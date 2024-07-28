@@ -8,15 +8,15 @@ function App() {
         <div className="w-full overflow-hidden">
             <Router>
                 <Routes>
-                    <Route path="/b/:encodedPlaceName/:tableNumber"
+                    <Route path="/neemble-eat/b/:encodedPlaceName/:tableNumber"
                            element={<Menu/>}/>
-                    <Route path="/"
+                    <Route path="/neemble-eat/"
                            element={<Placeholder/>}/>
-                    <Route path="/p/:encodedBusinessName/:tableNumber/:productId"
+                    <Route path="/neemble-eat/p/:encodedBusinessName/:tableNumber/:productId"
                            element={<Product/>}/>
-                    <Route path='/c/:encodedBusinessName/:tableNumber'
+                    <Route path='/neemble-eat/c/:encodedBusinessName/:tableNumber'
                            element={<Cart/>}/>
-                    <Route path="/o/:encodedBusinessName/:tableNumber"
+                    <Route path="/neemble-eat/o/:encodedBusinessName/:tableNumber"
                            element={<Orders/>}/>
                 </Routes>
             </Router>
