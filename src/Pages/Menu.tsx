@@ -225,7 +225,11 @@ function Menu(): React.ReactElement {
                         </button>
                     </div>
                     <div
-                        className='ml-5 rounded-md border border-gray-200 font-medium px-1.5 py-0.5 prevent-select'>Mesa: {tableNumber}</div>
+                        className='flex ml-5 rounded-md border border-gray-200 px-1.5 py-0.5 prevent-select'>
+                        <p className='font-medium'>Mesa:&nbsp;</p>
+                        <p className='font-light'>{tableNumber}</p>
+
+                    </div>
                 </div>
             </div>
             <div className='sticky top-0 bg-white z-10 pt-4'>
