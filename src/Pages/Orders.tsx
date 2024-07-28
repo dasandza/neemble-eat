@@ -12,6 +12,7 @@ import {Link, useParams} from "react-router-dom";
 import {decodeString} from "../utils/urlhandler.ts";
 import updateFieldsInAirtable from "../utils/updateFieldsInAirtable.ts";
 import addRecord from "../utils/writeAirtable.ts";
+import LoadingOrders from "./LoadingPages/LoadingOrders.tsx";
 
 function Orders() {
 
@@ -106,11 +107,7 @@ function Orders() {
     }
 
 
-    if (loading) return <div className='h-screen flex flex-col justify-center items-center'>
-        <h1 className='font-semibold'>{restaurantName}</h1>
-
-        <p>Orders</p>
-    </div>;
+    if (loading) return <LoadingOrders/>;
 
     if (error) return <div>{error}</div>;
 

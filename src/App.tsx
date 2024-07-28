@@ -1,6 +1,5 @@
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import {Menu, Placeholder, Product, Cart, Orders} from './Pages'
-import {LoadingMenu} from "./Pages/LoadingPages";
 
 
 function App() {
@@ -20,8 +19,6 @@ function App() {
                            element={<Cart/>}/>
                     <Route path="/neemble-eat/o/:encodedBusinessName/:tableNumber"
                            element={<Orders/>}/>
-                    <Route path="/neemble-eat/Loading"
-                           element={<LoadingMenu/>}/>
                 </Routes>
             </Router>
         </div>

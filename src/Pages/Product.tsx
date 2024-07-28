@@ -5,6 +5,7 @@ import {Link, useParams} from "react-router-dom";
 import {decodeString} from "../utils/urlhandler.ts";
 import fetchAirtableRecords from "../utils/fetcher.ts";
 import {initializeCartInLocalStorage, getCartFromLocalStorage, saveCartToLocalStorage} from "../utils/cartCRUD.ts";
+import LoadingProduct from "./LoadingPages/LoadingProduct.tsx";
 
 const Product = () => {
     const [cart, setCart] = useState<Array<CartItem>>(() => {
@@ -164,7 +165,7 @@ const Product = () => {
     }
 
     if (item == null) {
-        return <div></div>;
+        return <LoadingProduct/>;
     }
 
 
