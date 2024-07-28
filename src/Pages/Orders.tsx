@@ -117,7 +117,7 @@ function Orders() {
     return (
         <div className='min-h-svh px-4 bg-gray-100 font-poppins pt-7'>
             <div className='flex relative justify-between items-center mb-5'>
-                <Link to={`/b/${encodedBusinessName}/${tableNumber}`} className='absolute flex-none'>
+                <Link to={`/neemble-eat/b/${encodedBusinessName}/${tableNumber}`} className='absolute flex-none'>
                     <div className="text-left">
                         <p className='text-lg font-bold pr-4'>
                             {'<'}

@@ -166,7 +166,7 @@ function Menu(): React.ReactElement {
     return <div>
         <div className='font-poppins laptop:mx-6 mx-4 mt-2'>
             <div className='flex justify-between items-center '>
-                <Link to={`/o/${encodeString(place)}/${tableNumber}`}>
+                <Link to={`/neemble-eat/o/${encodeString(place)}/${tableNumber}`}>
                     <div
                         className='flex items-center justify-center rounded-xl w-fit px-3 py-1 my-3 bg-gray-200 shadow-inner'>
                         <p className='text-sm'>

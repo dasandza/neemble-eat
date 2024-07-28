@@ -150,7 +150,7 @@ function Cart() {
     return (
         <div className='font-poppins absolute min-w-full bg-gray-200 min-h-full pb-32'>
             <div className='flex relative justify-between items-center mx-6 mt-7'>
-                <Link to={`/b/${encodedBusinessName}/${tableNumber}`} className='absolute flex-none'>
+                <Link to={`/neemble-eat/b/${encodedBusinessName}/${tableNumber}`} className='absolute flex-none'>
                     <div className="text-left">
                         <p className='text-lg font-bold pr-3'>
                             {'<'}

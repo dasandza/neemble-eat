@@ -72,7 +72,7 @@ function CartSingleItem({cartProduct, placeName, tableNumber, decrement, increme
                             </div>
                         </div>
                     </div>
-                    <Link to={`/p/${encodeString(placeName)}/${tableNumber}/${cartProduct.id}`}
+                    <Link to={`/neemble-eat/p/${encodeString(placeName)}/${tableNumber}/${cartProduct.id}`}
                           className=' ml-1.5 flex items-center'>
                         <div className='flex items-center'>
                             <p className='text-zinc-400'>{'>'}</p>

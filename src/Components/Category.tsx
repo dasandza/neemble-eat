@@ -18,7 +18,7 @@ const Category = React.forwardRef<HTMLDivElement, CategoryData & { tableNumber: 
             <div
                 className='category-container laptop:border-none mt-1 laptop:mt-5 grid grid-cols-1 laptop:gap-5 laptop:grid-cols-2'>
                 {products.map((product, index) => (
-                    <Link to={`/p/${encodeString(placeName)}/${rest.tableNumber}/${product.record_id}`}
+                    <Link to={`/neemble-eat/p/${encodeString(placeName)}/${rest.tableNumber}/${product.record_id}`}
                           key={`${name}-product-${index}`}>
                         <ProductCard product={product}/>
                     </Link>

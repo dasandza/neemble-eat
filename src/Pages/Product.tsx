@@ -172,7 +172,7 @@ const Product = () => {
         <div className='font-poppins'>
             <div className='bg-gray-100 rounded-b-3xl flex flex-col laptop:flex-row justify-center pb-3.5'>
                 <div className='flex relative justify-between items-center mx-6 mt-7 mb-5'>
-                    <Link to={`/b/${encodedBusinessName}/${tableNumber}`} className='absolute flex-none'>
+                    <Link to={`/neemble-eat/b/${encodedBusinessName}/${tableNumber}`} className='absolute flex-none'>
                         <div className="text-left">
                             <p className='text-lg font-bold pr-3'>
                                 {'<'}
