@@ -211,7 +211,7 @@ const Product = () => {
                 <div className='mx-4'>
                     <div className='bg-gray-100 py-3 pl-5 rounded-xl'>
                         <h1 className='font-poppins-semibold'>
-                            Aditional Information
+                            Informação Adicional
                         </h1>
                     </div>
                 </div>
@@ -219,7 +219,7 @@ const Product = () => {
                       action=""
                       className='flex flex-col justify-center mt-5 mx-5'>
                     <textarea name="note" id="note" cols={30} rows={5}
-                              placeholder='Add a note'
+                              placeholder='Adicione detalhes'
                               className=" rounded-md border border-gray-300 px-2 py-2 text-sm mb-5">
 
                     </textarea>
@@ -227,12 +227,12 @@ const Product = () => {
                         productAdded ?
                             <div className='flex text-green-500 justify-center mb-4 prevent-select'>
                                 <p>
-                                    Product Added
+                                    Produto Adicionado
                                 </p>
                             </div> :
                             <div className='flex text-white justify-center mb-4 prevent-select'>
                                 <p>
-                                    Product Added
+                                    Produto Adicionado
                                 </p>
                             </div>
                     }
@@ -272,12 +272,12 @@ const Product = () => {
                             <button
                                 type="button"
                                 className="self-center cursor-not-allowed bg-gray-500 prevent-select text-white px-16 py-2 rounded-md mt-6 mb-14">
-                                Submit
+                                Adicionar
                             </button> :
                             <button
                                 type="submit"
                                 className="self-center prevent-select hover:bg-gray-700 bg-black text-white px-16 py-2 rounded-md mt-6 mb-14">
-                                Submit - Kz {total}
+                                Adicionar - {total}.00 Kz
                             </button>
                     }
                 </form>

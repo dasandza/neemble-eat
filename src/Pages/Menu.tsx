@@ -149,12 +149,12 @@ function Menu(): React.ReactElement {
 
     const closedRestaurant = <div className='font-medium px-1.5 py-0.5 rounded-md flex items-center bg-gray-300'>
         <CrossSign className='mr-1'></CrossSign>
-        <p className='prevent-select no cursor-default text-gray-700'>Closed</p>
+        <p className='prevent-select no cursor-default text-gray-700'>Fechado</p>
     </div>
 
     const openRestaurant = <div className='font-medium px-1.5 py-0.5 rounded-md flex items-center bg-green-100'>
         <Check className='mr-1'></Check>
-        <p className='prevent-select text-emerald-800 cursor-default '>Open</p>
+        <p className='prevent-select text-emerald-800 cursor-default '>Aberto</p>
     </div>
 
     const open = true;
@@ -166,7 +166,7 @@ function Menu(): React.ReactElement {
                     <div
                         className='flex items-center justify-center rounded-xl w-fit px-3 py-1 my-3 bg-gray-200 shadow-inner'>
                         <p className='text-sm'>
-                            Your Orders
+                            Os seus pedidos
                         </p>
                     </div>
                 </Link>
@@ -221,11 +221,11 @@ function Menu(): React.ReactElement {
                         <InformationIcon className='mr-1'/>
                         <button
                             className='prevent-select text-gray-700'
-                            onClick={toggleInformationVisibility}>More Info
+                            onClick={toggleInformationVisibility}>Info
                         </button>
                     </div>
                     <div
-                        className='ml-5 rounded-md border border-gray-200 font-medium px-1.5 py-0.5 prevent-select'>Table: {tableNumber}</div>
+                        className='ml-5 rounded-md border border-gray-200 font-medium px-1.5 py-0.5 prevent-select'>Mesa: {tableNumber}</div>
                 </div>
             </div>
             <div className='sticky top-0 bg-white z-10 pt-4'>
@@ -296,27 +296,21 @@ function Menu(): React.ReactElement {
                 </div>
             </div>
             <div className='flex justify-between pt-4 pb-16 px-5 laptop:px-9'>
-                <div className='text-gray-600 underline'>
+                <div className='text-gray-600 underline text-sm'>
                     <div>
                         <a href="#" className='flex items-center'>
-                            <p className='mr-1.5'>Privacy Policy</p>
+                            <p className='mr-1.5'>Política de Privacidade</p>
                             <CharmLinkExternal></CharmLinkExternal>
                         </a>
                     </div>
                     <div>
                         <a href="#" className='flex items-center'>
-                            <p className='mr-1.5'>Terms of Service</p>
-                            <CharmLinkExternal></CharmLinkExternal>
-                        </a>
-                    </div>
-                    <div className=''>
-                        <a href="#" className='flex items-center'>
-                            <p className='mr-1.5'>Manage Cookies</p>
+                            <p className='mr-1.5'>Termos de Serviço</p>
                             <CharmLinkExternal></CharmLinkExternal>
                         </a>
                     </div>
                 </div>
-                <div>
+                <div className='flex items-end'>
                     <h2 className='font-bold text-gray-600 text-sm'>Powered by <a
                         href="https://www.neemble.net"
                         className='hover:text-gray-400 transition-colors duration-300'

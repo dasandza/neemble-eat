@@ -1,6 +1,21 @@
+interface weekDaysMapper {
+    [key: string]: string
+}
+
+
 function formatDateString(dateString: string): string {
     // Create a Date object from the input date string
     const date = new Date(dateString);
+
+    const weekDaysTranslationMapping: weekDaysMapper = {
+        "Sunday": "Domingo",
+        "Monday": "Segunda-Feira",
+        "Tuesday": "Terça-Feira",
+        "Wednesday": "Quarta-Feira",
+        "Thursday": "Quinta-Feira",
+        "Friday": "Sexta-Feira",
+        "Saturday": "Sábado",
+    }
 
     // Define options for date formatting
     const options: Intl.DateTimeFormatOptions = {
@@ -24,12 +39,12 @@ function formatDateString(dateString: string): string {
         hour12: false // 24-hour format
     };
 
-    const formattedTime = new Intl.DateTimeFormat('en-US', timeOptions).format(date);
+    const formattedTime = new Intl.DateTimeFormat('pt-PT', timeOptions).format(date);
 
     // Combine the date and time parts
     const [day, month, dayNum] = formattedDate.split(',')[1].trim().split(' ');
-    console.log(day)
-    return `${formattedDate.split(',')[0]}, ${month} ${dayNum} at ${formattedTime}`;
+    console.log(day, dayNum)
+    return `${weekDaysTranslationMapping[formattedDate.split(",")[0]]}, ${month}  |  ${formattedTime}`;
 }
 
 export default formatDateString

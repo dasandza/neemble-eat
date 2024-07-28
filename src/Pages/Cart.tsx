@@ -169,7 +169,7 @@ function Cart() {
                         {numberOfItems} item
                     </p> :
                     <p>
-                        {numberOfItems} items
+                        {numberOfItems} itens
                     </p>
                 }
             </div>
@@ -205,7 +205,7 @@ function Cart() {
                         <div className='flex justify-center mt-4'>
                             <div className='flex bg-black text-white rounded-3xl w-full py-4 text-sm justify-center'
                                  onClick={handleSubmit}>
-                                Order
+                                Confirmar Pedido
                             </div>
                         </div>
                     </div>

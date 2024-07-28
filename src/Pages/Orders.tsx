@@ -129,16 +129,16 @@ function Orders() {
             </div>
             <div>
                 <h1 className='text-lg font-semibold'>
-                    Recent Orders
+                    Pedidos recentes
                 </h1>
                 <p className='text-sm text-zinc-600'>
-                    Below are your most recent orders
+                    Abaixo estão os seus pedidos
                 </p>
             </div>
             {orders.length == 0 &&
                 <div className='h-svh w-full  flex items-center justify-center'>
                     <p className='text-gray-500'>
-                        You did not order anything yet
+                        Nenhum pedido ainda
                     </p>
                 </div>
             }
@@ -151,7 +151,7 @@ function Orders() {
                                 <div className='flex justify-between items-center text-sm'>
                                     <div>
                                         <div className='flex'>
-                                            <p className='font-semibold'>Order:&nbsp;</p>
+                                            <p className='font-semibold'>Pedido:&nbsp;</p>
                                             <p className='truncate w-32'>
                                                 {order.fields["Name (from Item)"]}
                                             </p>
@@ -174,10 +174,10 @@ function Orders() {
                                 <div className='my-2'>
                                     {order.fields["Order Status"] == "In progress" ?
                                         <p className='bg-purple-100 border border-purple-600 font-semibold text-purple-600 w-fit text-sm px-2 py-0.5 rounded-lg flex justify-center items-center'>
-                                            {order.fields["Order Status"]}
+                                            A ser preparado
                                         </p> :
                                         <p className='bg-amber-100 border border-amber-600 font-semibold text-amber-600 w-fit text-sm px-2 py-0.5 rounded-lg flex justify-center items-center'>
-                                            {order.fields["Order Status"]}
+                                            Pronto
                                         </p>
                                     }
                                 </div>
@@ -192,7 +192,7 @@ function Orders() {
                     <div className='flex items-center justify-between px-2'>
                         <div>
                             <h1 className='font-semibold text-sm'>
-                                Total to Pay
+                                Total a Pagar
                             </h1>
                             <p className=' text-sm text-zinc-800'>
                                 {sessionPrice} Kz
@@ -201,7 +201,7 @@ function Orders() {
                         <div>
                             <button className='px-7 py-3 bg-black text-sm text-white rounded-3xl'
                                     onClick={handleGetBill}>
-                                Get The Bill
+                                Pedir a Conta
                             </button>
                         </div>
                     </div>
