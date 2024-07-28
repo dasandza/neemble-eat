@@ -174,7 +174,7 @@ function Menu(): React.ReactElement {
                         </p>
                     </div>
                 </Link>
-                <Link to={`/c/${encodeString(place)}/${tableNumber}`}>
+                <Link to={`/neemble-eat/c/${encodeString(place)}/${tableNumber}`}>
                     <div
                         className='flex  items-center justify-center rounded-xl w-fit px-3 py-1 my-2 bg-gray-200 shadow-inner'>
                         <p className='text-sm mr-1'>
