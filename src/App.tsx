@@ -8,7 +8,7 @@ function App() {
         <div className="w-full overflow-hidden">
             <Router>
                 <Routes>
-                    <Route path="/neemble-eat/b/:encodedPlaceName/:tableNumber"
+                    <Route path="/neemble-eat/b/:encodedPlaceName/table/:tableNumber"
                            element={<Menu/>}/>
                     <Route path="/neemble-eat/"
                            element={<Placeholder/>}/>
