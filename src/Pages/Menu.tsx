@@ -8,7 +8,7 @@ import OrganizeMenuItems from "../utils/OrganizeMenuItems.ts";
 import {MenuItem, CategoryData, Business, CartItem, MenuPageParams} from '../interfaces.tsx'
 import {decodeString, encodeString} from "../utils/urlhandler.ts";
 import {getCartFromLocalStorage, initializeCartInLocalStorage, getItemsInTheCartNumber} from "../utils/cartCRUD.ts";
-
+import {LoadingMenu} from "./LoadingPages";
 
 function Menu(): React.ReactElement {
     const existingCart = getCartFromLocalStorage()
@@ -103,11 +103,7 @@ function Menu(): React.ReactElement {
 
     // Loading state UI
     if (!records.length || !airtableItems.length || business == undefined) {
-        return <div className='h-screen flex flex-col justify-center items-center'>
-            <h1 className='font-semibold'>{place}</h1>
-
-            <p>Menu</p>
-        </div>
+        return <LoadingMenu/>
     }
 
 
