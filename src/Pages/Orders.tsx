@@ -234,7 +234,7 @@ function Orders() {
                             &times;
                         </button>
                         <h2 className="mb-4 text-xl font-bold">
-                            A sua conta à caminho{customerName != "" && customerName ? `, ${customerName}!` : "!"}
+                            A sua conta esta à caminho{customerName != "" && customerName ? `, ${customerName}!` : "!"}
                         </h2>
                         <p className="mb-4 text-[14px]">
                             A conta chegará a sua mesa em questão de minutos. Obrigado pelo tempo que esteve
