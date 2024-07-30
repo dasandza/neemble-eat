@@ -50,7 +50,7 @@ function CartSingleItem({cartProduct, placeName, tableNumber, decrement, increme
                                 {localItem.name}
                             </h1>
                             <div className='text-sm text-zinc-600 flex'>
-                                <p>{localItem.price}Kz </p>
+                                <p>{localItem.price} Kz </p>
                                 <p className='mx-1'>x</p>
                                 <p className='font-bold'>{localItem.quantity}</p>
                             </div>

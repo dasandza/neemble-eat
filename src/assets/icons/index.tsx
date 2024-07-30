@@ -8,10 +8,8 @@ import CharmLinkExternal from "./CharmLinkExternal.tsx";
 import MenuRestaurant from "./MenuIcon.tsx";
 import CartIcon from "./CartIcon.tsx";
 import DeleteIcon from "./DeleteIcon.tsx";
-import ClockIcon from "./ClockIcon.tsx";
 
 export {
-    ClockIcon,
     DeleteIcon,
     InformationIcon,
     CartIcon,

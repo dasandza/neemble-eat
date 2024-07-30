@@ -16,6 +16,9 @@ import LoadingOrders from "./LoadingPages/LoadingOrders.tsx";
 
 function Orders() {
 
+
+    const [customerName, setCustomerName] = useState<string>("")
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [table, setTable] = useState<AirtableTable>()
     const [orders, setOrders] = useState<Array<AirtableOrders>>([])
     const [error, setError] = useState<string | null>(null);
@@ -31,14 +34,10 @@ function Orders() {
         async function fetchData() {
             try {
                 const ordersList: AirtableOrders[] = await fetchAirtableRecords("Orders");
-                for (const order of ordersList) {
-                    console.log(order.id)
-                }
                 const sessionsList: AirtableSession[] = await fetchAirtableRecords("Sessions");
                 for (const session of sessionsList) {
                     if (session.fields["Restaurant Name"][0].toLowerCase() == restaurantName.toLowerCase() && session.fields["Table Number"][0] == tableNumber && session.fields.Status == "Open") {
                         setSession(session)
-                        console.log("SESSION:", session.id)
                         setOrders(ordersList.filter((order) => {
                             return order.fields["Session ID"][0] === session.id
                         }));
@@ -87,6 +86,10 @@ function Orders() {
         }
     }
 
+    const togglePopup = () => {
+        setIsPopupOpen(!isPopupOpen);
+    };
+
     function handleGetBill() {
         if (session == null) return;
         if (table == null) return;
@@ -104,6 +107,12 @@ function Orders() {
             addRecord("Sessions", {"Table": [table?.id]})
         }
         setOrders([])
+        const customerName = sessionStorage.getItem('CustomerName');
+        if (customerName != "" && customerName) {
+            setCustomerName(customerName)
+        }
+        togglePopup()
+        sessionStorage.clear();
     }
 
 
@@ -122,7 +131,7 @@ function Orders() {
                     </div>
                 </Link>
                 <div className='flex-grow'></div>
-                <div className='flex-none text-center '>
+                <div className='flex-none text-center font-semibold'>
                     Menu
                 </div>
                 <div className='flex-grow'></div>
@@ -188,25 +197,58 @@ function Orders() {
                 </div>
             }
             {orders.length != 0 &&
-                <div className='bg-white -mb-1 shadow-sm py-3 px-1.5 rounded-3xl mt-3'>
-                    <div className='flex items-center justify-between px-2'>
-                        <div>
-                            <h1 className='font-semibold text-sm'>
-                                Total a Pagar
-                            </h1>
-                            <p className=' text-sm text-zinc-800'>
-                                {sessionPrice} Kz
-                            </p>
+                <div>
+                    <div className='bg-white -mb-1 shadow-sm py-3 px-1.5 rounded-3xl mt-3'>
+                        <div className='flex items-center justify-between px-2'>
+                            <div>
+                                <h1 className='font-semibold text-sm'>
+                                    Total a Pagar
+                                </h1>
+                                <p className=' text-sm text-zinc-800'>
+                                    {sessionPrice} Kz
+                                </p>
+                            </div>
+                            <div>
+                                <button className='px-7 py-3 bg-black text-sm text-white rounded-3xl'
+                                        onClick={handleGetBill}>
+                                    Pedir a Conta
+                                </button>
+                            </div>
                         </div>
-                        <div>
-                            <button className='px-7 py-3 bg-black text-sm text-white rounded-3xl'
-                                    onClick={handleGetBill}>
-                                Pedir a Conta
-                            </button>
+                    </div>
+                    <div>
+                        <div className='text-[12px] italic text-gray-400 ml-2 mt-4'>
+                            <p><span className='font-semibold not-italic'>Obs:&nbsp;</span>Quando estiver satisfeito(a),
+                                clique no
+                                botão acima para pedir a sua conta facilmente.</p>
                         </div>
                     </div>
                 </div>
             }
+            {isPopupOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="relative w-11/12 max-w-lg p-6 bg-white rounded shadow-lg">
+                        <button
+                            onClick={togglePopup}
+                            className="absolute top-0 right-0 mt-3 mr-4 text-gray-500 hover:text-gray-700 focus:outline-none">
+                            &times;
+                        </button>
+                        <h2 className="mb-4 text-xl font-bold">
+                            A sua conta à caminho{customerName != "" && customerName ? `, ${customerName}!` : "!"}
+                        </h2>
+                        <p className="mb-4 text-[14px]">
+                            A conta chegará a sua mesa em questão de minutos. Obrigado pelo tempo que esteve
+                            connosco, volte sempre!
+                        </p>
+                        <button
+                            onClick={togglePopup}
+                            className="px-4 py-1 text-white bg-black rounded-md focus:outline-none"
+                        >
+                            Fechar
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

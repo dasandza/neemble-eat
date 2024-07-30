@@ -72,7 +72,6 @@ const Product = () => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         const note: string = formData.get("note") as string;
-        //console.log(note == "")
         let data: CartItem;
         if (item == null) {
             console.log("No item found");
@@ -145,7 +144,6 @@ const Product = () => {
         } else {
             setNumberOfItems(numberOfItems - 1)
         }
-        console.log(numberOfItems)
     }
 
     const handleButtons = (operation: string) => {

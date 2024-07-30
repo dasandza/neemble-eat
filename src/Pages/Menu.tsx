@@ -47,10 +47,22 @@ function Menu(): React.ReactElement {
     useEffect(() => {
         async function fetchData() {
             try {
-                const itemsData = await fetchAirtableRecords("Items");
-                const businessesData = await fetchAirtableRecords("Businesses");
-                setAirtableItems(itemsData);
-                setRecords(businessesData);
+                const storedItemsData = sessionStorage.getItem('Items');
+                const storedBusinessData = sessionStorage.getItem('Businesses');
+                if (storedItemsData) {
+                    setAirtableItems(JSON.parse(storedItemsData))
+                } else {
+                    const itemsData = await fetchAirtableRecords("Items");
+                    sessionStorage.setItem('Items', JSON.stringify(itemsData));
+                    setAirtableItems(itemsData);
+                }
+                if (storedBusinessData) {
+                    setRecords(JSON.parse(storedBusinessData))
+                } else {
+                    const businessesData = await fetchAirtableRecords("Businesses");
+                    sessionStorage.setItem('Businesses', JSON.stringify(businessesData));
+                    setRecords(businessesData);
+                }
             } catch (err) {
                 setError('Failed to fetch data');
                 console.error("Error fetching data:", err);
@@ -166,7 +178,7 @@ function Menu(): React.ReactElement {
                     <div
                         className='flex items-center justify-center rounded-xl w-fit px-3 py-1 my-3 bg-gray-200 shadow-inner'>
                         <p className='text-sm'>
-                            Os seus pedidos
+                            Pedidos
                         </p>
                     </div>
                 </Link>
