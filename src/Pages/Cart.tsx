@@ -257,7 +257,7 @@ function Cart() {
                         <Link to={`/neemble-eat/o/${encodedBusinessName}/${tableNumber}`}>
                             <button
                                 onClick={togglePopup}
-                                className="px-4 py-1 text-white bg-black rounded-md focus:outline-none"
+                                className="px-7 py-1 text-white bg-black rounded-md focus:outline-none"
                             >
                                 Fechar
                             </button>

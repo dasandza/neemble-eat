@@ -47,8 +47,14 @@ function Menu(): React.ReactElement {
     useEffect(() => {
         async function fetchData() {
             try {
-                const storedItemsData = sessionStorage.getItem('Items');
-                const storedBusinessData = sessionStorage.getItem('Businesses');
+                let storedItemsData = sessionStorage.getItem('Items');
+                let storedBusinessData = sessionStorage.getItem('Businesses');
+                const data: Business[] | null = storedBusinessData ? JSON.parse(storedBusinessData) : null
+                if (data && data[0].fields.Name.toLowerCase() != place.toLowerCase()) {
+                    storedBusinessData = null
+                    storedItemsData = null
+                    sessionStorage.clear()
+                }
                 if (storedItemsData) {
                     setAirtableItems(JSON.parse(storedItemsData))
                 } else {
