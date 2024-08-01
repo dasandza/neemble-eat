@@ -23,7 +23,7 @@ jobs:
       - name: Build project
         run: npm run build
         env:
-          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_API_KEY: AIzaSyD-46U7Yk72k04PoIYkF_4mjfBK9O-HYow
 
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v3
