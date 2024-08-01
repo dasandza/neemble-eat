@@ -3,6 +3,8 @@ import {Menu, Placeholder, Product, Cart, Orders, LogIn, SignUp} from './Pages'
 
 function App() {
 
+
+    //THE APP IS NOT WORKING BECAUSE OF THE API, IF NOTHING WORKS, PASTE IT INTO THE FIREBASE.TS FILE FODASE (IT IS IN THE .ENV FILE)
     return (
 
         <Router>
