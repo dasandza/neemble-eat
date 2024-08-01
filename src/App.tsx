@@ -1,5 +1,5 @@
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
-import {Menu, Placeholder, Product, Cart, Orders, LogIn} from './Pages'
+import {Menu, Placeholder, Product, Cart, Orders, LogIn, SignUp} from './Pages'
 
 function App() {
 
@@ -19,6 +19,8 @@ function App() {
                        element={<Orders/>}/>
                 <Route path="/neemble-eat/login"
                        element={<LogIn/>}/>
+                <Route path="/neemble-eat/signup"
+                       element={<SignUp/>}/>
 
             </Routes>
         </Router>

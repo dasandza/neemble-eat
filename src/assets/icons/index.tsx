@@ -11,8 +11,10 @@ import DeleteIcon from "./DeleteIcon.tsx";
 import HugeiconsView from "./HugeiconsView.tsx";
 import HugeiconsViewOff from "./HugeiconsViewOff.tsx";
 import Mail from "./Mail.tsx";
+import PhoneIcon from "./PhoneIcon.tsx";
 
 export {
+    PhoneIcon,
     Mail,
     HugeiconsViewOff,
     HugeiconsView,
