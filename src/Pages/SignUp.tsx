@@ -7,6 +7,7 @@ import auth from "../firebase/firebase.ts";
 
 
 function SignUp() {
+    console.log(import.meta.env.VITE_FIREBASE_API_KEY)
     const [passwordVisibility, setPasswordVisibility] = useState<boolean>(false)
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
