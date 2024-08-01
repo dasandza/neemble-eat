@@ -8,8 +8,14 @@ import CharmLinkExternal from "./CharmLinkExternal.tsx";
 import MenuRestaurant from "./MenuIcon.tsx";
 import CartIcon from "./CartIcon.tsx";
 import DeleteIcon from "./DeleteIcon.tsx";
+import HugeiconsView from "./HugeiconsView.tsx";
+import HugeiconsViewOff from "./HugeiconsViewOff.tsx";
+import Mail from "./Mail.tsx";
 
 export {
+    Mail,
+    HugeiconsViewOff,
+    HugeiconsView,
     DeleteIcon,
     InformationIcon,
     CartIcon,
