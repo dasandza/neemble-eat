@@ -70,7 +70,7 @@ function Menu(): React.ReactElement {
                     setRecords(businessesData);
                 }
             } catch (err) {
-                setError('Failed to fetch data');
+                setError(`Failed to fetch data: ${err}`);
                 console.error("Error fetching data:", err);
             }
         }
@@ -116,7 +116,7 @@ function Menu(): React.ReactElement {
 
     // Error handling UI
     if (error) {
-        return <div>Error loading data!</div>;
+        return <div>{error}</div>;
     }
 
     // Loading state UI
