@@ -2,7 +2,6 @@ import {useState} from "react";
 import {MenuSetup, RestaurantDetails, TableConfiguration} from "./SetupSteps";
 import {useParams} from "react-router-dom";
 import {Category} from "../interfaces.tsx";
-import addRecord from "../utils/writeAirtable.ts";
 
 
 function AccountSetUp() {
