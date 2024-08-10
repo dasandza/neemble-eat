@@ -2,7 +2,7 @@ import Airtable from "airtable";
 import {UpdateFieldsParams} from "../interfaces.tsx";
 
 const base = new Airtable(
-    {apiKey: 'pattB3WiZmyoSsP2w.35fc49ab8c91ebc54bc2c3039ef802d7f05582759114a1f135688aa1e14a6400'}
+    {apiKey: 'pattB3WiZmyoSsP2w.2573d1e03a4d234a961f372963227104ee7aa8de7acef7aa2081210a4c28d30b'}
 ).base('app8D4iyjhnvGzrL7');
 
 
