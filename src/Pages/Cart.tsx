@@ -32,7 +32,6 @@ function Cart() {
     const [totalValue, setTotalValue] = useState<number>(getTotalValue);
     const [session, setSession] = useState<AirtableSession | null>(null)
     const [error, setError] = useState<string | null>(null);
-    //const [table, setTable] = useState<AirtableTable>()
 
 
     const filter_Cart = (cart: CartItem[]) => {
@@ -43,15 +42,7 @@ function Cart() {
     useEffect(() => {
         async function fetchData() {
             try {
-                //const tablesList: AirtableTable[] = await fetchAirtableRecords("Tables")
-                //for (const table of tablesList) {
-                //    if (table.fields["Name (from Restaurant)"][0].toLowerCase() == businessName.toLowerCase() &&
-                //        table.fields.Number == tableNumber) {
-                //        setTable(table)
-                //        break
-                //    }
-                //}
-                //setTable(filteredList[0].fields)
+
                 const sessionsList: AirtableSession[] = await fetchAirtableRecords("Sessions");
                 for (const session of sessionsList) {
                     if (session.fields["Restaurant Name"][0].toLowerCase() == businessName.toLowerCase() && session.fields["Table Number"][0] == tableNumber && session.fields.Status == "Open") {
@@ -72,7 +63,6 @@ function Cart() {
     }, []);
 
     useEffect(() => {
-        //const newCart = filter_Cart(cart)
         saveCartToLocalStorage(cart)
         setNumberOfItems(getItemsInTheCartNumber(cart))
         setTotalValue(getTotalValue)
@@ -129,7 +119,6 @@ function Cart() {
     }
 
     const togglePopup = () => {
-
         setIsPopupOpen(!isPopupOpen);
     };
 

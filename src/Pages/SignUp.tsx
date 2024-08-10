@@ -4,9 +4,11 @@ import React, {useState} from "react";
 import {Link} from "react-router-dom";
 import {createUserWithEmailAndPassword} from "firebase/auth";
 import auth from "../firebase/firebase.ts";
-
+import {useNavigate} from 'react-router-dom';
+import addRecord from "../utils/writeAirtable.ts";
 
 function SignUp() {
+    const navigate = useNavigate();
     const [passwordVisibility, setPasswordVisibility] = useState<boolean>(false)
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
@@ -21,14 +23,28 @@ function SignUp() {
 
     function handleSubmition(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredentials) => {
-                console.log(userCredentials)
-                setError("")
-            }).catch((error) => {
-            console.log(error)
-            setError("Houve um problema ao criar a sua conta.")
-        })
+
+        if (firstName == "" || lastName == "" || phoneNumber == "") {
+            setError("Preencha todos os campos")
+        } else {
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredentials) => {
+                    console.log(userCredentials.user.uid)
+                    const recordID = addRecord("Representant", {
+                        "First Name": firstName,
+                        "Last Name": lastName,
+                        "Email": email,
+                        "Phone Number": phoneNumber,
+                        "UUID": userCredentials.user.uid
+                    })
+                    navigate(`/neemble-eat/setup/${recordID}/${firstName}`);
+                }).catch((error) => {
+                console.log(error)
+                setError("Houve um problema ao criar a sua conta.")
+            })
+        }
+
+
     }
 
     return (

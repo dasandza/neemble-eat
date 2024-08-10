@@ -6,6 +6,9 @@ export default {
     content: ["./index.html", "./src/**/*.{js,ts,tsx,jsx}"],
     theme: {
         extend: {
+            container: {
+                padding: "1rem",
+            },
             screens: {
                 "tablet": "480px",
                 "laptop": "768px",

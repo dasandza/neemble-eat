@@ -12,8 +12,18 @@ import HugeiconsView from "./HugeiconsView.tsx";
 import HugeiconsViewOff from "./HugeiconsViewOff.tsx";
 import Mail from "./Mail.tsx";
 import PhoneIcon from "./PhoneIcon.tsx";
+import ImageUpload from "./ImageUpload.tsx";
+import LocationIcon from "./LocationIcon.tsx";
+import AddIcon from "./AddIcon.tsx";
+import SearchIcon from "./SearchIcon.tsx";
+import BinIcon from "./BinIcon.tsx";
 
 export {
+    BinIcon,
+    SearchIcon,
+    AddIcon,
+    LocationIcon,
+    ImageUpload,
     PhoneIcon,
     Mail,
     HugeiconsViewOff,

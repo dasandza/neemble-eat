@@ -1,9 +1,23 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import React from "react";
 
+// TEMP INTERFACES
+
+interface Category {
+    name: string;
+    menuItems: Array<ProductProps>;
+}
+
+interface ProductProps {
+    name: string;
+    description: string;
+    price: number;
+    imageURL: string;
+    record_id: string
+}
+
 
 // Airtable interfaces
-
 
 interface RecordData {
     fields: {
@@ -15,6 +29,14 @@ interface UpdateFieldsParams {
     tableName: string;
     recordId: string;
     fieldsToUpdate: { [key: string]: string };
+}
+
+interface Representant {
+    "First Name": string,
+    "Last Name": string,
+    "UUID": string,
+    "Phone Number": string,
+    "Email": string
 }
 
 interface AirtableOrders {
@@ -67,15 +89,12 @@ interface AirtableSessionParams {
     "Session Number": string,
 }
 
+interface AirtableItem {
+
+}
+
 
 // Rest
-interface ProductProps {
-    name: string;
-    description: string;
-    price: number;
-    imageURL: string;
-    record_id: string
-}
 
 
 interface CategoryData {
@@ -212,6 +231,7 @@ interface BannerFields {
 }
 
 export type {
+    Representant,
     AirtableSession,
     OrdersPageParams,
     CartPageParams,
@@ -221,9 +241,11 @@ export type {
     CartItem,
     CategoryData,
     MenuItem,
+    Category,
     Business,
     AirtableSessionParams,
     RecordData,
+    AirtableItem,
     ProductProps,
     CategoryParams,
     UpdateFieldsParams,
