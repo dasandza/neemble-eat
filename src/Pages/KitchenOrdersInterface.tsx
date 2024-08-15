@@ -290,33 +290,36 @@ function KitchenOrdersInterface() {
                                     }
                                 </div>
                             </div>
-                            <div className='mt-6 flex space-x-3'>
-                                <h2 className='flex items-center rounded-md border border-gray-300 text-sm w-fit text-gray-500 px-1.5 font-poppins-semibold prevent-select'>
-                                    <PriceTag className='mr-1'/>
-                                    {
-                                        orderSelected != null ?
-                                            orderSelected.fields["Total"] :
-                                            "0.00"
-                                    }
-                                </h2>
-                                <h2 className='flex items-center rounded-md border border-gray-300 text-sm w-fit text-gray-500 px-1.5 font-poppins-semibold prevent-select'>
-                                    <CutleryIcon className='mr-1'/>
-                                    {orderSelected != null ?
-                                        `${orderSelected.fields.Quantity} 
+                            <div className='mt-6 laptop:flex laptop:space-x-3 laptop:space-y-0 space-y-1'>
+                                <div className='flex space-x-3'>
+                                    <h2 className='flex items-center rounded-md border border-gray-300 text-sm w-fit text-gray-500 px-1.5 font-poppins-semibold prevent-select'>
+                                        <PriceTag className='mr-1'/>
+                                        {
+                                            orderSelected != null ?
+                                                orderSelected.fields["Total"] :
+                                                "0.00"
+                                        }
+                                    </h2>
+                                    <h2 className='flex items-center rounded-md border border-gray-300 text-sm w-fit text-gray-500 px-1.5 font-poppins-semibold prevent-select'>
+                                        <CutleryIcon className='mr-1'/>
+                                        {orderSelected != null ?
+                                            `${orderSelected.fields.Quantity} 
                                         ${orderSelected.fields.Quantity == 1 ? "unidade" : "unidades"}` :
-                                        "0 itens"
-                                    }&nbsp;
-                                </h2>
-                                <h2 className='flex items-center rounded-md border border-gray-300 text-sm w-fit text-gray-500 px-1.5 font-poppins-semibold prevent-select'>
-                                    <QrCode className='mr-1'/>
-                                    Mesa {orderSelected ? orderSelected.fields["Table Number"] :
-                                    "null"
-                                }
-                                </h2>
-                                <h2 className='flex items-center rounded-md border border-gray-300 text-sm w-fit text-gray-500 px-1.5 font-poppins-semibold prevent-select'>
-                                    <ClockIcon className='mr-1'/>
-                                    {orderSelected ? timeCalculator(orderSelected.fields["Time Created"]) : "now"}
-                                </h2>
+                                            "0 itens"
+                                        }&nbsp;
+                                    </h2>
+                                </div>
+                                <div className='flex space-x-3'>
+                                    <h2 className='flex items-center rounded-md border border-gray-300 text-sm w-fit text-gray-500 px-1.5 font-poppins-semibold prevent-select'>
+                                        <QrCode className='mr-1'/>
+                                        Mesa {orderSelected ? orderSelected.fields["Table Number"] :
+                                        "null"}
+                                    </h2>
+                                    <h2 className='flex items-center rounded-md border border-gray-300 text-sm w-fit text-gray-500 px-1.5 font-poppins-semibold prevent-select'>
+                                        <ClockIcon className='mr-1'/>
+                                        {orderSelected ? timeCalculator(orderSelected.fields["Time Created"]) : "now"}
+                                    </h2>
+                                </div>
                             </div>
                         </div>
                     </div>
