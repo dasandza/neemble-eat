@@ -341,7 +341,7 @@ function KitchenOrdersInterface() {
                         </div>
                         {orderSelected != null &&
                             <div
-                                className='flex flex-col space-x-3 laptop:space-x-0 laptop:space-y-3'>
+                                className='flex-col space-x-0 space-y-3'>
                                 {
 
                                     ["New", "In progress"].includes(orderSelected?.fields["Order Status"]) &&
