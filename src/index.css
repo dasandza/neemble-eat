@@ -5,6 +5,18 @@
 
 @layer base {
 
+    /* Hide the arrows in Chrome, Safari, Edge, Opera */
+    input[type='number']::-webkit-outer-spin-button,
+    input[type='number']::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Hide the arrows in Firefox */
+    input[type='number'] {
+        -moz-appearance: textfield;
+    }
+
     .item:not(:last-child)::after {
         content: "";
         border-right: 1px solid #e5e7eb; /* Gray-200 */

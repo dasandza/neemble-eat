@@ -2,6 +2,7 @@ import {CartItem} from "../interfaces.tsx";
 import {Link} from "react-router-dom";
 import {encodeString} from "../utils/urlhandler.ts";
 import {useState} from "react";
+import {BinIcon} from "../assets/icons";
 
 interface CartItemProps {
     cartProduct: CartItem,
@@ -9,9 +10,10 @@ interface CartItemProps {
     placeName: string,
     increment: (id: string) => CartItem | undefined,
     decrement: (id: string) => CartItem | undefined,
+    deleteItem: (id: string) => void,
 }
 
-function CartSingleItem({cartProduct, placeName, tableNumber, decrement, increment}: CartItemProps) {
+function CartSingleItem({cartProduct, placeName, tableNumber, decrement, increment, deleteItem}: CartItemProps) {
     const [localItem, setLocalItem] = useState<CartItem>(cartProduct);
 
 
@@ -27,6 +29,10 @@ function CartSingleItem({cartProduct, placeName, tableNumber, decrement, increme
         if (item != undefined) {
             setLocalItem(item)
         }
+    }
+
+    function deleteProduct(id: string) {
+        deleteItem(id)
     }
 
 
@@ -45,7 +51,7 @@ function CartSingleItem({cartProduct, placeName, tableNumber, decrement, increme
                                  alt=""
                                  className='rounded-md object-cover w-full h-full'/>
                         </div>
-                        <div>
+                        <div className=''>
                             <h1 className='font-semibold text-zinc-800'>
                                 {localItem.name}
                             </h1>
@@ -54,21 +60,33 @@ function CartSingleItem({cartProduct, placeName, tableNumber, decrement, increme
                                 <p className='mx-1'>x</p>
                                 <p className='font-bold'>{localItem.quantity}</p>
                             </div>
-                            <div className='flex justify-between max-w-20 min-w-20 mt-3.5'>
-                                <div
-                                    className='flex items-center justify-center bg-gray-300 rounded-full px-2 cursor-pointer'>
-                                    <p className='flex items-center justify-center text-black prevent-select'
-                                       onClick={() => decrementProduct(localItem.id)}>
-                                        -
-                                    </p>
+                            <div className='flex justify-between items-center max-w-28 mt-3.5'>
+                                <div className='flex space-x-3'>
+                                    <div
+                                        className='flex hover:bg-gray-400 transition-colors duration-300 items-center justify-center bg-gray-300 rounded-full px-2 cursor-pointer'>
+                                        <p className='flex items-center justify-center text-black prevent-select'
+                                           onClick={() => decrementProduct(localItem.id)}>
+                                            -
+                                        </p>
+                                    </div>
+                                    <div
+                                        className='flex hover:bg-gray-400 transition-colors duration-300 items-center justify-center bg-gray-300 rounded-full px-2 cursor-pointer'>
+                                        <p className='flex items-center justify-center text-black prevent-select'
+                                           onClick={() => incrementProduct(localItem.id)}>
+                                            +
+                                        </p>
+                                    </div>
                                 </div>
-                                <div
-                                    className='flex items-center justify-center bg-gray-300 rounded-full px-2 cursor-pointer'>
-                                    <p className='flex items-center justify-center text-black prevent-select'
-                                       onClick={() => incrementProduct(localItem.id)}>
-                                        +
-                                    </p>
+                                <div>
+                                    <div
+                                        className='flex hover:bg-red-500 transition-colors duration-200 items-center justify-center bg-gray-300 rounded-full px-1 py-1 cursor-pointer'>
+                                        <BinIcon
+                                            onClick={() => {
+                                                deleteProduct(localItem.id)
+                                            }}/>
+                                    </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>

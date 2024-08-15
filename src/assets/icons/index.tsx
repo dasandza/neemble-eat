@@ -17,8 +17,24 @@ import LocationIcon from "./LocationIcon.tsx";
 import AddIcon from "./AddIcon.tsx";
 import SearchIcon from "./SearchIcon.tsx";
 import BinIcon from "./BinIcon.tsx";
+import ArrowDropdown from "./ArrowDropdown.tsx";
+import PriceTag from "./PriceTag.tsx";
+import QrCode from "./QrCode.tsx";
+import CutleryIcon from "./CutleryIcon.tsx";
+import SortAscending from "./SortAscending.tsx";
+import SortDescending from "./SortDescending.tsx";
+import HamburgerMenuIcon from "./HamburgerMenuIcon.tsx";
+import ClockIcon from "./ClockIcon.tsx";
 
 export {
+    ClockIcon,
+    HamburgerMenuIcon,
+    SortDescending,
+    SortAscending,
+    CutleryIcon,
+    QrCode,
+    PriceTag,
+    ArrowDropdown,
     BinIcon,
     SearchIcon,
     AddIcon,

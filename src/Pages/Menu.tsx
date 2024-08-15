@@ -9,6 +9,7 @@ import {MenuItem, CategoryData, Business, CartItem, MenuPageParams} from '../int
 import {decodeString, encodeString} from "../utils/urlhandler.ts";
 import {getCartFromLocalStorage, initializeCartInLocalStorage, getItemsInTheCartNumber} from "../utils/cartCRUD.ts";
 import {LoadingMenu} from "./LoadingPages";
+import Notifications from "../assets/icons/Notifications.tsx";
 
 function Menu(): React.ReactElement {
     const existingCart = getCartFromLocalStorage()
@@ -235,7 +236,7 @@ function Menu(): React.ReactElement {
                 <div className='main-buttons font-bold rounded-md flex items-center pt-2'>
                     {open ? openRestaurant : closedRestaurant}
                     <div
-                        className='cursor-pointer font-medium px-1.5 py-0.5 ml-5 rounded-md border border-gray-200 flex items-center hover:bg-gray-200 transition-colors duration-300 hover:border-gray-400'>
+                        className='cursor-pointer font-medium px-1.5 py-0.5 ml-5 rounded-lg border border-gray-200 flex items-center hover:bg-gray-200 transition-colors duration-300 hover:border-gray-400'>
                         <InformationIcon className='mr-1'/>
                         <button
                             className='prevent-select text-gray-700'
@@ -243,10 +244,14 @@ function Menu(): React.ReactElement {
                         </button>
                     </div>
                     <div
-                        className='flex ml-5 rounded-md border border-gray-200 px-1.5 py-0.5 prevent-select'>
+                        className='flex ml-5 rounded-lg border border-gray-200 px-1.5 py-0.5 prevent-select'>
                         <p className='font-medium'>Mesa:&nbsp;</p>
                         <p className='font-light'>{tableNumber}</p>
-
+                    </div>
+                    <div
+                        className='flex ml-5 items-center rounded-lg border border-gray-300 px-1.5 bg-gray-100 hover:bg-gray-200 transition-colors cursor-pointer duration-300 py-0.5 prevent-select '>
+                        <Notifications className='m-1 laptop:mr-1 laptop:my-0 laptop:ml-0'/>
+                        <p className='font-poppins-regular hidden laptop:block'>Chamar Garçon</p>
                     </div>
                 </div>
             </div>

@@ -1,21 +1,16 @@
 import {MenuItem, CartItem, ProductPageParams} from "../interfaces.tsx";
 import TestImage from '../assets/images/img_2.png'
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Link, useParams} from "react-router-dom";
 import {decodeString} from "../utils/urlhandler.ts";
 import fetchAirtableRecords from "../utils/fetcher.ts";
 import {initializeCartInLocalStorage, getCartFromLocalStorage, saveCartToLocalStorage} from "../utils/cartCRUD.ts";
 import LoadingProduct from "./LoadingPages/LoadingProduct.tsx";
+import {CartIcon} from "../assets/icons";
+import CartPopUp from "../Components/CartPopUp.tsx";
 
 const Product = () => {
-    const [cart, setCart] = useState<Array<CartItem>>(() => {
-        const existingCart = getCartFromLocalStorage();
-        if (existingCart) {
-            return existingCart;
-        } else {
-            return initializeCartInLocalStorage();
-        }
-    });
+    const [cart, setCart] = useState<Array<CartItem>>(() => getCart());
     const [productAdded, setProductAdded] = useState<boolean>(false)
     const [total, setTotal] = useState(0);
     const [numberOfItems, setNumberOfItems] = useState(0);
@@ -28,7 +23,8 @@ const Product = () => {
         productId: string
     } = useParams() as unknown as ProductPageParams;
     const businessName = decodeString(encodedBusinessName)
-
+    const [isCartPopUpOpen, setIsCartPopUpOpen] = useState<boolean>(false)
+    const popUpRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         saveCartToLocalStorage(cart)
@@ -56,6 +52,18 @@ const Product = () => {
         fetchData();
     }, [businessName]);
 
+
+    useEffect(() => {
+        if (isCartPopUpOpen) {
+            document.addEventListener('click', handleClickOutside, true);
+        } else {
+            document.removeEventListener('click', handleClickOutside, true);
+        }
+
+        return () => {
+            document.removeEventListener('click', handleClickOutside, true);
+        };
+    }, [isCartPopUpOpen]);
 
     useEffect(() => {
         if (item != undefined) {
@@ -100,7 +108,31 @@ const Product = () => {
             }
         }
         addItemToCart(data)
+        if (!isCartPopUpOpen) {
+            setIsCartPopUpOpen(true);
+        }
+
     };
+
+    const togglePopup = () => {
+        setIsCartPopUpOpen(!isCartPopUpOpen);
+    };
+
+    const handleClickOutside = (event: MouseEvent) => {
+        if (popUpRef.current && !popUpRef.current.contains(event.target as Node)) {
+            setIsCartPopUpOpen(false);
+        }
+    };
+
+    function getCart() {
+        const existingCart = getCartFromLocalStorage();
+        if (existingCart) {
+            return existingCart;
+        } else {
+            return initializeCartInLocalStorage();
+        }
+    }
+
 
     const addItemToCart = (item: CartItem) => {
         let newCart: Array<CartItem>;
@@ -169,9 +201,10 @@ const Product = () => {
 
     return (
         <div className='font-poppins'>
-            <div className='bg-gray-100 rounded-b-3xl flex flex-col laptop:flex-row justify-center pb-3.5'>
+            <div className='bg-gray-100 rounded-b-3xl flex flex-col justify-center pb-3.5'>
                 <div className='flex relative justify-between items-center mx-6 mt-7 mb-5'>
-                    <Link to={`/neemble-eat/b/${encodedBusinessName}/${tableNumber}`} className='absolute flex-none'>
+                    <Link to={`/neemble-eat/b/${encodedBusinessName}/${tableNumber}`}
+                          className='absolute flex-none'>
                         <div className="text-left">
                             <p className='text-lg font-bold pr-3'>
                                 {'<'}
@@ -179,10 +212,21 @@ const Product = () => {
                         </div>
                     </Link>
                     <div className='flex-grow'></div>
-                    <div className='flex-none text-center '>
+                    <div className='flex-none text-center'>
                         Menu
                     </div>
                     <div className='flex-grow'></div>
+                    <div className='absolute right-0 flex-none'>
+                        <button
+                            onClick={togglePopup}>
+                            <CartIcon className=''/>
+                        </button>
+                        {isCartPopUpOpen && (
+                            <CartPopUp close={() => setIsCartPopUpOpen(false)}
+                                       encodedRestaurantName={encodedBusinessName} tableNumber={tableNumber}
+                                       cart={cart}/>
+                        )}
+                    </div>
                 </div>
                 <div className='mx-auto rounded-md w-fit items-center overflow-hidden pb-4 px-5'>
                     <img src={image}
@@ -218,7 +262,7 @@ const Product = () => {
                       className='flex flex-col justify-center mt-5 mx-5'>
                     <textarea name="note" id="note" cols={30} rows={5}
                               placeholder='Adicione detalhes'
-                              className=" rounded-md border border-gray-300 px-2 py-2 text-sm mb-5">
+                              className="text-base rounded-md border border-gray-300 px-2 py-2 mb-5">
 
                     </textarea>
                     {

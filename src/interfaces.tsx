@@ -16,8 +16,16 @@ interface ProductProps {
     record_id: string
 }
 
-
 // Airtable interfaces
+
+interface AirtableItem {
+    Name: string,
+    Description: string,
+    Owner: string | Promise<string>,
+    Price: number,
+    Category: string,
+    image: string,
+}
 
 interface RecordData {
     fields: {
@@ -43,15 +51,16 @@ interface AirtableOrders {
     "createdTime": string,
     "id": string,
     fields: {
+        "Price (from Item)": number,
         "Name (from Item)": string,
         "Time Created": string;
         "Item": Array<string>;
-        "Quantity": string;
+        "Quantity": number;
         "Aditional Note": string,
         "Table": Array<string>;
-        "Total": string,
+        "Total": number,
         "Table Number": string;
-        "Session Status": string,
+        "Session Status": Array<string>,
         "Order Status": string,
         "Restaurant ID": Array<string>,
         "Session ID": Array<string>
@@ -88,11 +97,6 @@ interface AirtableSessionParams {
     "Status": string,
     "Session Number": string,
 }
-
-interface AirtableItem {
-
-}
-
 
 // Rest
 

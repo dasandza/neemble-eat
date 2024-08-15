@@ -1,11 +1,11 @@
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
-import {Menu, Product, Cart, Orders, LogIn, SignUp, MainPage, AccountSetUp} from './Pages'
+import {Menu, Product, Cart, Orders, LogIn, SignUp, MainPage, AccountSetUp, KitchenOrdersInterface} from './Pages'
 
 function App() {
 
 
     // THE APP IS NOT WORKING BECAUSE OF THE API, IF NOTHING WORKS, PASTE IT INTO THE FIREBASE.TS FILE FODASE (IT IS IN THE .ENV FILE)
-    // UPDATE: THE APU KEY IS VULNERABLE, ANY ONE CAN SEE IT AND THATS SMOKE TO THE GANG. NEXT TASK: HIDE THIS SHIT
+    // UPDATE: THE APU KEY IS VULNERABLE, ANY ONE CAN SEE IT AND THAT'S SMOKE TO THE GANG. NEXT TASK: HIDE THIS SHIT
     // NOTE: MAKE SURE TO DELETE THESE COMMENTS BEFORE PUSHING IT INTO GITHUB
     return (
         <div className="App">
@@ -27,6 +27,8 @@ function App() {
                            element={<SignUp/>}/>
                     <Route path="/neemble-eat/setup/:recordID/:name"
                            element={<AccountSetUp/>}/>
+                    <Route path="/neemble-eat/orders"
+                           element={<KitchenOrdersInterface/>}/>
                 </Routes>
             </Router>
         </div>

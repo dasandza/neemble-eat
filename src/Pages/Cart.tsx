@@ -18,14 +18,7 @@ function Cart() {
 
     const [customerName, setCustomerName] = useState<string>('');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [cart, setCart] = useState<Array<CartItem>>(() => {
-        const existingCart = getCartFromLocalStorage();
-        if (existingCart) {
-            return existingCart;
-        } else {
-            return initializeCartInLocalStorage();
-        }
-    });
+    const [cart, setCart] = useState<Array<CartItem>>(() => getCart());
     const [numberOfItems, setNumberOfItems] = useState<number>(getItemsInTheCartNumber(cart))
     const {encodedBusinessName, tableNumber} = useParams() as unknown as CartPageParams;
     const businessName: string = decodeString(encodedBusinessName)
@@ -105,6 +98,19 @@ function Cart() {
     }
 
 
+    function DeleteProduct(id: string) {
+        for (let i = 0; i < cart.length; i++) {
+            const item = cart[i];
+            if (item.id == id) {
+                delete cart[i];
+                setCart(filter_Cart(cart))
+                return;
+            }
+
+        }
+
+    }
+
     function getTotalValue() {
         let localTotal = 0
         if (cart.length == 0) {
@@ -121,6 +127,15 @@ function Cart() {
     const togglePopup = () => {
         setIsPopupOpen(!isPopupOpen);
     };
+    
+    function getCart() {
+        const existingCart = getCartFromLocalStorage();
+        if (existingCart) {
+            return existingCart;
+        } else {
+            return initializeCartInLocalStorage();
+        }
+    }
 
 
     function handleSubmit() {
@@ -143,6 +158,7 @@ function Cart() {
                 }
             }
         }
+
         setCart([])
         togglePopup()
     }
@@ -182,6 +198,7 @@ function Cart() {
                         cart.map((item, index: number) =>
                                 item != undefined && <div key={index} className='mt-3'>
                                     <CartSingleItem
+                                        deleteItem={DeleteProduct}
                                         decrement={DecrementProduct}
                                         increment={IncrementProduct}
                                         cartProduct={item}
@@ -212,7 +229,7 @@ function Cart() {
                                           placeholder='Nome (opcional)'
                                           onChange={handleCustomername}
                                           value={customerName}
-                                          className="peer w-full resize-none rounded-b-none border-b border-blue-gray-200 bg-transparent pb-1.5 text-sm text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border-blue-gray-200 focus:border-gray-900 focus:outline-0 disabled:resize-none disabled:border-0 disabled:bg-blue-gray-50">
+                                          className="peer w-full text-base resize-none rounded-b-none border-b border-gray-600 bg-transparent pb-1.5 text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border-blue-gray-200 focus:border-gray-900 focus:outline-0 disabled:resize-none disabled:border-0 disabled:bg-blue-gray-50">
 
                                 </textarea>
                                     <button

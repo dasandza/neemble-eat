@@ -3,6 +3,8 @@ import {MenuSetup, RestaurantDetails, TableConfiguration} from "./SetupSteps";
 import {useParams} from "react-router-dom";
 import {Category} from "../interfaces.tsx";
 
+//import addRecord from "../utils/writeAirtable.ts";
+
 
 function AccountSetUp() {
 
@@ -60,17 +62,55 @@ function AccountSetUp() {
         return steps[setupStep] || null;
     }
 
+    //function convertCategoryToAirtableItems(category: Category, restaurantID: Promise<string> | string): AirtableItem[] {
+    //    return category.menuItems.map((product: ProductProps): AirtableItem => {
+    //        return {
+    //            Name: product.name,
+    //            Description: product.description,
+    //            Owner: restaurantID, // Owner is an array with the ProductProps's record_id
+    //            Price: product.price,
+    //            Category: category.name,
+    //            image: product.imageURL,
+    //        };
+    //    });
+    //}
+
+
     //function concludeAccountSetUp() {
-    //
-    //    const restaurantID = addRecord("Businesses", {
-    //        Name: restaurantNameRestaurantDetails,
-    //        Representant: recordID,
-    //        phoneNumber: phoneNumberRestaurantDetails,
-    //        Banner: selectedImageRestaurantDetails,
-    //        Description: descriptionRestaurantDetails,
-    //        numberOfTables: numberOfTablesTableConfiguration,
-    //        Items:
-    //    })
+    //    const restaurantID = addRecord("Businesses",
+    //        selectedImageRestaurantDetails ?
+    //            {
+    //                Name: restaurantNameRestaurantDetails,
+    //                Representant: recordID,
+    //                phoneNumber: phoneNumberRestaurantDetails,
+    //                Banner: selectedImageRestaurantDetails,
+    //                Description: descriptionRestaurantDetails,
+    //                numberOfTables: numberOfTablesTableConfiguration
+    //            } :
+    //            {
+    //                Name: restaurantNameRestaurantDetails,
+    //                Representant: recordID,
+    //                phoneNumber: phoneNumberRestaurantDetails,
+    //                Description: descriptionRestaurantDetails,
+    //                numberOfTables: numberOfTablesTableConfiguration
+    //            }
+    //    )
+    //    if (restaurantID != null) {
+    //        for (const menuCategory of categoriesMenuSetupParams) {
+    //            const items: AirtableItem[] = convertCategoryToAirtableItems(
+    //                menuCategory,
+    //                restaurantID)
+    //            for (const item of items) {
+    //                addRecord("Items", {
+    //                    Name: item.Name,
+    //                    Description: item.Description,
+    //                    Owner: [item.Owner],
+    //                    Price: item.Price
+    //                })
+    //            }
+//
+    //        }
+    //    }
     //}
 
     return (

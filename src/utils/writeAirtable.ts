@@ -9,7 +9,7 @@ const base = new Airtable(
 // TypeScript interface for the record data type
 
 // Function to add a new record
-async function addRecord(tableName: string, data: FieldSet): Promise<string | null> {
+async function addRecord(tableName: string, data: FieldSet): Promise<string> {
     try {
         const record = await base(tableName).create([
             {
@@ -22,7 +22,7 @@ async function addRecord(tableName: string, data: FieldSet): Promise<string | nu
         return record[0].id
     } catch (error) {
         console.error('Error creating record:', error);
-        return null
+        return "";
     }
 }
 

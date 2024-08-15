@@ -7,8 +7,10 @@ import LogIn from "./LogIn.tsx";
 import SignUp from "./SignUp.tsx";
 import MainPage from "./MainPage.tsx";
 import AccountSetUp from "./AccountSetUp.tsx";
+import KitchenOrdersInterface from "./KitchenOrdersInterface.tsx";
 
 export {
+    KitchenOrdersInterface,
     MainPage,
     AccountSetUp,
     SignUp,
