@@ -290,7 +290,8 @@ function KitchenOrdersInterface() {
                                     }
                                 </div>
                             </div>
-                            <div className='mt-6 laptop:flex laptop:space-x-3 laptop:space-y-0 space-y-1'>
+                            <div
+                                className='mt-6 laptop:flex laptop:space-x-3 laptop:space-y-0 space-y-2'>
                                 <div className='flex space-x-3'>
                                     <h2 className='flex items-center rounded-md border border-gray-300 text-sm w-fit text-gray-500 px-1.5 font-poppins-semibold prevent-select'>
                                         <PriceTag className='mr-1'/>
@@ -340,7 +341,7 @@ function KitchenOrdersInterface() {
                         </div>
                         {orderSelected != null &&
                             <div
-                                className='flex absolute laptop:flex-col laptop:static bottom-0 space-x-3 laptop:space-x-0 laptop:space-y-3'>
+                                className='flex flex-col space-x-3 laptop:space-x-0 laptop:space-y-3'>
                                 {
 
                                     ["New", "In progress"].includes(orderSelected?.fields["Order Status"]) &&
