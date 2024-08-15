@@ -339,9 +339,9 @@ function KitchenOrdersInterface() {
                                 </div>
                             }
                         </div>
-                        {orderSelected != null &&
-                            <div
-                                className='flex-col space-x-0 space-y-3'>
+                        {
+                            orderSelected != null &&
+                            <div className='flex space-x-2'>
                                 {
 
                                     ["New", "In progress"].includes(orderSelected?.fields["Order Status"]) &&
@@ -369,7 +369,6 @@ function KitchenOrdersInterface() {
                                         Cancelar
                                     </button>
                                 }
-
                             </div>
                         }
                     </div>
