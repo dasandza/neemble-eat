@@ -350,7 +350,7 @@ function KitchenOrdersInterface() {
                                             "In progress" :
                                             orderSelected?.fields["Order Status"] == "In progress" ?
                                                 "Done" : "Done")}
-                                        className='bg-black text-white font-poppins-semibold w-[75%] laptop:w-fit laptop:px-8 py-1.5 rounded-lg'>
+                                        className='bg-black text-white font-poppins-semibold w-fit px-8 py-1.5 rounded-lg'>
                                         {
                                             orderSelected?.fields["Order Status"] == "New" ?
                                                 "Em preparo" :
@@ -365,7 +365,7 @@ function KitchenOrdersInterface() {
                                         onClick={() => {
                                             upddateStatus("Cancelled")
                                         }}
-                                        className='bg-red-500 hover:bg-red-600 text-white font-poppins-semibold w-[25%] laptop:w-fit laptop:px-8 py-1.5 rounded-lg'>
+                                        className='bg-red-500 hover:bg-red-600 text-white font-poppins-semibold w-fit px-8 py-1.5 rounded-lg'>
                                         Cancelar
                                     </button>
                                 }
