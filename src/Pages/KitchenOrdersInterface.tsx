@@ -32,6 +32,9 @@ function KitchenOrdersInterface() {
     const [ascendingSorting, setAscendingSorting] = useState<boolean>(false)
     //const [groupByTable, setGroupByTable] = useState<boolean>()
     const [isLeftMenuOpen, setIsLeftMenuOpen] = useState<boolean>(false)
+    const [isTableSelectMenuOpen, setIsTableSelectMenuOpen] = useState(false);
+    const [allTablesNumbers, setAllTablesNumbers] = useState<string[]>(["Todas"])
+    const [tableSelection, setTableSelection] = useState("Todas")
 
     const filterModes: filterProps[] = [
         {name: "Todos", tag: "All"},
@@ -54,6 +57,13 @@ function KitchenOrdersInterface() {
                     setOrders(o2)
                     setFilteredOrders(o2)
                 }
+                const temp = allTablesNumbers
+                for (const order of o2) {
+                    if (!temp.includes(order.fields["Table Number"][0])) {
+                        temp.push(order.fields["Table Number"][0])
+                    }
+                }
+                setAllTablesNumbers(temp)
             } catch (err) {
                 setError(`Failed to fetch data: ${err}`);
                 console.error("Error fetching data:", err);
@@ -77,6 +87,13 @@ function KitchenOrdersInterface() {
                     setOrders(o2)
                     setFilteredOrders(o2)
                 }
+                const temp = allTablesNumbers
+                for (const order of o2) {
+                    if (!temp.includes(order.fields["Table Number"][0])) {
+                        temp.push(order.fields["Table Number"][0])
+                    }
+                }
+                setAllTablesNumbers(temp)
             } catch (err) {
                 setError(`Failed to fetch data: ${err}`);
                 console.error("Error fetching data:", err);
@@ -100,7 +117,13 @@ function KitchenOrdersInterface() {
                     setOrders(o2)
                     setFilteredOrders(o2)
                 }
-
+                const temp = allTablesNumbers
+                for (const order of o2) {
+                    if (!temp.includes(order.fields["Table Number"][0])) {
+                        temp.push(order.fields["Table Number"][0])
+                    }
+                }
+                setAllTablesNumbers(temp)
             } catch (err) {
                 setError(`Failed to fetch data: ${err}`);
                 console.error("Error fetching data:", err);
@@ -160,6 +183,21 @@ function KitchenOrdersInterface() {
         setFilteredOrders(sortOrdersByDate(filteredOrders, !ascendingSorting))
     }
 
+    const toggleDropdown = () => {
+        setIsTableSelectMenuOpen(!isTableSelectMenuOpen);
+    };
+
+    function selectTable(table: string) {
+        setTableSelection(table)
+        toggleDropdown()
+        if (table == "Todas") {
+            setFilteredOrders(orders)
+        } else {
+            setFilteredOrders(orders.filter(order => order.fields["Table Number"] == table))
+        }
+
+    }
+
     if (error != "") return <div>{error}</div>
 
     if (orders == null) return <div>no order</div>
@@ -205,13 +243,13 @@ function KitchenOrdersInterface() {
                     <HamburgerMenuIcon width="25px" height='25px'
                                        onClick={toggleHamburgerMenu}/>
                 </div>
-                <div className='px-4 pb-4'>
+                <div className='flex items-center px-4 pb-4 space-x-6'>
                     <div
                         onClick={toggleSortingOrder}
-                        className='cursor-pointer laptop:hover:bg-gray-100 transition durantion-200 w-fit py-1 px-2 rounded-md'>
+                        className='cursor-pointer laptop:hover:bg-gray-100 laptop:hover:b g-gray-100 transition durantion-200 w-fit p-1 rounded-md'>
                         {
                             ascendingSorting ?
-                                <div className='flex text-gray-700 space-x-2 items-center'>
+                                <div className='flex  text-gray-700 space-x-2 items-center'>
                                     <SortAscending
                                         width={"20px"}
                                         height={"20px"}/>
@@ -227,7 +265,61 @@ function KitchenOrdersInterface() {
 
                         }
                     </div>
+                    <div className='flex items-center space-x-4'>
+                        <div className="relative inline-block text-left">
+                            <button
+                                onClick={toggleDropdown}
+                                className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium bg-white rounded-md hover:bg-gray-100 focus:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-100"
+                            >
+                                Mesa
+                                <svg
+                                    className="-mr-1 ml-2 h-5 w-5"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                    aria-hidden="true"
+                                >
+                                    <path
+                                        fillRule="evenodd"
+                                        d="M5.23 7.21a.75.75 0 011.06 0L10 10.94l3.71-3.73a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.23 8.27a.75.75 0 010-1.06z"
+                                        clipRule="evenodd"
+                                    />
+                                </svg>
+                            </button>
 
+                            {isTableSelectMenuOpen && (
+                                <div
+                                    className="origin-top-right absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                    <div className="py-1" role="menu" aria-orientation="vertical"
+                                         aria-labelledby="options-menu">
+                                        {
+                                            allTablesNumbers.map((x, index) =>
+                                                <button
+                                                    onClick={() =>
+                                                        selectTable(x)
+                                                    }
+                                                    key={index}
+                                                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                    role="menuitem">
+                                                    {
+                                                        x == "Todas" ? x : `Mesa ${x}`
+                                                    }
+                                                </button>
+                                            )
+                                        }
+
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                        <div className='italic text-sm text-gray-500 font-poppins-semibold prevent-select'>
+                            <p>
+                                {
+                                    tableSelection == "Todas" ? tableSelection : `Mesa ${tableSelection}`
+                                }
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div className={`${orderSelected != null && 'laptop:flex laptop:h-screen'}`}>
@@ -326,24 +418,11 @@ function KitchenOrdersInterface() {
                     </div>
 
                     <div className='p-4 relative laptop:static h-full'>
-                        <div className=''>
-                            {orderSelected &&
-                                orderSelected.fields["Aditional Note"] != undefined &&
-                                <div>
-                                    <h1 className='text-xl font-poppins-semibold'>
-                                        Detalhes do cliente:
-                                    </h1>
-                                    <p className='italic text-gray-700 my-2'>
-                                        "{orderSelected?.fields["Aditional Note"]}"
-                                    </p>
-                                </div>
-                            }
-                        </div>
+
                         {
                             orderSelected != null &&
                             <div className='flex space-x-2'>
                                 {
-
                                     ["New", "In progress"].includes(orderSelected?.fields["Order Status"]) &&
                                     <button
                                         onClick={() => upddateStatus(orderSelected?.fields["Order Status"] == "New" ?
@@ -371,6 +450,19 @@ function KitchenOrdersInterface() {
                                 }
                             </div>
                         }
+                        <div className=''>
+                            {orderSelected &&
+                                orderSelected.fields["Aditional Note"] != undefined &&
+                                <div>
+                                    <h1 className='text-xl font-poppins-semibold'>
+                                        Detalhes do cliente:
+                                    </h1>
+                                    <p className='italic text-gray-700 my-2'>
+                                        "{orderSelected?.fields["Aditional Note"]}"
+                                    </p>
+                                </div>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
