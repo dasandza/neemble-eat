@@ -23,12 +23,13 @@ function MenuSetup({categories, setCategories, restaurantID}: MenuSetupParams) {
     }
 
     function openEditCategoryPage(index: number) {
-        console.log("CATEGORY BEING EDITED: ", categories[index])
+        //console.log("CATEGORY BEING EDITED: ", categories[index])
         setCategoryBeingEditedIndex(index)
         setIsEditCategoryPageOpen(true)
     }
 
     function closeEditCategoryPage() {
+        console.log("RESULTADO DA CATEGORIA EDITADA:", categories[categoryBeingEditedIndex])
         setCategoryBeingEditedIndex(-1)
         setIsEditCategoryPageOpen(false)
     }
@@ -116,19 +117,26 @@ function MenuSetup({categories, setCategories, restaurantID}: MenuSetupParams) {
                         Adicione a primeira categoria do seu menu
                     </div>
             }
+            {
+                isCreateCategoryPageOpen &&
+                <AddCategory isOpen={isCreateCategoryPageOpen}
+                             close={() => setIsCreateCategoryPageOpen(false)}
+                             addCategory={(category) => addCategory(category)}
+                             restaurantId={restaurantID}/>
 
-            <AddCategory isOpen={isCreateCategoryPageOpen}
-                         close={() => setIsCreateCategoryPageOpen(false)}
-                         addCategory={(category) => addCategory(category)}
-                         restaurantId={restaurantID}/>
-            <EditCategory close={closeEditCategoryPage}
-                          editCategory={(category) => editCategory(category)}
-                          restaurantId={restaurantID}
-                          isOpen={isEditCategoryPageOpen}
-                          category={categoryBeingEditedIndex != -1 ? categories[categoryBeingEditedIndex] : {
-                              name: "",
-                              menuItems: []
-                          } as Category}/>
+            }
+            {
+                isEditCategoryPageOpen &&
+                <EditCategory close={closeEditCategoryPage}
+                              editCategory={(category) => editCategory(category)}
+                              restaurantId={restaurantID}
+                              isOpen={isEditCategoryPageOpen}
+                              category={categoryBeingEditedIndex != -1 ? categories[categoryBeingEditedIndex] : {
+                                  name: "",
+                                  menuItems: []
+                              } as Category}/>
+            }
+
         </div>
     );
 }

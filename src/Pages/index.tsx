@@ -7,10 +7,20 @@ import LogIn from "./LogIn.tsx";
 import SignUp from "./SignUp.tsx";
 import MainPage from "./MainPage.tsx";
 import AccountSetUp from "./AccountSetUp.tsx";
-import KitchenOrdersInterface from "./KitchenOrdersInterface.tsx";
+import OrdersInterface from "./OrdersInterface.tsx";
+import About from "./About.tsx";
+import Demo from "./Demo.tsx";
+import Contact from "./Contact.tsx";
+import Support from "./Support.tsx";
+import SessionsInterface from "./SessionsInterface.tsx";
 
 export {
-    KitchenOrdersInterface,
+    SessionsInterface,
+    About,
+    Demo,
+    Contact,
+    Support,
+    OrdersInterface,
     MainPage,
     AccountSetUp,
     SignUp,

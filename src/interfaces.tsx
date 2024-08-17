@@ -12,7 +12,7 @@ interface ProductProps {
     name: string;
     description: string;
     price: number;
-    imageURL: string;
+    imageURL: string | null;
     record_id: string
 }
 
@@ -21,10 +21,10 @@ interface ProductProps {
 interface AirtableItem {
     Name: string,
     Description: string,
-    Owner: string | Promise<string>,
+    Owner: [string],
     Price: number,
     Category: string,
-    image: string,
+    image?: string,
 }
 
 interface RecordData {
@@ -36,7 +36,7 @@ interface RecordData {
 interface UpdateFieldsParams {
     tableName: string;
     recordId: string;
-    fieldsToUpdate: { [key: string]: string };
+    fieldsToUpdate: { [key: string]: string | string[] };
 }
 
 interface Representant {
@@ -90,16 +90,16 @@ interface AirtableSession {
 
 interface AirtableSessionParams {
     Table: Array<string>,
-    "Restaurant Name": Array<string>,
+    "Restaurant Name"?: Array<string>,
     "Restaurant ID": Array<string>,
     "Table Number": Array<string>,
     Orders: Array<string>,
-    "Status": string,
+    "Status"?: string,
     "Session Number": string,
+    Total: number,
 }
 
 // Rest
-
 
 interface CategoryData {
     name: string,

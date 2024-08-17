@@ -1,6 +1,6 @@
 import {HugeiconsView, HugeiconsViewOff, Mail, PhoneIcon} from "../assets/icons";
 import Image from "../assets/images/chef.png";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import {createUserWithEmailAndPassword} from "firebase/auth";
 import auth from "../firebase/firebase.ts";
@@ -8,6 +8,10 @@ import {useNavigate} from 'react-router-dom';
 import addRecord from "../utils/writeAirtable.ts";
 
 function SignUp() {
+
+
+    const [signInAttempt, setSignInAttempt] = useState<boolean>(false)
+    const [accountRecordID, setAccountRecordID] = useState<Promise<string>>()
     const navigate = useNavigate();
     const [passwordVisibility, setPasswordVisibility] = useState<boolean>(false)
     const [firstName, setFirstName] = useState("")
@@ -17,19 +21,36 @@ function SignUp() {
     const [email, setEmail] = useState('')
     const [error, setError] = useState("")
 
+    useEffect(() => {
+        async function getAccountRecordID() {
+            const realAccountRecordID = await accountRecordID
+            if (realAccountRecordID) {
+                navigate(`/neemble-eat/setup/${realAccountRecordID}/${firstName}`);
+                setSignInAttempt(false)
+            } else {
+                if (signInAttempt) {
+                    setError("Houve um erro!")
+                }
+            }
+        }
+
+        getAccountRecordID()
+    }, [accountRecordID]);
+
+
     function handleVisibility() {
         setPasswordVisibility(!passwordVisibility)
     }
 
     function handleSubmition(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
-
+        setSignInAttempt(true)
         if (firstName == "" || lastName == "" || phoneNumber == "") {
             setError("Preencha todos os campos")
         } else {
             createUserWithEmailAndPassword(auth, email, password)
                 .then((userCredentials) => {
-                    console.log(userCredentials.user.uid)
+                    //console.log(userCredentials.user.uid)
                     const recordID = addRecord("Representant", {
                         "First Name": firstName,
                         "Last Name": lastName,
@@ -37,10 +58,19 @@ function SignUp() {
                         "Phone Number": phoneNumber,
                         "UUID": userCredentials.user.uid
                     })
-                    navigate(`/neemble-eat/setup/${recordID}/${firstName}`);
+                    setAccountRecordID(recordID)
+
                 }).catch((error) => {
+
+                // FIREBASE ERRORS: https://firebase.google.com/docs/reference/node/firebase.auth.Error
+                if (error.code === "auth/email-already-in-use") {
+                    setError("O email inserido ja está em uso.")
+                } else if (error.code === "auth/invalid-api-key") {
+                    // Thrown if the provided API key is invalid.
+                } else {
+                    setError("Houve um problema ao criar a sua conta.")
+                }
                 console.log(error)
-                setError("Houve um problema ao criar a sua conta.")
             })
         }
 

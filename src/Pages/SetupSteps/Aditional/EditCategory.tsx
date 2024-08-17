@@ -15,6 +15,7 @@ interface EditCategoryProps {
 
 function EditCategory({isOpen, close, editCategory, restaurantId, category}: EditCategoryProps) {
 
+
     const [isEditItemPageOpen, setIsEditItemPageOpen] = useState<boolean>(false)
     const [isCreateItemPageOpen, setIsCreateItemPageOpen] = useState<boolean>(false)
     const [name, setName] = useState<string>("")
@@ -39,8 +40,9 @@ function EditCategory({isOpen, close, editCategory, restaurantId, category}: Edi
 
     }, [category.menuItems]);
 
+
     function addItem(item: ProductProps) {
-        console.log("NEW ITEM:", item)
+        //console.log("NEW ITEM:", item)
         category.menuItems = category.menuItems.concat(item)
     }
 
@@ -55,7 +57,7 @@ function EditCategory({isOpen, close, editCategory, restaurantId, category}: Edi
     }
 
     function deleteItem(itemToBeDeleted: ProductProps) {
-        category.menuItems = category.menuItems.filter((item) => item != itemToBeDeleted)
+        setCategoryItems(category.menuItems.filter((item) => item != itemToBeDeleted))
     }
 
     function editItem(item: ProductProps) {
@@ -67,7 +69,9 @@ function EditCategory({isOpen, close, editCategory, restaurantId, category}: Edi
 
         if (name != "") {
             category.name = name
+
         }
+        category.menuItems = categoryItems
         editCategory(category);
         handleClose()
     }
@@ -76,6 +80,12 @@ function EditCategory({isOpen, close, editCategory, restaurantId, category}: Edi
         setName("")
         close()
     }
+
+    if (category.name != "") {
+        console.log("CATEGORIA:", category)
+    }
+
+    if (category.name == "" && category.menuItems.length == 0) return <div></div>
 
     if (!isOpen) return null;
 
@@ -183,22 +193,30 @@ function EditCategory({isOpen, close, editCategory, restaurantId, category}: Edi
                     </div>
                 </form>
             </div>
-            <AddItem isOpen={isCreateItemPageOpen}
-                     close={() => setIsCreateItemPageOpen(false)}
-                     addItem={(item) => addItem(item)}
-                     restaurantId={restaurantId}
-                     categoryName={name}/>
-            <EditItem isOpen={isEditItemPageOpen}
-                      editItem={(item) => editItem(item)}
-                      close={closeEditItemPage}
-                      categoryName={name}
-                      item={itemBeingEditedIndex != -1 ? category.menuItems[itemBeingEditedIndex] : {
-                          name: "",
-                          price: 0,
-                          imageURL: "",
-                          description: "",
-                          record_id: restaurantId
-                      } as ProductProps}/>
+            {
+                isCreateItemPageOpen &&
+                <AddItem isOpen={isCreateItemPageOpen}
+                         close={() => setIsCreateItemPageOpen(false)}
+                         addItem={(item) => addItem(item)}
+                         restaurantId={restaurantId}
+                         categoryName={name}/>
+            }
+
+            {
+                isEditItemPageOpen &&
+                <EditItem isOpen={isEditItemPageOpen}
+                          editItem={(item) => editItem(item)}
+                          close={closeEditItemPage}
+                          categoryName={name}
+                          item={itemBeingEditedIndex != -1 ? category.menuItems[itemBeingEditedIndex] : {
+                              name: "",
+                              price: 0,
+                              imageURL: "",
+                              description: "",
+                              record_id: restaurantId
+                          } as ProductProps}/>
+            }
+
         </div>
     );
 }

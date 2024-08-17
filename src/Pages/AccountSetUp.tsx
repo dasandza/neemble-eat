@@ -1,16 +1,22 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {MenuSetup, RestaurantDetails, TableConfiguration} from "./SetupSteps";
 import {useParams} from "react-router-dom";
-import {Category} from "../interfaces.tsx";
-
-//import addRecord from "../utils/writeAirtable.ts";
+import {AirtableItem, Category, ProductProps} from "../interfaces.tsx";
+import addRecord from "../utils/writeAirtable.ts";
+import {onAuthStateChanged, User} from "firebase/auth";
+import auth from "../firebase/firebase.ts";
+import AuthError from "./AuthError.tsx";
+import updateFieldsInAirtable from "../utils/updateFieldsInAirtable.ts";
 
 
 function AccountSetUp() {
+    const [authUser, setAuthUser] = useState<null | User>(null)
 
+    //const [promiseTableID, setPromiseTableID] = useState()
     const [setupStep, setSetupStep] = useState<number>(0);
     const {name, recordID} = useParams() as { name: string, recordID: string }
-
+    const [restaurantIDPromise, setRestaurantIDPromise] = useState<null | Promise<string>>(null)
+    const [dataCreated, setDataCreated] = useState<boolean>(false)
 
     // Restautant Details Parameters
     const [restaurantNameRestaurantDetails, setRestaurantNameRestaurantDetails] = useState("")
@@ -18,11 +24,12 @@ function AccountSetUp() {
     const [addressRestaurantDetails, setAddressRestaurantDetails] = useState("")
     const [descriptionRestaurantDetails, setDescriptionRestaurantDetails] = useState("")
     const [selectedImageRestaurantDetails, setSelectedImageRestaurantDetails] = useState<string | null>(null);
+    const [errorRestaurantDetails, setErrorRestaurantDetails] = useState<string | null>(null)
 
 
     // Table Configuration Parameters
     const [numberOfTablesTableConfiguration, setNumberOfTablesTableConfiguration] = useState<number>(0);
-
+    const [errorTableConfiguration, setErrorTableConfigurationTableConfiguration] = useState<string | null>(null)
 
     // Menu Setup Parameters
     const [categoriesMenuSetupParams, setCategoriesMenuSetupParams] = useState<Category[]>([])
@@ -39,79 +46,183 @@ function AccountSetUp() {
             phoneNumber={phoneNumberRestaurantDetails}
             address={addressRestaurantDetails}
             description={descriptionRestaurantDetails}
-            selectedImage={selectedImageRestaurantDetails}/>,
+            selectedImage={selectedImageRestaurantDetails}
+            error={errorRestaurantDetails}/>,
         1: <TableConfiguration
             setNumberOfTables={(numberOfTables: number) => setNumberOfTablesTableConfiguration(numberOfTables)}
-            numberOfTables={numberOfTablesTableConfiguration}/>,
+            numberOfTables={numberOfTablesTableConfiguration}
+            error={errorTableConfiguration}/>,
         2: <MenuSetup
             restaurantID={recordID}
             setCategories={categories => (setCategoriesMenuSetupParams(categories))}
             categories={categoriesMenuSetupParams}/>,
     };
 
-    function handlePageChange(operation: string) {
-        if (operation == '-') {
-            setSetupStep(setupStep - 1)
-        } else {
-            setSetupStep(setupStep + 1)
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    setAuthUser(user)
+                } else {
+                    setAuthUser(null)
+                }
+            }
+        )
+    }, []);
+
+
+    useEffect(() => {
+        async function setStringRestaurantID() {
+            const realRestaurantID = await restaurantIDPromise
+            if (realRestaurantID) {
+                concludeAccountSetUp2(realRestaurantID)
+                setDataCreated(true)
+            }
         }
 
+        if (!dataCreated) {
+            setStringRestaurantID()
+        }
+    }, [restaurantIDPromise]);
+
+    function RestaurantDetailsCompleted() {
+        return restaurantNameRestaurantDetails != "" &&
+            phoneNumberRestaurantDetails != "" &&
+            addressRestaurantDetails != "" &&
+            selectedImageRestaurantDetails != null &&
+            descriptionRestaurantDetails != "";
+
+    }
+
+    function TableConfigurationCompleted() {
+        return numberOfTablesTableConfiguration != 0
+    }
+
+
+    function handlePageChange(operation: string) {
+        let blocker = false;
+
+        if (setupStep == 0 && !RestaurantDetailsCompleted() && operation == "+") {
+            blocker = true
+            setErrorRestaurantDetails("Complete todos os campos")
+        }
+
+        if (setupStep == 1 && !TableConfigurationCompleted() && operation == "+") {
+            blocker = true
+            setErrorTableConfigurationTableConfiguration("Digite o número de mesas")
+        }
+
+        if (setupStep == 2 && categoriesMenuSetupParams.length != 0 && operation == "+") {
+            concludeAccountSetUp1()
+            blocker = true
+        }
+
+        if (setupStep == 2 && categoriesMenuSetupParams.length == 0 && operation == "+") {
+            blocker = true
+        }
+        if (!blocker) {
+            setErrorRestaurantDetails(null)
+            setErrorTableConfigurationTableConfiguration(null)
+            if (operation == '-') {
+                setSetupStep(setupStep - 1)
+            } else {
+                setSetupStep(setupStep + 1)
+            }
+        }
     }
 
     function getStep(): JSX.Element | null {
         return steps[setupStep] || null;
     }
 
-    //function convertCategoryToAirtableItems(category: Category, restaurantID: Promise<string> | string): AirtableItem[] {
-    //    return category.menuItems.map((product: ProductProps): AirtableItem => {
-    //        return {
-    //            Name: product.name,
-    //            Description: product.description,
-    //            Owner: restaurantID, // Owner is an array with the ProductProps's record_id
-    //            Price: product.price,
-    //            Category: category.name,
-    //            image: product.imageURL,
-    //        };
-    //    });
-    //}
+
+    function convertCategoryToAirtableItems(category: Category, restaurantID: string): AirtableItem[] {
+        return category.menuItems.map((product: ProductProps): AirtableItem => {
+            return product.imageURL ? {
+                    Name: product.name,
+                    Description: product.description,
+                    Owner: [restaurantID],
+                    Price: product.price,
+                    Category: category.name,
+                    image: product.imageURL,
+                } :
+                {
+                    Name: product.name,
+                    Description: product.description,
+                    Owner: [restaurantID],
+                    Price: product.price,
+                    Category: category.name
+                };
+        });
+    }
 
 
-    //function concludeAccountSetUp() {
-    //    const restaurantID = addRecord("Businesses",
-    //        selectedImageRestaurantDetails ?
-    //            {
-    //                Name: restaurantNameRestaurantDetails,
-    //                Representant: recordID,
-    //                phoneNumber: phoneNumberRestaurantDetails,
-    //                Banner: selectedImageRestaurantDetails,
-    //                Description: descriptionRestaurantDetails,
-    //                numberOfTables: numberOfTablesTableConfiguration
-    //            } :
-    //            {
-    //                Name: restaurantNameRestaurantDetails,
-    //                Representant: recordID,
-    //                phoneNumber: phoneNumberRestaurantDetails,
-    //                Description: descriptionRestaurantDetails,
-    //                numberOfTables: numberOfTablesTableConfiguration
-    //            }
-    //    )
-    //    if (restaurantID != null) {
-    //        for (const menuCategory of categoriesMenuSetupParams) {
-    //            const items: AirtableItem[] = convertCategoryToAirtableItems(
-    //                menuCategory,
-    //                restaurantID)
-    //            for (const item of items) {
-    //                addRecord("Items", {
-    //                    Name: item.Name,
-    //                    Description: item.Description,
-    //                    Owner: [item.Owner],
-    //                    Price: item.Price
-    //                })
-    //            }
-//
-    //        }
-    //    }
-    //}
+    function concludeAccountSetUp1() {
+        // RESTAURANT CREATED
+        const restaurantID = addRecord("Businesses",
+            selectedImageRestaurantDetails ?
+                {
+                    Name: restaurantNameRestaurantDetails,
+                    Representant: recordID,
+                    phoneNumber: phoneNumberRestaurantDetails,
+                    Banner: selectedImageRestaurantDetails,
+                    Description: descriptionRestaurantDetails,
+                    numberOfTables: numberOfTablesTableConfiguration.toString()
+                } :
+                {
+                    Name: restaurantNameRestaurantDetails,
+                    Representant: recordID,
+                    phoneNumber: phoneNumberRestaurantDetails,
+                    Description: descriptionRestaurantDetails,
+                    numberOfTables: numberOfTablesTableConfiguration.toString()
+                }
+        )
+        setRestaurantIDPromise(restaurantID)
+    }
+
+    function concludeAccountSetUp2(realRestaurantID: string) {
+        for (const category of categoriesMenuSetupParams) {
+            const items = convertCategoryToAirtableItems(category, realRestaurantID)
+            for (const item of items) {
+                addRecord("Items", item.image == undefined ? {
+                        Name: item.Name,
+                        Description: item.Description,
+                        Owner: item.Owner,
+                        Price: item.Price,
+                        Category: item.Category,
+                    } : {
+                        Name: item.Name,
+                        Description: item.Description,
+                        Owner: item.Owner,
+                        Price: item.Price,
+                        Category: item.Category,
+                        Image: item.image
+                    }
+                )
+            }
+
+        }
+        const table = "Businesses"
+        const id = realRestaurantID
+        const fieldsToUpdate = {"Representant": [recordID]}
+        updateFieldsInAirtable({
+            tableName: table,
+            recordId: id,
+            fieldsToUpdate: fieldsToUpdate,
+        })
+        for (let i = 1; i <= numberOfTablesTableConfiguration; i++) {
+            addRecord("Tables", {
+                "Number": i.toString(),
+                "Restaurant": [realRestaurantID]
+            }).then(tableID =>
+                addRecord("Sessions", {
+                    "Table": [tableID],
+                }))
+        }
+    }
+
+    if (!authUser) {
+        return <AuthError/>
+    }
 
     return (
         <div className='max-w-[1080px] mx-auto'>
@@ -143,16 +254,15 @@ function AccountSetUp() {
                                 Voltar
                             </button>
                         }
-                        {
-                            setupStep !== 2 &&
-                            <button
-                                type='button'
-                                onClick={() => handlePageChange('+')}
-                                className='px-3 py-1 bg-black rounded-lg text-white font-poppins-semibold border-2 border-gray-300'
-                            >
-                                Próximo
-                            </button>
-                        }
+
+                        <button
+                            type='button'
+                            onClick={() => handlePageChange('+')}
+                            className={`px-3 py-1 ${setupStep == 2 && categoriesMenuSetupParams.length == 0 ? "cursor-not-allowed bg-gray-400" : "bg-black"} rounded-lg text-white font-poppins-semibold border-2 border-gray-300`}
+                        >
+                            {setupStep == 2 ? "Concluir" : "Próximo"}
+                        </button>
+
                     </div>
                 </div>
             </div>

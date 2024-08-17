@@ -33,8 +33,8 @@ function AddCategory({isOpen, close, addCategory, restaurantId}: AddCategoryProp
 
 
     function addItem(item: ProductProps) {
-        console.log("NEW ITEM: ", item)
-        setCategoryItems(categoryItems.concat(item))
+        //console.log("NEW ITEM: ", item)
+        setCategoryItems([item, ...categoryItems])
     }
 
     function openEditItemPage(index: number) {
@@ -182,22 +182,29 @@ function AddCategory({isOpen, close, addCategory, restaurantId}: AddCategoryProp
                 </form>
 
             </div>
-            <AddItem isOpen={isCreateItemPageOpen}
-                     close={() => setIsCreateItemPageOpen(false)}
-                     addItem={(item) => addItem(item)}
-                     restaurantId={restaurantId}
-                     categoryName={name}/>
-            <EditItem isOpen={isEditItemPageOpen}
-                      editItem={(item) => editItem(item)}
-                      close={closeEditItemPage}
-                      categoryName={name}
-                      item={itemBeingEditedIndex != -1 ? categoryItems[itemBeingEditedIndex] : {
-                          name: "",
-                          price: 0,
-                          imageURL: "",
-                          description: "",
-                          record_id: restaurantId
-                      } as ProductProps}/>
+            {
+                isCreateItemPageOpen &&
+                <AddItem isOpen={isCreateItemPageOpen}
+                         close={() => setIsCreateItemPageOpen(false)}
+                         addItem={(item) => addItem(item)}
+                         restaurantId={restaurantId}
+                         categoryName={name}/>
+            }
+            {
+                isEditItemPageOpen &&
+                <EditItem isOpen={isEditItemPageOpen}
+                          editItem={(item) => editItem(item)}
+                          close={closeEditItemPage}
+                          categoryName={name}
+                          item={itemBeingEditedIndex != -1 ? categoryItems[itemBeingEditedIndex] : {
+                              name: "",
+                              price: 0,
+                              imageURL: "",
+                              description: "",
+                              record_id: restaurantId
+                          } as ProductProps}/>
+            }
+
 
         </div>
     );

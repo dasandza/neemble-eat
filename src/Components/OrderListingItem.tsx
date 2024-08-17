@@ -6,7 +6,7 @@ interface props {
     onClick: () => void
 }
 
-function KitchenOrderListingItem({order, onClick}: props) {
+function OrderListingItem({order, onClick}: props) {
     return (
 
         <div
@@ -72,4 +72,4 @@ function KitchenOrderListingItem({order, onClick}: props) {
     );
 }
 
-export default KitchenOrderListingItem;
+export default OrderListingItem;

@@ -1,8 +1,7 @@
 import {useEffect, useState} from "react";
-import {AirtableOrders} from "../interfaces.tsx";
+import {AirtableSession} from "../interfaces.tsx";
 import fetchAirtableRecords from "../utils/fetcher.ts";
-import KitchenOrderListingItem from "../Components/KitchenOrderListingItem.tsx";
-import filterLastXhOrders from "../utils/filterLastXhOrders.ts";
+import SessionListingItem from "../Components/SessionListingItem.tsx";
 
 import {
     CharmCross, ClockIcon,
@@ -10,11 +9,11 @@ import {
     HamburgerMenuIcon,
     PriceTag,
     QrCode,
-    SortAscending,
-    SortDescending
 } from "../assets/icons";
 import timeCalculator from "../utils/TimeCalculator.ts";
 import updateFieldsInAirtable from "../utils/updateFieldsInAirtable.ts";
+import getLastSessions from "../utils/getLastSessions.ts";
+import filterLastXhSessions from "../utils/filterLastXhSessions.ts";
 
 
 interface filterProps {
@@ -23,14 +22,12 @@ interface filterProps {
 }
 
 
-function KitchenOrdersInterface() {
-    const [orders, setOrders] = useState<AirtableOrders[]>([])
+function SessionsInterface() {
+    const [sessions, setSessions] = useState<AirtableSession[]>([])
     const [error, setError] = useState<string>("")
-    const [orderSelected, setOrderSelected] = useState<AirtableOrders | null>(null)
-    const [filteredOrders, setFilteredOrders] = useState<AirtableOrders[]>(orders)
+    const [sessionSelected, setSessionSelected] = useState<AirtableSession | null>(null)
+    const [filteredSessions, setFilteredSessions] = useState<AirtableSession[]>(sessions)
     const [filterMode, setFilterMode] = useState<filterProps>({name: "Todos", tag: "All"})
-    const [ascendingSorting, setAscendingSorting] = useState<boolean>(false)
-    //const [groupByTable, setGroupByTable] = useState<boolean>()
     const [isLeftMenuOpen, setIsLeftMenuOpen] = useState<boolean>(false)
     const [isTableSelectMenuOpen, setIsTableSelectMenuOpen] = useState(false);
     const [allTablesNumbers, setAllTablesNumbers] = useState<string[]>(["Todas"])
@@ -38,29 +35,37 @@ function KitchenOrdersInterface() {
 
     const filterModes: filterProps[] = [
         {name: "Todos", tag: "All"},
-        {name: "Novos", tag: "New"},
-        {name: "Em Preparo", tag: "In progress"},
-        {name: "Prontos", tag: "Done"},
-        {name: "Cancelados", tag: "Cancelled"},
+        {name: "Faturas", tag: "Billed"},
+        {name: "Mesas Ocupadas", tag: "Open"},
     ]
 
     useEffect(() => {
         async function fetchData() {
             try {
-                const ordersData = await fetchAirtableRecords("Orders");
-                const o1 = ordersData.filter((order: AirtableOrders) => filterLastXhOrders(order) && order.fields["Session Status"][0] != "Billed")
-                const o2 = sortOrdersByDate(o1, ascendingSorting)
+                const sessionsData = await fetchAirtableRecords("Sessions");
+                const s1 = getLastSessions(sessionsData)
+                const s = s1.filter((session) => filterLastXhSessions(session))
+
                 if (filterMode.tag != "All") {
-                    setOrders(o2.filter(order => order.fields["Order Status"] == filterMode.tag))
-                    setFilteredOrders(o2.filter(order => order.fields["Order Status"] == filterMode.tag))
+                    setSessions(s.filter(session => session.fields.Status == filterMode.tag))
+                    setFilteredSessions(tableSelection != "Todas" ?
+                        s.filter(session =>
+                            session.fields.Status === filterMode.tag &&
+                            session.fields["Table Number"][0] == tableSelection) :
+                        s.filter(session =>
+                            session.fields.Status === filterMode.tag)
+                    )
                 } else {
-                    setOrders(o2)
-                    setFilteredOrders(o2)
+                    setSessions(s)
+                    setFilteredSessions(s.filter(session => tableSelection == "Todas" ?
+                        session :
+                        session.fields["Table Number"][0] == tableSelection
+                    ))
                 }
                 const temp = allTablesNumbers
-                for (const order of o2) {
-                    if (!temp.includes(order.fields["Table Number"][0])) {
-                        temp.push(order.fields["Table Number"][0])
+                for (const session of s) {
+                    if (!temp.includes(session.fields["Table Number"][0])) {
+                        temp.push(session.fields["Table Number"][0])
                     }
                 }
                 setAllTablesNumbers(temp)
@@ -77,20 +82,30 @@ function KitchenOrdersInterface() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const ordersData = await fetchAirtableRecords("Orders");
-                const o1 = ordersData.filter((order: AirtableOrders) => filterLastXhOrders(order) && order.fields["Session Status"][0] != "Billed")
-                const o2 = sortOrdersByDate(o1, ascendingSorting)
+                const sessionsData = await fetchAirtableRecords("Sessions");
+                const s1 = getLastSessions(sessionsData)
+                const s = s1.filter((session) => filterLastXhSessions(session))
+
                 if (filterMode.tag != "All") {
-                    setOrders(o2.filter(order => order.fields["Order Status"] == filterMode.tag))
-                    setFilteredOrders(o2.filter(order => order.fields["Order Status"] == filterMode.tag))
+                    setSessions(s.filter(session => session.fields.Status == filterMode.tag))
+                    setFilteredSessions(tableSelection != "Todas" ?
+                        s.filter(session =>
+                            session.fields.Status === filterMode.tag &&
+                            session.fields["Table Number"][0] == tableSelection) :
+                        s.filter(session =>
+                            session.fields.Status === filterMode.tag)
+                    )
                 } else {
-                    setOrders(o2)
-                    setFilteredOrders(o2)
+                    setSessions(s)
+                    setFilteredSessions(s.filter(session => tableSelection == "Todas" ?
+                        session :
+                        session.fields["Table Number"][0] == tableSelection
+                    ))
                 }
                 const temp = allTablesNumbers
-                for (const order of o2) {
-                    if (!temp.includes(order.fields["Table Number"][0])) {
-                        temp.push(order.fields["Table Number"][0])
+                for (const session of s) {
+                    if (!temp.includes(session.fields["Table Number"][0])) {
+                        temp.push(session.fields["Table Number"][0])
                     }
                 }
                 setAllTablesNumbers(temp)
@@ -107,20 +122,30 @@ function KitchenOrdersInterface() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const ordersData = await fetchAirtableRecords("Orders");
-                const o1 = ordersData.filter((order: AirtableOrders) => filterLastXhOrders(order) && order.fields["Session Status"][0] != "Billed")
-                const o2 = sortOrdersByDate(o1, ascendingSorting)
+                const sessionsData = await fetchAirtableRecords("Sessions");
+                const s1 = getLastSessions(sessionsData)
+                const s = s1.filter((session) => filterLastXhSessions(session))
+
                 if (filterMode.tag != "All") {
-                    setOrders(o2.filter(order => order.fields["Order Status"] == filterMode.tag))
-                    setFilteredOrders(o2.filter(order => order.fields["Order Status"] == filterMode.tag))
+                    setSessions(s.filter(session => session.fields.Status == filterMode.tag))
+                    setFilteredSessions(tableSelection != "Todas" ?
+                        s.filter(session =>
+                            session.fields.Status === filterMode.tag &&
+                            session.fields["Table Number"][0] == tableSelection) :
+                        s.filter(session =>
+                            session.fields.Status === filterMode.tag)
+                    )
                 } else {
-                    setOrders(o2)
-                    setFilteredOrders(o2)
+                    setSessions(s)
+                    setFilteredSessions(s.filter(session => tableSelection == "Todas" ?
+                        session :
+                        session.fields["Table Number"][0] == tableSelection
+                    ))
                 }
                 const temp = allTablesNumbers
-                for (const order of o2) {
-                    if (!temp.includes(order.fields["Table Number"][0])) {
-                        temp.push(order.fields["Table Number"][0])
+                for (const session of s) {
+                    if (!temp.includes(session.fields["Table Number"][0])) {
+                        temp.push(session.fields["Table Number"][0])
                     }
                 }
                 setAllTablesNumbers(temp)
@@ -132,24 +157,16 @@ function KitchenOrdersInterface() {
 
         fetchData().then(r => r);
 
-    }, [orderSelected]);
+    }, [sessionSelected]);
 
 
-    function filterOrders(mode: filterProps) {
+    function filterSessions(mode: filterProps) {
         setFilterMode(mode)
         if (mode.tag != "All") {
-            setFilteredOrders(orders.filter(order => order.fields["Order Status"] == mode.tag))
+            setFilteredSessions(sessions.filter(session => session.fields.Status == mode.tag))
         } else {
-            setFilteredOrders(orders)
+            setFilteredSessions(sessions)
         }
-    }
-
-    function sortOrdersByDate(orders: AirtableOrders[], ascending: boolean = true): AirtableOrders[] {
-        return orders.sort((a, b) => {
-            const dateA = new Date(a.createdTime);
-            const dateB = new Date(b.createdTime);
-            return ascending ? dateA.getTime() - dateB.getTime() : dateB.getTime() - dateA.getTime();
-        });
     }
 
     function toggleHamburgerMenu() {
@@ -157,12 +174,12 @@ function KitchenOrdersInterface() {
     }
 
     function upddateStatus(newStatus: string): void {
-        for (const orderIndex in filteredOrders) {
-            if (filteredOrders[orderIndex].id == orderSelected?.id) {
-                const order = filteredOrders[orderIndex]
-                const name = "Orders"
-                const recordId = order.id
-                const fieldsToUpdate = {"Order Status": newStatus}
+        for (const sessionIndex in filteredSessions) {
+            if (filteredSessions[sessionIndex].id == sessionSelected?.id) {
+                const session = filteredSessions[sessionIndex]
+                const name = "Sessions"
+                const recordId = session.id
+                const fieldsToUpdate = {"Status": newStatus}
 
                 updateFieldsInAirtable({
                     tableName: name,
@@ -171,17 +188,13 @@ function KitchenOrdersInterface() {
                 }).then(() => {
                 })
                 //alert(`Pedido alterado para ${newStatus}`);
-                order.fields["Order Status"] = newStatus;
-                setOrderSelected(order)
-                setFilteredOrders(filteredOrders.map(x => x == order ? order : x))
+                session.fields["Status"] = newStatus;
+                setSessionSelected(session)
+                setFilteredSessions(filteredSessions.map(x => x == session ? session : x))
             }
         }
     }
 
-    function toggleSortingOrder() {
-        setAscendingSorting(!ascendingSorting)
-        setFilteredOrders(sortOrdersByDate(filteredOrders, !ascendingSorting))
-    }
 
     const toggleDropdown = () => {
         setIsTableSelectMenuOpen(!isTableSelectMenuOpen);
@@ -191,16 +204,15 @@ function KitchenOrdersInterface() {
         setTableSelection(table)
         toggleDropdown()
         if (table == "Todas") {
-            setFilteredOrders(orders)
+            setFilteredSessions(sessions)
         } else {
-            setFilteredOrders(orders.filter(order => order.fields["Table Number"] == table))
+            setFilteredSessions(sessions.filter(session => session.fields["Table Number"][0] == table))
         }
-
     }
 
     if (error != "") return <div>{error}</div>
 
-    if (orders == null) return <div>no order</div>
+    if (sessions == null) return <div>no sessions</div>
 
     return (
         <div>
@@ -210,7 +222,7 @@ function KitchenOrdersInterface() {
                     filterModes.map((mode, index) => (
                         <div key={index}
                              onClick={() => {
-                                 filterOrders(mode);
+                                 filterSessions(mode);
                                  toggleHamburgerMenu()
                              }}
                              className={`${mode.tag == filterMode.tag ? "bg-black text-white" : "text-gray-700"} py-3 px-3`}>
@@ -227,7 +239,7 @@ function KitchenOrdersInterface() {
                                 filterModes.map((mode, index) => (
                                     <button
                                         key={index}
-                                        onClick={() => filterOrders(mode)}
+                                        onClick={() => filterSessions(mode)}
                                         className={`font-poppins-semibold rounded-md ${mode.tag == filterMode.tag ? "bg-black text-white" : "laptop:hover:bg-gray-100"} px-4 py-1 transition-colors duration-200 flex items-center justify-center`}>
                                         {mode.name}
                                     </button>
@@ -244,27 +256,6 @@ function KitchenOrdersInterface() {
                                        onClick={toggleHamburgerMenu}/>
                 </div>
                 <div className='flex items-center px-4 pb-4 space-x-6'>
-                    <div
-                        onClick={toggleSortingOrder}
-                        className='cursor-pointer laptop:hover:bg-gray-100 laptop:hover:b g-gray-100 transition durantion-200 w-fit p-1 rounded-md'>
-                        {
-                            ascendingSorting ?
-                                <div className='flex  text-gray-700 space-x-2 items-center'>
-                                    <SortAscending
-                                        width={"20px"}
-                                        height={"20px"}/>
-
-                                </div>
-                                :
-                                <div className='flex  text-gray-700 space-x-2 items-center'>
-                                    <SortDescending
-                                        width={"20px"}
-                                        height={"20px"}/>
-
-                                </div>
-
-                        }
-                    </div>
                     <div className='flex items-center space-x-4'>
                         <div className="relative inline-block text-left">
                             <button
@@ -322,22 +313,22 @@ function KitchenOrdersInterface() {
                     </div>
                 </div>
             </div>
-            <div className={`${orderSelected != null && 'laptop:flex laptop:h-screen'}`}>
+            <div className={`${sessionSelected != null && 'laptop:flex laptop:h-screen'}`}>
                 <div
-                    className={`pt-40 space-y-3 transition-all ease-in-out duration-700 ${orderSelected ? 'laptop:w-1/2' : 'laptop:w-full'}`}>
-                    {filteredOrders.map((order, index) => (
-                        <KitchenOrderListingItem
-                            order={order}
+                    className={`pt-40 space-y-3 transition-all ease-in-out duration-700 ${sessionSelected ? 'laptop:w-1/2' : 'laptop:w-full'}`}>
+                    {filteredSessions.map((session, index) => (
+                        <SessionListingItem
+                            session={session}
                             key={index}
-                            onClick={() => setOrderSelected(order)}/>
+                            onClick={() => setSessionSelected(session)}/>
                     ))}
                 </div>
                 <div
-                    className={`fixed laptop:pt-36 bg-white h-dvh laptop:h-screen w-full laptop:w-1/2 top-0 laptop:right-0 laptop:bottom-1 ease-in-out duration-700 ${orderSelected != null ? ' translate-y-0 laptop:translate-x-0' : 'translate-y-[110%] laptop:translate-y-0 laptop:translate-x-full'} shadow-md z-30 laptop:z-10`}>
+                    className={`fixed laptop:pt-36 bg-white h-dvh laptop:h-screen w-full laptop:w-1/2 top-0 laptop:right-0 laptop:bottom-1 ease-in-out duration-700 ${sessionSelected != null ? ' translate-y-0 laptop:translate-x-0' : 'translate-y-[110%] laptop:translate-y-0 laptop:translate-x-full'} shadow-md z-30 laptop:z-10`}>
 
                     <div className='flex justify-end p-4'>
                         <button className='rounded-md p-0.5 laptop:hover:bg-gray-100 transition duration-200'
-                                onClick={() => setOrderSelected(null)}>
+                                onClick={() => setSessionSelected(null)}>
                             <CharmCross width="20px" height="20px"/>
                         </button>
                     </div>
@@ -345,40 +336,23 @@ function KitchenOrdersInterface() {
                         <div className='w-full'>
                             <div className='flex flex-col-reverse laptop:flex-row laptop:justify-between'>
                                 <h1 className='text-2xl w-[80%] leading-tight text-gray-700'>
-                                    {orderSelected != null ?
-                                        orderSelected.fields["Name (from Item)"] :
-                                        "name"
-                                    }
+                                    Mesa {sessionSelected?.fields["Table Number"][0]}
                                 </h1>
                                 <div className='prevent-select w-fit mb-2 laptop:mb-0'>
                                     {
-                                        orderSelected ?
-                                            orderSelected.fields["Order Status"] == "Done" ?
-                                                <div className=''>
-                                                    <p className='bg-green-200 rounded-full text-xs px-2.5 py-0.5'>
-                                                        Pronto
-                                                    </p>
-                                                </div> :
-                                                orderSelected.fields["Order Status"] == "In progress" ?
-                                                    <div className=''>
-                                                        <p className='bg-yellow-300 rounded-full text-xs px-2.5 py-0.5'>
-                                                            Em Preparo
-                                                        </p>
-                                                    </div> :
-                                                    orderSelected.fields["Order Status"] == "New" ?
-                                                        <div className=''>
-                                                            <p className='bg-blue-200 rounded-full text-xs px-2.5 py-0.5'>
-                                                                Novo
-                                                            </p>
-                                                        </div> :
-                                                        <div className=''>
-                                                            <p className='bg-red-200 rounded-full text-xs px-2.5 py-0.5'>
-                                                                Cancelado
-                                                            </p>
-                                                        </div> :
-                                            <div>
-
+                                        sessionSelected &&
+                                        sessionSelected.fields.Status == "Billed" ?
+                                            <div className=''>
+                                                <p className='bg-green-200 rounded-full text-xs px-2.5 py-0.5'>
+                                                    Fatura
+                                                </p>
+                                            </div> :
+                                            <div className=''>
+                                                <p className='bg-yellow-300 rounded-full text-xs px-2.5 py-0.5'>
+                                                    Em consumo
+                                                </p>
                                             </div>
+
                                     }
                                 </div>
                             </div>
@@ -388,29 +362,29 @@ function KitchenOrdersInterface() {
                                     <h2 className='flex items-center rounded-md border border-gray-300 text-sm w-fit text-gray-500 px-1.5 font-poppins-semibold prevent-select'>
                                         <PriceTag className='mr-1'/>
                                         {
-                                            orderSelected != null ?
-                                                orderSelected.fields["Total"] :
+                                            sessionSelected != null ?
+                                                sessionSelected.fields["Total"] :
                                                 "0.00"
                                         }
                                     </h2>
                                     <h2 className='flex items-center rounded-md border border-gray-300 text-sm w-fit text-gray-500 px-1.5 font-poppins-semibold prevent-select'>
                                         <CutleryIcon className='mr-1'/>
-                                        {orderSelected != null ?
-                                            `${orderSelected.fields.Quantity} 
-                                        ${orderSelected.fields.Quantity == 1 ? "unidade" : "unidades"}` :
-                                            "0 itens"
+                                        {
+                                            sessionSelected != null ?
+                                                `${sessionSelected.fields.Orders.length} ${sessionSelected.fields.Orders.length == 1 ? "Pedido" : "Pedidos"}` :
+                                                "0 Pedidos"
                                         }&nbsp;
                                     </h2>
                                 </div>
                                 <div className='flex space-x-3'>
                                     <h2 className='flex items-center rounded-md border border-gray-300 text-sm w-fit text-gray-500 px-1.5 font-poppins-semibold prevent-select'>
                                         <QrCode className='mr-1'/>
-                                        Mesa {orderSelected ? orderSelected.fields["Table Number"] :
+                                        Mesa {sessionSelected ? sessionSelected.fields["Table Number"][0] :
                                         "null"}
                                     </h2>
                                     <h2 className='flex items-center rounded-md border border-gray-300 text-sm w-fit text-gray-500 px-1.5 font-poppins-semibold prevent-select'>
                                         <ClockIcon className='mr-1'/>
-                                        {orderSelected ? timeCalculator(orderSelected.fields["Time Created"]) : "now"}
+                                        {sessionSelected ? timeCalculator(sessionSelected.createdTime) : "now"}
                                     </h2>
                                 </div>
                             </div>
@@ -418,28 +392,19 @@ function KitchenOrdersInterface() {
                     </div>
 
                     <div className='p-4 relative laptop:static h-full'>
-
                         {
-                            orderSelected != null &&
+                            sessionSelected != null &&
                             <div className='flex space-x-2'>
                                 {
-                                    ["New", "In progress"].includes(orderSelected?.fields["Order Status"]) &&
-                                    <button
-                                        onClick={() => upddateStatus(orderSelected?.fields["Order Status"] == "New" ?
-                                            "In progress" :
-                                            orderSelected?.fields["Order Status"] == "In progress" ?
-                                                "Done" : "Done")}
-                                        className='bg-black text-white font-poppins-semibold w-fit px-8 py-1.5 rounded-lg'>
-                                        {
-                                            orderSelected?.fields["Order Status"] == "New" ?
-                                                "Em preparo" :
-                                                orderSelected?.fields["Order Status"] == "In progress" &&
-                                                "Pronto"
-                                        }
+                                    sessionSelected.fields.Status == "Open" &&
+                                    <button onClick={() => upddateStatus("Billed")}
+                                            className='bg-black text-white font-poppins-semibold w-fit px-8 py-1.5 rounded-lg'>
+                                        Fechar Conta
                                     </button>
+
                                 }
 
-                                {orderSelected?.fields["Order Status"] != "Cancelled" &&
+                                {sessionSelected?.fields.Status != "Cancelled" &&
                                     <button
                                         onClick={() => {
                                             upddateStatus("Cancelled")
@@ -450,19 +415,14 @@ function KitchenOrdersInterface() {
                                 }
                             </div>
                         }
-                        <div className=''>
-                            {orderSelected &&
-                                orderSelected.fields["Aditional Note"] != undefined &&
-                                <div>
-                                    <h1 className='text-xl font-poppins-semibold'>
-                                        Detalhes do cliente:
-                                    </h1>
-                                    <p className='italic text-gray-700 my-2'>
-                                        "{orderSelected?.fields["Aditional Note"]}"
-                                    </p>
+
+                        {
+                            sessionSelected?.fields.Orders?.map((order, index) =>
+                                <div key={index}>
+                                    {order}
                                 </div>
-                            }
-                        </div>
+                            )
+                        }
                     </div>
                 </div>
             </div>
@@ -475,4 +435,4 @@ function KitchenOrdersInterface() {
     );
 }
 
-export default KitchenOrdersInterface;
+export default SessionsInterface;

@@ -145,7 +145,7 @@ function AddItem({isOpen, close, addItem, restaurantId, categoryName}: AddItemPr
                                     </label>
                                     <div className="relative mb-6">
                                         <input
-                                            type="text"
+                                            type="number"
                                             id="price"
                                             value={price}
                                             onChange={(e) => setPrice(e.target.value)}

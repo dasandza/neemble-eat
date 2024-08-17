@@ -4,10 +4,11 @@ import {ChangeEvent} from "react";
 interface TableConfigurationParams {
     numberOfTables: number,
     setNumberOfTables: (numberOfTables: number) => void;
+    error: null | string,
 }
 
 
-function TableConfiguration({numberOfTables, setNumberOfTables}: TableConfigurationParams) {
+function TableConfiguration({numberOfTables, setNumberOfTables, error}: TableConfigurationParams) {
 
     const handleNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -36,10 +37,18 @@ function TableConfiguration({numberOfTables, setNumberOfTables}: TableConfigurat
                     type="text"
                     value={numberOfTables !== null ? numberOfTables : ''}
                     onChange={handleNumberChange}
-                    className="mt-2 w-14 border border-gray-300 hover:bg-gray-100 px-2 rounded"
+                    className={`mt-2 w-14 border ${error ? "border-red-500" : "border-gray-300"}  hover:bg-gray-100 px-2 rounded`}
                     placeholder="0-99"
                 />
             </form>
+            {
+                error &&
+                <div className='mt-6'>
+                    <p className='font-poppins-semibold text-red-500 italic text-sm'>
+                        *{error}
+                    </p>
+                </div>
+            }
         </div>
     );
 }

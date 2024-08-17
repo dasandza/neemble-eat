@@ -11,12 +11,12 @@ interface AddItemProps {
 }
 
 function EditItem({isOpen, close, editItem, categoryName, item}: AddItemProps) {
-    //console.log("YOU ARE EDITING: ", item)
+
+
     const [name, setName] = useState<string>(item.name)
     const [description, setDescription] = useState<string>(item.description ? item.description : "")
-    const [price, setPrice] = useState<string>(item.price.toString() ? item.price.toPrecision() : "0")
-    const [imageURL, setImageURL] = useState<string | null>(item.imageURL ? item.imageURL : "")
-
+    const [price, setPrice] = useState<string>(item.price.toPrecision())
+    const [imageURL, setImageURL] = useState<string | null>(item.imageURL)
 
     useEffect(() => {
         if (isOpen) {
@@ -31,10 +31,10 @@ function EditItem({isOpen, close, editItem, categoryName, item}: AddItemProps) {
 
     function handleSave(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
-
+        console.log("IMAGEM: ", imageURL)
         item.name = name == "" ? item.name : name
         item.description = description == "" ? description : description
-        item.imageURL = imageURL ? imageURL == "" ? item.imageURL : imageURL : item.imageURL
+        item.imageURL = imageURL
         item.price = price ? price == "" ? Number(item.price) : Number(price) : Number(item.price)
 
         editItem(item)
@@ -57,13 +57,22 @@ function EditItem({isOpen, close, editItem, categoryName, item}: AddItemProps) {
         const file = e.target.files?.[0];
         if (file && file.type.startsWith('image/')) {
             setImageURL(URL.createObjectURL(file));
-            console.log(URL.createObjectURL(file))
+            console.log(URL.createObjectURL(file).replace("http://localhost:5173", "http://localhost:5173/neemble-eat"))
         } else {
             alert('Por favor selecione uma imagem.');
         }
     };
+    if (item.name != "") {
+        console.log("ITEM SENDO EDITADO: ", item)
+        //console.log("NUMERO QUE VAI PARA O USESTATE: ", item.price.toString() != "" ? item.price.toPrecision() : "0")
+    }
 
-    if (!isOpen) return null;
+    if (!isOpen) {
+        return null
+    } else {
+        console.log(price)
+    }
+
 
     return (
         <div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-50 rounded-t rounded-lg">
@@ -143,12 +152,12 @@ function EditItem({isOpen, close, editItem, categoryName, item}: AddItemProps) {
                                     </label>
                                     <div className="relative mb-6">
                                         <input
-                                            type="text"
+                                            type="number"
                                             id="price"
                                             value={price}
                                             onChange={(e) => setPrice(e.target.value)}
                                             className="border border-gray-300 text-gray-900 text-sm hover:bg-gray-100 transition-colors duration-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-2"
-                                            placeholder={item.price.toString()}
+                                            placeholder={price}
                                         />
                                     </div>
                                 </div>

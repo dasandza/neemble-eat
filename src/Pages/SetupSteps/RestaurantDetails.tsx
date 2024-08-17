@@ -1,4 +1,4 @@
-import {ChangeEvent} from "react";
+import {ChangeEvent, useEffect} from "react";
 import {PhoneIcon, ImageUpload, LocationIcon} from "../../assets/icons";
 
 
@@ -8,6 +8,7 @@ interface RestaurantDetailsProps {
     address: string,
     description: string,
     selectedImage: string | null,
+    error: string | null,
 
     setRestaurantName: (name: string) => void,
     setPhoneNumber: (phoneNumber: string) => void,
@@ -27,10 +28,13 @@ function RestaurantDetails({
                                setDescription,
                                description,
                                setPhoneNumber,
-                               phoneNumber
+                               phoneNumber,
+                               error
                            }: RestaurantDetailsProps) {
-    //const [error, setError] = useState<string>("")
 
+    useEffect(() => {
+        console.log(error)
+    }, [error]);
 
     function handleImageRemoval() {
         setSelectedImage(null)
@@ -51,14 +55,15 @@ function RestaurantDetails({
             <div className='laptop:mr-12'>
                 <div className=''>
                     <label htmlFor="bannerImage" className='text-sm font-poppins-semibold ml-1'>
-                        Adicione uma imagem de fundo
+                        <p className='h-fit'>Adicione uma imagem de fundo<span className='text-red-500'>*</span></p>
+
                     </label>
                     <div className='w-fit'>
                         <div className="flex flex-col items-center justify-center p-4">
                             {
                                 !selectedImage &&
                                 <label
-                                    className="w-40 h-24 flex flex-col items-center justify-center px-4 py-4 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-gray-100 transition-colors duration-300">
+                                    className={`${error && !selectedImage && "border border-red-500"} w-40 h-24 flex flex-col items-center justify-center px-4 py-4 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase cursor-pointer hover:bg-gray-100 transition-colors duration-300`}>
                                     <ImageUpload/>
                                     <input
                                         type="file"
@@ -104,11 +109,10 @@ function RestaurantDetails({
                                id="restaurantName"
                                value={restaurantName}
                                onChange={(e) => setRestaurantName(e.target.value)}
-                               className="border border-gray-300 text-gray-900 text-sm hover:bg-gray-100 transition-colors duration-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                               placeholder="nome do restaurante"/>
+                               className={`border ${error ? restaurantName == "" ? "border-[1.5px] border-red-600 placeholder-red-500 focus:placeholder-gray-900 focus:text-gray-900" : "border-red-600 text-gray-900" : "text-gray-900 border-gray-300 focus:ring-blue-500 focus:border-blue-500"} text-sm hover:bg-gray-100 transition-colors duration-300 rounded-lg block w-full p-2.5`}
+                               placeholder={error && restaurantName == "" ? "Escreva o nome do restaurante" : "nome do restaurante"}/>
                     </div>
                 </div>
-
                 <div>
                     <label htmlFor="phoneNumber" className='text-sm font-poppins-semibold ml-1'>
                         Número de telefone
@@ -124,8 +128,8 @@ function RestaurantDetails({
                         <input type="tel" id="phoneNumber"
                                value={phoneNumber}
                                onChange={(e) => setPhoneNumber(e.target.value)}
-                               className="border border-gray-300 text-gray-900 text-sm hover:bg-gray-100 transition-colors duration-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
-                               placeholder="número do restaurante"/>
+                               className={`border ${error ? phoneNumber == "" ? "border-[1.5px] border-red-600 placeholder-red-500 focus:placeholder-gray-900 focus:text-gray-900" : "border-red-600 text-gray-900" : "text-gray-900 border-gray-300 focus:ring-blue-500 focus:border-blue-500"} text-sm hover:bg-gray-100 transition-colors duration-300 rounded-lg block w-full ps-10 p-2.5`}
+                               placeholder={error && phoneNumber == "" ? "Escreva o número de telefone" : "Número do restaurante"}/>
                     </div>
                 </div>
                 <div>
@@ -142,8 +146,8 @@ function RestaurantDetails({
                         <input type="text" id="address"
                                value={address}
                                onChange={(e) => setAddress(e.target.value)}
-                               className="border border-gray-300 text-gray-900 text-sm hover:bg-gray-100 transition-colors duration-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
-                               placeholder="endereço"/>
+                               className={`border ${error ? address == "" ? "border-[1.5px] border-red-600 text-gray-900 placeholder-red-500 focus:placeholder-gray-900 focus:text-gray-900" : "border-red-600 text-gray-900 placeholder-red-500" : "text-gray-900 border-gray-300 focus:ring-blue-500 focus:border-blue-500"} text-sm hover:bg-gray-100 transition-colors duration-300 rounded-lg block w-full ps-10 p-2.5`}
+                               placeholder={error && address == "" ? "Escreva o endereço" : "Endereço"}/>
                     </div>
                 </div>
                 <div>
@@ -156,11 +160,20 @@ function RestaurantDetails({
                         <textarea id="description" rows={5}
                                   value={description}
                                   onChange={(e) => setDescription(e.target.value)}
-                                  className="block p-2.5 w-full text-sm text-gray-900 border border-gray-300 bg-white hover:bg-gray-100 transition-colors duration-300 rounded-lg focus:ring-blue-500"
-                                  placeholder="Descrição"></textarea>
+                                  className={`block p-2.5 w-full text-sm text-gray-900 border ${error ? "placeholder-red-500 focus:placeholder-gray-900 border-[1.5px] border-red-600 focus:border-red-500" : "border-gray-300 focus:ring-blue-500"}  bg-white hover:bg-gray-100 transition-colors duration-300 rounded-lg `}
+                                  placeholder="Descrição">
+                        </textarea>
                     </div>
                 </div>
             </form>
+            {
+                error &&
+                <div>
+                    <p className='font-poppins-semibold text-red-500 italic text-sm'>
+                        *{error}
+                    </p>
+                </div>
+            }
         </div>
     );
 }
