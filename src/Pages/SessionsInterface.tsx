@@ -16,6 +16,7 @@ import getLastSessions from "../utils/getLastSessions.ts";
 import filterLastXhSessions from "../utils/filterLastXhSessions.ts";
 import addRecord from "../utils/writeAirtable.ts";
 import filterLastXhOrders from "../utils/filterLastXhOrders.ts";
+import exportDataToCSV from "../utils/ExportToCSV.ts";
 
 
 interface filterProps {
@@ -235,8 +236,7 @@ function SessionsInterface() {
     }
 
     function getDayLog() {
-        console.log(sessions)
-        console.log(orders)
+        exportDataToCSV(orders)
     }
 
     if (error != "") return <div>{error}</div>
@@ -343,7 +343,7 @@ function SessionsInterface() {
                     <div className='px-4'>
                         <div
                             className='cursor-pointer laptop:hover:bg-gray-100 transition durantion-200 w-fit p-1 rounded-md'
-                            onClick={getDayLog}>
+                            onClick={() => getDayLog()}>
                             <PrintIcon
                                 width={"20px"}
                                 height={"20px"}/>

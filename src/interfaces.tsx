@@ -51,6 +51,7 @@ interface AirtableOrders {
     "createdTime": string,
     "id": string,
     fields: {
+        [key: string]: any;
         "Price (from Item)": number,
         "Name (from Item)": string,
         "Time Created": string;
