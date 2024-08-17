@@ -6,6 +6,13 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({product}) => {
+
+    if (!product.imageURL) {
+        window.location.reload()
+        sessionStorage.clear()
+        localStorage.clear()
+    }
+
     return (
 
         <div
@@ -19,7 +26,8 @@ const ProductCard: React.FC<ProductCardProps> = ({product}) => {
             </div>
             <div
                 className='product-image justify-center items-center px-2 py-5 tablet:px-1 tablet:py-3 tablet:mr-2 laptop:mr-0 laptop:py-0 laptop:px-0 grow laptop:grow-0 flex w-2/5 tablet:w-1/4 laptop:w-1/4 '>
-                <img src={product.imageURL} alt={product.name} className='object-cover w-full h-full'/>
+                <img src={product.imageURL ? product.imageURL : ""} alt={product.name}
+                     className='object-cover w-full h-full'/>
             </div>
         </div>
     );

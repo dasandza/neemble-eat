@@ -90,11 +90,11 @@ interface AirtableSession {
 
 interface AirtableSessionParams {
     Table: Array<string>,
-    "Restaurant Name"?: Array<string>,
+    "Restaurant Name": Array<string>,
     "Restaurant ID": Array<string>,
     "Table Number": Array<string>,
     Orders: Array<string>,
-    "Status"?: string,
+    "Status": string,
     "Session Number": string,
     Total: number,
 }
