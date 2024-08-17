@@ -14,6 +14,7 @@ import timeCalculator from "../utils/TimeCalculator.ts";
 import updateFieldsInAirtable from "../utils/updateFieldsInAirtable.ts";
 import getLastSessions from "../utils/getLastSessions.ts";
 import filterLastXhSessions from "../utils/filterLastXhSessions.ts";
+import addRecord from "../utils/writeAirtable.ts";
 
 
 interface filterProps {
@@ -186,6 +187,12 @@ function SessionsInterface() {
                     recordId: recordId,
                     fieldsToUpdate: fieldsToUpdate
                 }).then(() => {
+                    if (newStatus == "Cancelled") {
+                        addRecord("Sessions", {
+                            "Table": filteredSessions[sessionIndex].fields.Table
+                        })
+                    }
+
                 })
                 //alert(`Pedido alterado para ${newStatus}`);
                 session.fields["Status"] = newStatus;
