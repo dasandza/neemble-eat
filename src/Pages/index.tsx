@@ -13,8 +13,11 @@ import Demo from "./Demo.tsx";
 import Contact from "./Contact.tsx";
 import Support from "./Support.tsx";
 import SessionsInterface from "./SessionsInterface.tsx";
+import UserHomePage from "./UserHomePage.tsx";
+
 
 export {
+    UserHomePage,
     SessionsInterface,
     About,
     Demo,

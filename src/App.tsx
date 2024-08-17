@@ -13,7 +13,7 @@ import {
     Demo,
     Contact,
     Support,
-    SessionsInterface
+    SessionsInterface, UserHomePage
 } from './Pages'
 import {CharmCross} from "./assets/icons";
 
@@ -79,6 +79,8 @@ function App() {
                            element={<OrdersInterface/>}/>
                     <Route path="/neemble-eat/sessions"
                            element={<SessionsInterface/>}/>
+                    <Route path="/neemble-eat/user/rep/:representantID"
+                           element={<UserHomePage/>}/>
                 </Routes>
             </Router>
         </div>

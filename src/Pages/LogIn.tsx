@@ -1,24 +1,43 @@
 import Image from '../assets/images/cooking (1).png'
 import {Mail, HugeiconsView, HugeiconsViewOff} from "../assets/icons";
-import React, {useState} from "react";
-import {Link} from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 import auth from "../firebase/firebase.ts";
 import {signInWithEmailAndPassword} from "firebase/auth";
+import fetchAirtableRecords from "../utils/fetcher.ts";
+import {AirtableRepresentant} from "../interfaces.tsx";
 
 
 function LogIn() {
+    
+    const navigate = useNavigate();
+    const [UUID, setUUID] = useState<string | null>(null)
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
-    const [error, setError] = useState("")
+    const [error, setError] = useState<string | null>(null)
     const [passwordVisibility, setPasswordVisibility] = useState<boolean>(false)
 
+
+    useEffect(() => {
+        async function fetch() {
+            const representants: AirtableRepresentant[] = await fetchAirtableRecords("Representant")
+            for (const representant of representants) {
+                if (representant.fields.UUID == UUID) {
+                    navigate(`/neemble-eat/user/rep/${representant.id}/`)
+                }
+            }
+
+        }
+
+        fetch().then()
+    }, [UUID]);
 
     function handleSubmition(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredentials) => {
-                console.log(userCredentials)
-                setError("")
+                setUUID(userCredentials.user.uid)
+                setError(null)
             }).catch((error) => {
             setError("Houve um problema ao iniciar sessão. Tente novamente ou troque a sua palavra passe")
             console.log(error)

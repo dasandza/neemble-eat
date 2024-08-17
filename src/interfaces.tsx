@@ -47,6 +47,13 @@ interface Representant {
     "Email": string
 }
 
+interface AirtableRepresentant {
+    "createdTime": string,
+    "id": string,
+    fields: Representant
+}
+
+
 interface AirtableOrders {
     "createdTime": string,
     "id": string,
@@ -236,6 +243,7 @@ interface BannerFields {
 }
 
 export type {
+    AirtableRepresentant,
     Representant,
     AirtableSession,
     OrdersPageParams,

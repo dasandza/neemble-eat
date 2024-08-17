@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {MenuSetup, RestaurantDetails, TableConfiguration} from "./SetupSteps";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {AirtableItem, Category, ProductProps} from "../interfaces.tsx";
 import addRecord from "../utils/writeAirtable.ts";
 import {onAuthStateChanged, User} from "firebase/auth";
@@ -11,6 +11,7 @@ import updateFieldsInAirtable from "../utils/updateFieldsInAirtable.ts";
 
 function AccountSetUp() {
     const [authUser, setAuthUser] = useState<null | User>(null)
+    const navigate = useNavigate();
 
     //const [promiseTableID, setPromiseTableID] = useState()
     const [setupStep, setSetupStep] = useState<number>(0);
@@ -218,6 +219,7 @@ function AccountSetUp() {
                     "Table": [tableID],
                 }))
         }
+        navigate(`/neemble-eat/user/rep/${recordID}/`)
     }
 
     if (!authUser) {

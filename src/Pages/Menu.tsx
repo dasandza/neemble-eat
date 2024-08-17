@@ -55,6 +55,7 @@ function Menu(): React.ReactElement {
                     storedBusinessData = null
                     storedItemsData = null
                     sessionStorage.clear()
+                    localStorage.clear()
                 }
                 if (storedItemsData) {
                     setAirtableItems(JSON.parse(storedItemsData))
@@ -76,7 +77,7 @@ function Menu(): React.ReactElement {
             }
         }
 
-        fetchData();
+        fetchData().then(r => r);
     }, [place]);
 
     // Function to organize data
