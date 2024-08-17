@@ -245,22 +245,32 @@ function OrdersInterface() {
                 </div>
                 <div className='flex items-center px-4 pb-4 space-x-6'>
                     <div
-                        onClick={toggleSortingOrder}
-                        className='cursor-pointer laptop:hover:bg-gray-100 laptop:hover:b g-gray-100 transition durantion-200 w-fit p-1 rounded-md'>
+                        className=''>
                         {
                             ascendingSorting ?
-                                <div className='flex  text-gray-700 space-x-2 items-center'>
-                                    <SortAscending
-                                        width={"20px"}
-                                        height={"20px"}/>
+                                <div className='flex space-x-3 items-center'>
+                                    <div
+                                        className='cursor-pointer laptop:hover:bg-gray-100 transition durantion-200 w-fit p-1 rounded-md'
+                                        onClick={toggleSortingOrder}>
+                                        <SortAscending
+                                            width={"20px"}
+                                            height={"20px"}/>
 
+                                    </div>
+                                    <p className='text-gray-600 text-sm font-poppins-semibold prevent-select'>Antigo {"→"} Recente</p>
                                 </div>
-                                :
-                                <div className='flex  text-gray-700 space-x-2 items-center'>
-                                    <SortDescending
-                                        width={"20px"}
-                                        height={"20px"}/>
 
+                                :
+                                <div className='flex space-x-3 items-center'>
+                                    <div
+                                        className='cursor-pointer laptop:hover:bg-gray-100 transition durantion-200 w-fit p-1 rounded-md'
+                                        onClick={toggleSortingOrder}>
+                                        <SortDescending
+                                            width={"20px"}
+                                            height={"20px"}/>
+
+                                    </div>
+                                    <p className='text-gray-600 text-sm font-poppins-semibold prevent-select'> Recente {"→"} Antigo</p>
                                 </div>
 
                         }

@@ -20,6 +20,8 @@ import MulticaixaExpressLogo from "../assets/images/MCX_Express.png"
 
 function Orders() {
 
+
+    const [sessionInitiated, setSessionInitiated] = useState<boolean>(false)
     const [customerName, setCustomerName] = useState<string>("")
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [table, setTable] = useState<AirtableTable>()
@@ -43,12 +45,43 @@ function Orders() {
                 const sessionsList: AirtableSession[] = await fetchAirtableRecords("Sessions");
                 for (const session of sessionsList) {
                     if (session.fields["Restaurant Name"][0].toLowerCase() == restaurantName.toLowerCase() && session.fields["Table Number"][0] == tableNumber && session.fields.Status == "Open") {
-                        setSession(session)
-                        setOrders(ordersList.filter((order) => {
-                            return order.fields["Session ID"][0] === session.id
-                        }));
+                        if (session.fields.Orders && session.fields.Total == 0) {
+                            const name = "Sessions"
+                            const recordId = session.id
+                            const fieldsToUpdate = {"Status": "Cancelled"}
+                            console.log(sessionInitiated)
+                            if (!sessionInitiated && orders != undefined) {
+                                updateFieldsInAirtable({
+                                    tableName: name,
+                                    recordId: recordId,
+                                    fieldsToUpdate: fieldsToUpdate
+                                }).then(() => {
+                                    addRecord("Sessions", {
+                                        "Table": session.fields.Table
+                                    }).then(newRecordID => {
+                                        session.id = newRecordID
+                                        session.fields["Session Number"] = (Number(session.fields["Session Number"]) + 1).toString()
+                                        session.fields.Orders = []
+                                        sessionsList.push(session)
+                                    })
+                                })
+                                setSession(session)
+                                setOrders([]);
+                                setSessionInitiated(true)
+                            }
+                            break;
+                        } else {
+                            if (!sessionInitiated) {
+                                setSession(session)
+                                setOrders(ordersList.filter((order) => {
+                                    return order.fields["Session ID"][0] === session.id
+                                }));
+                                setSessionInitiated(true)
+                            }
 
-                        break;
+                            break;
+
+                        }
                     }
                     // I can do something if there is no open session
                 }
@@ -73,28 +106,60 @@ function Orders() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const ordersList: AirtableOrders[] = await fetchAirtableRecords("Orders");
-                const sessionsList: AirtableSession[] = await fetchAirtableRecords("Sessions");
-                for (const session of sessionsList) {
-                    if (session.fields["Restaurant Name"][0].toLowerCase() == restaurantName.toLowerCase() && session.fields["Table Number"][0] == tableNumber && session.fields.Status == "Open") {
-                        setSession(session)
-                        setOrders(ordersList.filter((order) => {
-                            return order.fields["Session ID"][0] === session.id
-                        }));
+                if (error != null) {
+                    const ordersList: AirtableOrders[] = await fetchAirtableRecords("Orders");
+                    const sessionsList: AirtableSession[] = await fetchAirtableRecords("Sessions");
+                    for (const session of sessionsList) {
+                        if (session.fields["Restaurant Name"][0].toLowerCase() == restaurantName.toLowerCase() && session.fields["Table Number"][0] == tableNumber && session.fields.Status == "Open") {
+                            if (session.fields.Orders && session.fields.Total == 0) {
+                                const name = "Sessions"
+                                const recordId = session.id
+                                const fieldsToUpdate = {"Status": "Cancelled"}
+                                if (!sessionInitiated && orders != undefined) {
+                                    updateFieldsInAirtable({
+                                        tableName: name,
+                                        recordId: recordId,
+                                        fieldsToUpdate: fieldsToUpdate
+                                    }).then(() => {
+                                        addRecord("Sessions", {
+                                            "Table": session.fields.Table
+                                        }).then(newRecordID => {
+                                            session.id = newRecordID
+                                            session.fields["Session Number"] = (Number(session.fields["Session Number"]) + 1).toString()
+                                            session.fields.Orders = []
+                                            sessionsList.push(session)
+                                        })
+                                    })
+                                    setSession(session)
+                                    setOrders([]);
+                                    setSessionInitiated(true)
+                                }
 
-                        break;
+                                break;
+                            } else {
+                                if (!sessionInitiated) {
+                                    setSession(session)
+                                    setOrders(ordersList.filter((order) => {
+                                        return order.fields["Session ID"][0] === session.id
+                                    }));
+                                    setSessionInitiated(true)
+                                }
+                                break;
+
+                            }
+                        }
+                        // I can do something if there is no open session
                     }
-                    // I can do something if there is no open session
-                }
-                const tablesList: AirtableTable[] = await fetchAirtableRecords("Tables");
-                for (const table of tablesList) {
-                    if (table.fields.Number == tableNumber && table.fields["Name (from Restaurant)"][0].toLowerCase() == restaurantName.toLowerCase()) {
-                        setTable(table)
-                        break;
+                    const tablesList: AirtableTable[] = await fetchAirtableRecords("Tables");
+                    for (const table of tablesList) {
+                        if (table.fields.Number == tableNumber && table.fields["Name (from Restaurant)"][0].toLowerCase() == restaurantName.toLowerCase()) {
+                            setTable(table)
+                            break;
+                        }
+                        // I can do something if there is no open session
                     }
-                    // I can do something if there is no open session
+                    setLoading(false)
                 }
-                setLoading(false)
             } catch (err) {
                 setError('Failed to fetch data');
                 console.error("Error fetching data:", err);

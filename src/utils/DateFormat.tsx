@@ -43,7 +43,7 @@ function formatDateString(dateString: string): string {
 
     // Combine the date and time parts
     const [day, month, dayNum] = formattedDate.split(',')[1].trim().split(' ');
-    console.log(day, dayNum)
+    console.log("IGNORE:", day, dayNum);
     return `${weekDaysTranslationMapping[formattedDate.split(",")[0]]}, ${month}  |  ${formattedTime}`;
 }
 

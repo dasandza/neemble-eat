@@ -25,8 +25,10 @@ import SortAscending from "./SortAscending.tsx";
 import SortDescending from "./SortDescending.tsx";
 import HamburgerMenuIcon from "./HamburgerMenuIcon.tsx";
 import ClockIcon from "./ClockIcon.tsx";
+import PrintIcon from "./PrintIcon.tsx";
 
 export {
+    PrintIcon,
     ClockIcon,
     HamburgerMenuIcon,
     SortDescending,

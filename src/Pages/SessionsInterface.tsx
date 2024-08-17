@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {AirtableSession} from "../interfaces.tsx";
+import {AirtableOrders, AirtableSession} from "../interfaces.tsx";
 import fetchAirtableRecords from "../utils/fetcher.ts";
 import SessionListingItem from "../Components/SessionListingItem.tsx";
 
@@ -7,7 +7,7 @@ import {
     CharmCross, ClockIcon,
     CutleryIcon,
     HamburgerMenuIcon,
-    PriceTag,
+    PriceTag, PrintIcon,
     QrCode,
 } from "../assets/icons";
 import timeCalculator from "../utils/TimeCalculator.ts";
@@ -15,6 +15,7 @@ import updateFieldsInAirtable from "../utils/updateFieldsInAirtable.ts";
 import getLastSessions from "../utils/getLastSessions.ts";
 import filterLastXhSessions from "../utils/filterLastXhSessions.ts";
 import addRecord from "../utils/writeAirtable.ts";
+import filterLastXhOrders from "../utils/filterLastXhOrders.ts";
 
 
 interface filterProps {
@@ -24,6 +25,8 @@ interface filterProps {
 
 
 function SessionsInterface() {
+
+    const [orders, setOrders] = useState<AirtableOrders[]>([])
     const [sessions, setSessions] = useState<AirtableSession[]>([])
     const [error, setError] = useState<string>("")
     const [sessionSelected, setSessionSelected] = useState<AirtableSession | null>(null)
@@ -43,6 +46,7 @@ function SessionsInterface() {
     useEffect(() => {
         async function fetchData() {
             try {
+                const ordersData = await fetchAirtableRecords("Orders")
                 const sessionsData = await fetchAirtableRecords("Sessions");
                 const s1 = getLastSessions(sessionsData)
                 const s = s1.filter((session) => filterLastXhSessions(session))
@@ -63,6 +67,12 @@ function SessionsInterface() {
                         session.fields["Table Number"][0] == tableSelection
                     ))
                 }
+
+                // Orders
+                const last24HOrders = ordersData.filter((order: AirtableOrders) => filterLastXhOrders(order))
+                setOrders(last24HOrders)
+
+                // Tables
                 const temp = allTablesNumbers
                 for (const session of s) {
                     if (!temp.includes(session.fields["Table Number"][0])) {
@@ -83,6 +93,7 @@ function SessionsInterface() {
     useEffect(() => {
         async function fetchData() {
             try {
+                const ordersData = await fetchAirtableRecords("Orders")
                 const sessionsData = await fetchAirtableRecords("Sessions");
                 const s1 = getLastSessions(sessionsData)
                 const s = s1.filter((session) => filterLastXhSessions(session))
@@ -103,6 +114,12 @@ function SessionsInterface() {
                         session.fields["Table Number"][0] == tableSelection
                     ))
                 }
+
+                // Orders
+                const last24HOrders = ordersData.filter((order: AirtableOrders) => filterLastXhOrders(order))
+                setOrders(last24HOrders)
+
+                // Tables
                 const temp = allTablesNumbers
                 for (const session of s) {
                     if (!temp.includes(session.fields["Table Number"][0])) {
@@ -217,6 +234,11 @@ function SessionsInterface() {
         }
     }
 
+    function getDayLog() {
+        console.log(sessions)
+        console.log(orders)
+    }
+
     if (error != "") return <div>{error}</div>
 
     if (sessions == null) return <div>no sessions</div>
@@ -262,7 +284,7 @@ function SessionsInterface() {
                     <HamburgerMenuIcon width="25px" height='25px'
                                        onClick={toggleHamburgerMenu}/>
                 </div>
-                <div className='flex items-center px-4 pb-4 space-x-6'>
+                <div className='flex items-center px-4 pb-4 space-x-6 justify-between'>
                     <div className='flex items-center space-x-4'>
                         <div className="relative inline-block text-left">
                             <button
@@ -316,6 +338,15 @@ function SessionsInterface() {
                                     tableSelection == "Todas" ? tableSelection : `Mesa ${tableSelection}`
                                 }
                             </p>
+                        </div>
+                    </div>
+                    <div className='px-4'>
+                        <div
+                            className='cursor-pointer laptop:hover:bg-gray-100 transition durantion-200 w-fit p-1 rounded-md'
+                            onClick={getDayLog}>
+                            <PrintIcon
+                                width={"20px"}
+                                height={"20px"}/>
                         </div>
                     </div>
                 </div>
@@ -422,14 +453,26 @@ function SessionsInterface() {
                                 }
                             </div>
                         }
+                        <div className='my-3 space-y-2'>
+                            <h1 className='text-xl font-poppins-semibold'>Pedidos:</h1>
+                            {
+                                orders.map((order, index) =>
+                                    sessionSelected?.fields.Orders.includes(order.id) &&
+                                    <div key={index}
+                                         className='hover:bg-gray-100 transition-colors duration-300 rounded-lg px-5 py-1'>
+                                        <div className='flex mb-2'>
+                                            <h1 className="truncate max-w-36 hover:overflow-clip laptop:hover:max-w-fit font-poppins-semibold ">
+                                                {order.fields["Name (from Item)"]}
+                                            </h1>
+                                            <p className='text-gray-400 font-poppins-semibold'>
+                                                &nbsp;{order.fields.Quantity}
+                                            </p>
+                                        </div>
 
-                        {
-                            sessionSelected?.fields.Orders?.map((order, index) =>
-                                <div key={index}>
-                                    {order}
-                                </div>
-                            )
-                        }
+                                    </div>
+                                )
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
