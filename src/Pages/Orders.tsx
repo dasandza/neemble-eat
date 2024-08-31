@@ -1,38 +1,30 @@
-import fetchAirtableRecords from "../utils/fetcher.ts";
 import {useEffect, useState} from "react";
-import {
-    AirtableOrders,
-    OrdersPageParams,
-    UpdateFieldsParams,
-    AirtableSession,
-    AirtableTable
-} from "../interfaces.tsx";
 import formatDateString from "../utils/DateFormat.tsx";
 import {Link, useParams} from "react-router-dom";
-import {decodeString} from "../utils/urlhandler.ts";
-import updateFieldsInAirtable from "../utils/updateFieldsInAirtable.ts";
-import addRecord from "../utils/writeAirtable.ts";
-import LoadingOrders from "./LoadingPages/LoadingOrders.tsx";
+import {LoadingOrders} from "./LoadingPages";
 import SwipeToConfirmButton from "../Components/SwipeToConfirmButton.tsx";
 import {ArrowDropdown} from "../assets/icons";
 import MulticaixaExpressLogo from "../assets/images/MCX_Express.png"
+import {OrderJson, TableSessionJson} from "../schema.ts";
+import {closeSession, fetchAllSessionOrders, fetchRestaurantOpenTable} from "../api";
 
 
 function Orders() {
 
+    const {restaurantID, menuID, tableNumber} = useParams() as unknown as {
+        restaurantID: string,
+        menuID: string,
+        tableNumber: number
+    };
 
-    const [sessionInitiated, setSessionInitiated] = useState<boolean>(false)
+
     const [customerName, setCustomerName] = useState<string>("")
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [table, setTable] = useState<AirtableTable>()
-    const [orders, setOrders] = useState<Array<AirtableOrders>>([])
+    const [orders, setOrders] = useState<Array<OrderJson>>([])
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true)
     const [sessionPrice, setSessionPrice] = useState<number>(0)
-    const {encodedBusinessName, tableNumber} = useParams() as unknown as OrdersPageParams;
-    const restaurantName = decodeString(encodedBusinessName)
-    const [session, setSession] = useState<AirtableSession | null>()
-    const [closeEmptySession, setCloseEmptySession] = useState<boolean>(false)
+    const [session, setSession] = useState<TableSessionJson | null>()
     const [tip, setTip] = useState<number>(0);
     const [paymentMethodShowing, setPaymentMethodShowing] = useState<boolean>(false)
     //const [paymentSelected, setPaymentSelected] = useState<string>("")
@@ -41,58 +33,11 @@ function Orders() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const ordersList: AirtableOrders[] = await fetchAirtableRecords("Orders");
-                const sessionsList: AirtableSession[] = await fetchAirtableRecords("Sessions");
-                for (const session of sessionsList) {
-                    if (session.fields["Restaurant Name"][0].toLowerCase() == restaurantName.toLowerCase() && session.fields["Table Number"][0] == tableNumber && session.fields.Status == "Open") {
-                        if (session.fields.Orders && session.fields.Total == 0) {
-                            const name = "Sessions"
-                            const recordId = session.id
-                            const fieldsToUpdate = {"Status": "Cancelled"}
-                            console.log(sessionInitiated)
-                            if (!sessionInitiated && orders != undefined) {
-                                updateFieldsInAirtable({
-                                    tableName: name,
-                                    recordId: recordId,
-                                    fieldsToUpdate: fieldsToUpdate
-                                }).then(() => {
-                                    addRecord("Sessions", {
-                                        "Table": session.fields.Table
-                                    }).then(newRecordID => {
-                                        session.id = newRecordID
-                                        session.fields["Session Number"] = (Number(session.fields["Session Number"]) + 1).toString()
-                                        session.fields.Orders = []
-                                        sessionsList.push(session)
-                                    })
-                                })
-                                setSession(session)
-                                setOrders([]);
-                                setSessionInitiated(true)
-                            }
-                            break;
-                        } else {
-                            if (!sessionInitiated) {
-                                setSession(session)
-                                setOrders(ordersList.filter((order) => {
-                                    return order.fields["Session ID"][0] === session.id
-                                }));
-                                setSessionInitiated(true)
-                            }
-
-                            break;
-
-                        }
-                    }
-                    // I can do something if there is no open session
-                }
-                const tablesList: AirtableTable[] = await fetchAirtableRecords("Tables");
-                for (const table of tablesList) {
-                    if (table.fields.Number == tableNumber && table.fields["Name (from Restaurant)"][0].toLowerCase() == restaurantName.toLowerCase()) {
-                        setTable(table)
-                        break;
-                    }
-                    // I can do something if there is no open session
-                }
+                // MAYBE I NEED A LISTENER TO CHECK IF THE SESSION WAS NOT CLOSE, IN CASE MANY PEOPLE ARE WITH THIS PAGE OPEN
+                const session = await fetchRestaurantOpenTable({restaurantID: restaurantID, tableNumber: tableNumber})
+                const orders = await fetchAllSessionOrders({sessionID: session.id})
+                setSession(session)
+                setOrders(orders)
                 setLoading(false)
             } catch (err) {
                 setError('Failed to fetch data');
@@ -103,93 +48,18 @@ function Orders() {
         fetchData().then(r => r);
     }, []);
 
+
     useEffect(() => {
-        async function fetchData() {
-            try {
-                if (error != null) {
-                    const ordersList: AirtableOrders[] = await fetchAirtableRecords("Orders");
-                    const sessionsList: AirtableSession[] = await fetchAirtableRecords("Sessions");
-                    for (const session of sessionsList) {
-                        if (session.fields["Restaurant Name"][0].toLowerCase() == restaurantName.toLowerCase() && session.fields["Table Number"][0] == tableNumber && session.fields.Status == "Open") {
-                            if (session.fields.Orders && session.fields.Total == 0) {
-                                const name = "Sessions"
-                                const recordId = session.id
-                                const fieldsToUpdate = {"Status": "Cancelled"}
-                                if (!sessionInitiated && orders != undefined) {
-                                    updateFieldsInAirtable({
-                                        tableName: name,
-                                        recordId: recordId,
-                                        fieldsToUpdate: fieldsToUpdate
-                                    }).then(() => {
-                                        addRecord("Sessions", {
-                                            "Table": session.fields.Table
-                                        }).then(newRecordID => {
-                                            session.id = newRecordID
-                                            session.fields["Session Number"] = (Number(session.fields["Session Number"]) + 1).toString()
-                                            session.fields.Orders = []
-                                            sessionsList.push(session)
-                                        })
-                                    })
-                                    setSession(session)
-                                    setOrders([]);
-                                    setSessionInitiated(true)
-                                }
-
-                                break;
-                            } else {
-                                if (!sessionInitiated) {
-                                    setSession(session)
-                                    setOrders(ordersList.filter((order) => {
-                                        return order.fields["Session ID"][0] === session.id
-                                    }));
-                                    setSessionInitiated(true)
-                                }
-                                break;
-
-                            }
-                        }
-                        // I can do something if there is no open session
-                    }
-                    const tablesList: AirtableTable[] = await fetchAirtableRecords("Tables");
-                    for (const table of tablesList) {
-                        if (table.fields.Number == tableNumber && table.fields["Name (from Restaurant)"][0].toLowerCase() == restaurantName.toLowerCase()) {
-                            setTable(table)
-                            break;
-                        }
-                        // I can do something if there is no open session
-                    }
-                    setLoading(false)
-                }
-            } catch (err) {
-                setError('Failed to fetch data');
-                console.error("Error fetching data:", err);
+        if (orders) {
+            let total = 0
+            for (const order of orders) {
+                total += order.prepStatus != "Cancelled" ? order.total : 0
             }
+            setSessionPrice(total)
         }
 
-        fetchData().then(r => r);
-    }, [error]);
-
-
-    useEffect(() => {
-        let total = 0
-        for (const order of orders) {
-            total += (Number(order.fields.Total))
-        }
-        setSessionPrice(total)
     }, [orders]);
 
-    async function verifySessions() {
-        try {
-            const sessionsList: AirtableSession[] = await fetchAirtableRecords("Sessions");
-            setCloseEmptySession(sessionsList.filter((session) => {
-                return session.fields["Restaurant Name"][0].toLowerCase() === restaurantName.toLowerCase() && session.fields["Table Number"][0] === tableNumber && session.fields.Status === "Open" && session.fields.Orders.length == 0
-            }).length == 1)
-        } catch (err) {
-            setCloseEmptySession(false)
-            //setError(`Failed to fetch data: ${error}`);
-            console.error("Error fetching data:", err);
-        }
-    }
 
     const togglePopup = () => {
         setIsPopupOpen(!isPopupOpen);
@@ -209,20 +79,18 @@ function Orders() {
 
     function handleGetBill() {
         if (session == null) return;
-        if (table == null) return;
-        // Example usage:
-        const params: UpdateFieldsParams = {
-            tableName: 'Sessions',
-            recordId: session?.id,
-            fieldsToUpdate: {
-                "Status": 'Billed',
-            },
-        };
-        verifySessions().then(r => r)
-        if (!closeEmptySession) {
-            updateFieldsInAirtable(params).catch(console.error);
-            addRecord("Sessions", {"Table": [table?.id]}).then(r => r)
-        }
+
+        closeSession({sessionID: session.id, status: "Billed"})
+            .then(() => {
+                setOrders([])
+                const customerName = sessionStorage.getItem('CustomerName');
+                if (customerName != "" && customerName) {
+                    setCustomerName(customerName)
+                }
+                togglePopup()
+                sessionStorage.clear();
+            })
+            .catch((error) => console.error(error))
         setOrders([])
         const customerName = sessionStorage.getItem('CustomerName');
         if (customerName != "" && customerName) {
@@ -240,7 +108,7 @@ function Orders() {
     return (
         <div className='min-h-svh px-4 bg-gray-100 font-poppins pt-7'>
             <div className='flex relative justify-between items-center mb-5'>
-                <Link to={`/neemble-eat/b/${encodedBusinessName}/${tableNumber}`} className='absolute flex-none'>
+                <Link to={`/neemble-eat/menu/${restaurantID}/${menuID}/${tableNumber}`} className='absolute flex-none'>
                     <div className="text-left">
                         <p className='text-lg font-bold pr-4'>
                             {'<'}
@@ -261,14 +129,12 @@ function Orders() {
                     Abaixo estão os seus pedidos
                 </p>
             </div>
-            {orders.length == 0 &&
+            {orders.length == 0 ?
                 <div className='h-svh w-full  flex items-center justify-center'>
                     <p className='text-gray-500'>
                         Nenhum pedido ainda
                     </p>
-                </div>
-            }
-            {orders.length != 0 &&
+                </div> :
                 <div className='bg-white shadow-sm py-2 px-3 rounded-xl mt-3'>
                     {
                         orders.map((order, index) => (
@@ -279,21 +145,21 @@ function Orders() {
                                         <div className='flex'>
                                             <p className='font-semibold'>Pedido:&nbsp;</p>
                                             <p className='truncate w-32'>
-                                                {order.fields["Name (from Item)"]}
+                                                {order.orderedItemName}
                                             </p>
                                             <p>
-                                                x {order.fields.Quantity}
+                                                x {order.quantity}
                                             </p>
                                         </div>
                                         <p className='text-sm text-gray-400'>
-                                            {formatDateString(order.fields["Time Created"])}
+                                            {formatDateString(order.orderTime)}
                                         </p>
                                     </div>
                                     <div className='text-sm'>
                                         <div className='flex'>
 
-                                            <p className={`font-semibold ${order.fields["Order Status"] == "Cancelled" && "line-through italic"}`}>
-                                                {order.fields["Price (from Item)"] * order.fields.Quantity}.00
+                                            <p className={`font-semibold ${order.prepStatus == "Cancelled" && "line-through italic"}`}>
+                                                {order.unitPrice * order.quantity}.00
                                             </p>
                                             <p>&nbsp;Kz</p>
                                         </div>
@@ -301,11 +167,11 @@ function Orders() {
                                 </div>
                                 <div className='my-2'>
                                     {
-                                        order.fields["Order Status"] == "Done" ?
+                                        order.prepStatus == "Done" ?
                                             <p className='bg-green-100 border border-green-600 font-semibold text-green-600 w-fit text-sm px-2 py-0.5 rounded-lg flex justify-center items-center'>
                                                 Pronto
                                             </p> :
-                                            order.fields["Order Status"] == "Cancelled" ?
+                                            order.prepStatus == "Cancelled" ?
                                                 <p className='bg-red-100 border border-red-600 font-semibold text-red-600 w-fit text-sm px-2 py-0.5 rounded-lg flex justify-center items-center'>
                                                     Cancelado
                                                 </p> :

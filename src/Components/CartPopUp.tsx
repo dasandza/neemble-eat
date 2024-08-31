@@ -4,12 +4,13 @@ import {Link} from "react-router-dom";
 
 interface PopUpButtonParams {
     close: () => void
-    encodedRestaurantName: string,
-    tableNumber: string,
+    restaurantID: string
+    menuID: string
+    tableNumber: number,
     cart: CartItem[]
 }
 
-const PopUpButton = ({close, encodedRestaurantName, tableNumber, cart}: PopUpButtonParams) => {
+const PopUpButton = ({close, restaurantID, menuID, tableNumber, cart}: PopUpButtonParams) => {
 
 
     return (
@@ -44,7 +45,7 @@ const PopUpButton = ({close, encodedRestaurantName, tableNumber, cart}: PopUpBut
                             ))}
                         </div>
                         <div className='mt-2'>
-                            <Link to={`/neemble-eat/c/${encodedRestaurantName}/${tableNumber}`}
+                            <Link to={`/neemble-eat/c/${restaurantID}/${menuID}/${tableNumber}`}
                                   className='flex justify-center w-full bg-black rounded-full text-sm py-1 text-white'>
                                 Ver carrinho
                             </Link>

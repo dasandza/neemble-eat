@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Category, ProductProps} from "../../../interfaces.tsx";
+import {Category, MenuItem} from "../../../schema.ts";
 import AddItem from "./AddItem.tsx";
 import EditItem from "./EditItem.tsx";
 import {BinIcon} from "../../../assets/icons";
@@ -8,15 +8,14 @@ interface AddCategoryProps {
     isOpen: boolean;
     addCategory: (category: Category) => void;
     close: () => void;
-    restaurantId: string;
 }
 
-function AddCategory({isOpen, close, addCategory, restaurantId}: AddCategoryProps) {
+function AddCategory({isOpen, close, addCategory}: AddCategoryProps) {
 
     const [isEditItemPageOpen, setIsEditItemPageOpen] = useState<boolean>(false)
     const [isCreateItemPageOpen, setIsCreateItemPageOpen] = useState<boolean>(false)
     const [name, setName] = useState<string>("")
-    const [categoryItems, setCategoryItems] = useState<ProductProps[]>([])
+    const [items, setItems] = useState<MenuItem[]>([])
     const [itemBeingEditedIndex, setItemBeingEditedIndex] = useState<number>(-1)
 
 
@@ -32,9 +31,9 @@ function AddCategory({isOpen, close, addCategory, restaurantId}: AddCategoryProp
     }, [isOpen]); // Only re-run the effect if isOpen changes
 
 
-    function addItem(item: ProductProps) {
+    function addItem(item: MenuItem) {
         //console.log("NEW ITEM: ", item)
-        setCategoryItems([item, ...categoryItems])
+        setItems([item, ...items])
     }
 
     function openEditItemPage(index: number) {
@@ -47,12 +46,12 @@ function AddCategory({isOpen, close, addCategory, restaurantId}: AddCategoryProp
         setIsEditItemPageOpen(false)
     }
 
-    function editItem(item: ProductProps) {
-        categoryItems[itemBeingEditedIndex] = item
+    function editItem(item: MenuItem) {
+        items[itemBeingEditedIndex] = item
     }
 
-    function deleteItem(itemToBeDeleted: ProductProps) {
-        setCategoryItems(categoryItems.filter((item) => item != itemToBeDeleted))
+    function deleteItem(itemToBeDeleted: MenuItem) {
+        setItems(items.filter((item) => item != itemToBeDeleted))
     }
 
 
@@ -62,14 +61,14 @@ function AddCategory({isOpen, close, addCategory, restaurantId}: AddCategoryProp
         if (name != "") {
             addCategory({
                 name: name,
-                menuItems: categoryItems
+                items: items
             } as Category);
         }
         handleClose()
     }
 
     function handleClose() {
-        setCategoryItems([])
+        setItems([])
         setName("")
         close()
     }
@@ -138,10 +137,10 @@ function AddCategory({isOpen, close, addCategory, restaurantId}: AddCategoryProp
                                     </p>
                                 </button>
                                 <div
-                                    className={categoryItems.length == 0 ? 'bg-gray-200 rounded-lg my-3 py-16 px-8 ' : 'space-y-1 pt-3'}>
+                                    className={items.length == 0 ? 'bg-gray-200 rounded-lg my-3 py-16 px-8 ' : 'space-y-1 pt-3'}>
                                     {
-                                        categoryItems.length > 0 &&
-                                        categoryItems.map((item, index) => (
+                                        items.length > 0 &&
+                                        items.map((item, index) => (
                                             <div key={index}
                                                  className='flex'>
                                                 <div
@@ -170,7 +169,7 @@ function AddCategory({isOpen, close, addCategory, restaurantId}: AddCategoryProp
                                         ))
                                     }
                                     {
-                                        categoryItems.length == 0 &&
+                                        items.length == 0 &&
                                         <p className='prevent-select justify-center text-gray-500 italic flex items-center'>
                                             Nenhum prato adicionado à esta categoria
                                         </p>
@@ -187,7 +186,6 @@ function AddCategory({isOpen, close, addCategory, restaurantId}: AddCategoryProp
                 <AddItem isOpen={isCreateItemPageOpen}
                          close={() => setIsCreateItemPageOpen(false)}
                          addItem={(item) => addItem(item)}
-                         restaurantId={restaurantId}
                          categoryName={name}/>
             }
             {
@@ -196,13 +194,12 @@ function AddCategory({isOpen, close, addCategory, restaurantId}: AddCategoryProp
                           editItem={(item) => editItem(item)}
                           close={closeEditItemPage}
                           categoryName={name}
-                          item={itemBeingEditedIndex != -1 ? categoryItems[itemBeingEditedIndex] : {
+                          item={itemBeingEditedIndex != -1 ? items[itemBeingEditedIndex] : {
                               name: "",
                               price: 0,
                               imageURL: "",
                               description: "",
-                              record_id: restaurantId
-                          } as ProductProps}/>
+                          } as MenuItem}/>
             }
 
 

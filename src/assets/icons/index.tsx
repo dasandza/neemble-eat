@@ -26,8 +26,29 @@ import SortDescending from "./SortDescending.tsx";
 import HamburgerMenuIcon from "./HamburgerMenuIcon.tsx";
 import ClockIcon from "./ClockIcon.tsx";
 import PrintIcon from "./PrintIcon.tsx";
+import OrdersMenu from "./OrdersMenu.tsx";
+import CartMenu from "./CartMenu.tsx";
+import DashboardIconSelected from "./DashboardIconSelected.tsx";
+import DashboardIconNotSelected from "./DashboardIconNotSelected.tsx";
+import RestaurantMenuIconNotSelected from "./RestaurantMenuIconNotSelected.tsx";
+import RestaurantMenuIconSelected from "./RestaurantMenuIconSelected.tsx";
+import SettingsIconSelected from "./SettingsIconSelected.tsx";
+import SettingsIconNotSelected from "./SettingsIconNotSelected.tsx";
+import BlueQRCode from "./BlueQRCode.tsx";
+import LaptopPhoneIcon from "./LaptopPhoneIcon.tsx";
+
 
 export {
+    LaptopPhoneIcon,
+    BlueQRCode,
+    SettingsIconNotSelected,
+    SettingsIconSelected,
+    RestaurantMenuIconSelected,
+    RestaurantMenuIconNotSelected,
+    DashboardIconNotSelected,
+    DashboardIconSelected,
+    OrdersMenu,
+    CartMenu,
     PrintIcon,
     ClockIcon,
     HamburgerMenuIcon,

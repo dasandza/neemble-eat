@@ -1,8 +1,8 @@
-import {AirtableOrders} from "../interfaces.tsx";
+import {OrderJson} from "../schema.ts";
 
-function filterLastXhOrders(order: AirtableOrders, h: number = 23): boolean {
+function filterLastXhOrders(order: OrderJson, h: number = 23): boolean {
 
-    const orderDate = new Date(order.createdTime);
+    const orderDate = new Date(order.orderTime);
     const now = new Date(new Date().getTime());
 
     const diffInMs = now.getTime() - orderDate.getTime();

@@ -1,19 +1,27 @@
 import {CartItem} from "../interfaces.tsx";
 import {Link} from "react-router-dom";
-import {encodeString} from "../utils/urlhandler.ts";
 import {useState} from "react";
 import {BinIcon} from "../assets/icons";
 
 interface CartItemProps {
     cartProduct: CartItem,
-    tableNumber: string,
-    placeName: string,
+    tableNumber: number,
+    restaurantID: string,
+    menuID: string,
     increment: (id: string) => CartItem | undefined,
     decrement: (id: string) => CartItem | undefined,
     deleteItem: (id: string) => void,
 }
 
-function CartSingleItem({cartProduct, placeName, tableNumber, decrement, increment, deleteItem}: CartItemProps) {
+function CartSingleItem({
+                            cartProduct,
+                            restaurantID,
+                            tableNumber,
+                            menuID,
+                            decrement,
+                            increment,
+                            deleteItem
+                        }: CartItemProps) {
     const [localItem, setLocalItem] = useState<CartItem>(cartProduct);
 
 
@@ -90,9 +98,9 @@ function CartSingleItem({cartProduct, placeName, tableNumber, decrement, increme
                             </div>
                         </div>
                     </div>
-                    <Link to={`/neemble-eat/p/${encodeString(placeName)}/${tableNumber}/${cartProduct.id}`}
+                    <Link to={`/neemble-eat/p/${restaurantID}/${menuID}/${tableNumber}/${cartProduct.id}`}
                           className=' ml-1.5 flex items-center'>
-                        <div className='flex items-center'>
+                        <div className='flex items-center prevent-select'>
                             <p className='text-zinc-400'>{'>'}</p>
                         </div>
                     </Link>

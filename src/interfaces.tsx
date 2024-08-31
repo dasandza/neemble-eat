@@ -44,7 +44,8 @@ interface Representant {
     "Last Name": string,
     "UUID": string,
     "Phone Number": string,
-    "Email": string
+    "Email": string,
+    "Businesses": Array<string>
 }
 
 interface AirtableRepresentant {
@@ -169,7 +170,7 @@ interface CartItem {
     name: string,
     price: number,
     quantity: number;
-    image?: string;
+    image: string;
     aditionalNote?: string;
 }
 
@@ -242,7 +243,14 @@ interface BannerFields {
     }
 }
 
+interface MenuOption {
+    name: string,
+    selectedIcon: JSX.Element,
+    notSelectedIcon: JSX.Element
+}
+
 export type {
+    MenuOption,
     AirtableRepresentant,
     Representant,
     AirtableSession,

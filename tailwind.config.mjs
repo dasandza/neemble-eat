@@ -6,7 +6,11 @@ export default {
     content: ["./index.html", "./src/**/*.{js,ts,tsx,jsx}"],
     theme: {
         extend: {
+            gridAutoFlow: {
+                'dense': 'dense',
+            },
             container: {
+
                 padding: "1rem",
             },
             screens: {

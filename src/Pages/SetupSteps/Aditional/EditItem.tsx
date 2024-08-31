@@ -1,13 +1,13 @@
-import {ProductProps} from "../../../interfaces.tsx";
+import {MenuItem} from "../../../schema.ts";
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {ImageUpload} from "../../../assets/icons";
 
 interface AddItemProps {
     isOpen: boolean;
-    editItem: (item: ProductProps) => void;
+    editItem: (item: MenuItem) => void;
     close: () => void;
     categoryName: string;
-    item: ProductProps;
+    item: MenuItem;
 }
 
 function EditItem({isOpen, close, editItem, categoryName, item}: AddItemProps) {
@@ -17,6 +17,7 @@ function EditItem({isOpen, close, editItem, categoryName, item}: AddItemProps) {
     const [description, setDescription] = useState<string>(item.description ? item.description : "")
     const [price, setPrice] = useState<string>(item.price.toPrecision())
     const [imageURL, setImageURL] = useState<string | null>(item.imageURL)
+    const [imageFile, setImageFile] = useState<File | null>(item.imageFile)
 
     useEffect(() => {
         if (isOpen) {
@@ -31,10 +32,12 @@ function EditItem({isOpen, close, editItem, categoryName, item}: AddItemProps) {
 
     function handleSave(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
-        console.log("IMAGEM: ", imageURL)
         item.name = name == "" ? item.name : name
         item.description = description == "" ? description : description
-        item.imageURL = imageURL
+        if (imageURL != null) {
+            item.imageURL = imageURL
+            item.imageFile = imageFile
+        }
         item.price = price ? price == "" ? Number(item.price) : Number(price) : Number(item.price)
 
         editItem(item)
@@ -44,20 +47,21 @@ function EditItem({isOpen, close, editItem, categoryName, item}: AddItemProps) {
     function handleClose() {
         setName("")
         setPrice("")
-        setImageURL(null)
+        handleImageRemoval()
         setDescription("")
         close()
     }
 
     function handleImageRemoval() {
         setImageURL(null)
+        setImageFile(null)
     }
 
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file && file.type.startsWith('image/')) {
             setImageURL(URL.createObjectURL(file));
-            console.log(URL.createObjectURL(file).replace("http://localhost:5173", "http://localhost:5173/neemble-eat"))
+            setImageFile(file)
         } else {
             alert('Por favor selecione uma imagem.');
         }

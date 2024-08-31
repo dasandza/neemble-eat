@@ -1,8 +1,8 @@
-import {AirtableSession} from "../interfaces.tsx";
+import {TableSessionJson} from "../schema.ts";
 
-function filterLastXhSessions(session: AirtableSession, h: number = 23): boolean {
+function filterLastXhSessions(session: TableSessionJson, h: number = 23): boolean {
 
-    const sessionDate = new Date(session.createdTime);
+    const sessionDate = new Date(session.created_time);
     const now = new Date(new Date().getTime());
 
     const diffInMs = now.getTime() - sessionDate.getTime();

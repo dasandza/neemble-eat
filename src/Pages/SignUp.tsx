@@ -3,32 +3,38 @@ import Image from "../assets/images/chef.png";
 import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import {createUserWithEmailAndPassword} from "firebase/auth";
-import auth from "../firebase/firebase.ts";
+import {auth} from "../firebase/firebase.ts";
 import {useNavigate} from 'react-router-dom';
-import addRecord from "../utils/writeAirtable.ts";
+import {createRepresentant} from "../api";
+import {Representant} from "../schema.ts";
+
 
 function SignUp() {
 
 
     const [signInAttempt, setSignInAttempt] = useState<boolean>(false)
-    const [accountRecordID, setAccountRecordID] = useState<Promise<string>>()
+    const [accountRecordID, setAccountRecordID] = useState<Promise<Representant>>()
     const navigate = useNavigate();
     const [passwordVisibility, setPasswordVisibility] = useState<boolean>(false)
+    const [passwordConfirmationVisibility, setPasswordConfirmationVisibility] = useState<boolean>(false)
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
     const [password, setPassword] = useState('')
+    const [passwordConfirmation, setPasswordConfirmation] = useState('')
     const [email, setEmail] = useState('')
     const [error, setError] = useState("")
 
+
     useEffect(() => {
         async function getAccountRecordID() {
-            const realAccountRecordID = await accountRecordID
-            if (realAccountRecordID) {
-                navigate(`/neemble-eat/setup/${realAccountRecordID}/${firstName}`);
+            const account = await accountRecordID
+            if (account) {
+                navigate(`/neemble-eat/setup/${account.id}/${firstName}`);
                 setSignInAttempt(false)
             } else {
                 if (signInAttempt) {
+                    setSignInAttempt(false)
                     setError("Houve um erro!")
                 }
             }
@@ -42,47 +48,54 @@ function SignUp() {
         setPasswordVisibility(!passwordVisibility)
     }
 
+    function handleConfimationVisibility() {
+        setPasswordConfirmationVisibility(!passwordConfirmationVisibility)
+    }
+
     function handleSubmition(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
-        setSignInAttempt(true)
-        if (firstName == "" || lastName == "" || phoneNumber == "") {
-            setError("Preencha todos os campos")
+        if (passwordConfirmation == password) {
+            setSignInAttempt(true)
+            if (firstName == "" || lastName == "" || phoneNumber == "") {
+                setError("Preencha todos os campos")
+            } else {
+                createUserWithEmailAndPassword(auth, email, password)
+                    .then((userCredentials) => {
+                        //console.log(userCredentials.user.uid)
+                        const user = createRepresentant({
+                            UUID: userCredentials.user.uid,
+                            firstName: firstName,
+                            lastName: lastName,
+                            phoneNumber: phoneNumber,
+                            email: email,
+                            role: "Owner"
+                        })
+                        setAccountRecordID(user)
+                    }).catch((error) => {
+
+                    // FIREBASE ERRORS: https://firebase.google.com/docs/reference/node/firebase.auth.Error
+                    if (error.code === "auth/email-already-in-use") {
+                        setError("O email inserido ja está em uso.")
+                    } else if (error.code === "auth/invalid-api-key") {
+                        // Thrown if the provided API key is invalid.
+                    } else {
+                        setError("Houve um problema ao criar a sua conta.")
+                    }
+                    console.log(error)
+                })
+            }
         } else {
-            createUserWithEmailAndPassword(auth, email, password)
-                .then((userCredentials) => {
-                    //console.log(userCredentials.user.uid)
-                    const recordID = addRecord("Representant", {
-                        "First Name": firstName,
-                        "Last Name": lastName,
-                        "Email": email,
-                        "Phone Number": phoneNumber,
-                        "UUID": userCredentials.user.uid
-                    })
-                    setAccountRecordID(recordID)
-
-                }).catch((error) => {
-
-                // FIREBASE ERRORS: https://firebase.google.com/docs/reference/node/firebase.auth.Error
-                if (error.code === "auth/email-already-in-use") {
-                    setError("O email inserido ja está em uso.")
-                } else if (error.code === "auth/invalid-api-key") {
-                    // Thrown if the provided API key is invalid.
-                } else {
-                    setError("Houve um problema ao criar a sua conta.")
-                }
-                console.log(error)
-            })
+            setError("As palavras passe diferentes")
         }
-
 
     }
 
     return (
         <div className="">
-            <div className="font-poppins flex items-center justify-center mx-auto max-w-[1020px]">
+            <div className="font-poppins flex items-center justify-center mx-auto max-w-[920px]">
                 <div className='w-full flex justify-between py-10'>
                     <div className='laptop:flex items-center'>
-                        <div className='mx-10 mt-[15%] laptop:mt-0 laptop:mx-0'>
+                        <div className='laptop:pl-12 mx-8 my-12 laptop:mt-0 laptop:mx-0'>
                             <h1 className='font-poppins-semibold text-2xl'>
                                 Crie a sua conta!
                             </h1>
@@ -161,6 +174,29 @@ function SignUp() {
                                         onChange={(e) => setPassword(e.target.value)}
                                         className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 hover:bg-gray-100 transition-colors duration-300 focus:border-blue-500 block w-full pr-10 p-2.5"
                                         placeholder="password"/>
+                                </div>
+                                <label htmlFor="email" className='text-sm ml-1'>Confirmar Password<span
+                                    className='text-red-500'>*</span></label>
+                                <div className={error != "" ? "relative mt-1" : "relative mb-6"}>
+                                    <div
+                                        className="absolute inset-y-0 right-0 flex items-center pr-3.5">
+                                        {
+                                            passwordConfirmationVisibility ?
+                                                <HugeiconsView
+                                                    className='rounded-[4px] cursor-pointer hover:bg-gray-100 transition-colors duration-300 p-1'
+                                                    onClick={handleConfimationVisibility}/> :
+                                                <HugeiconsViewOff
+                                                    className='rounded-[4px] cursor-pointer hover:bg-gray-100 transition-colors duration-300 p-1'
+                                                    onClick={handleConfimationVisibility}/>
+                                        }
+                                    </div>
+                                    <input
+                                        type={passwordConfirmationVisibility ? "text" : "password"}
+                                        id="password"
+                                        value={passwordConfirmation}
+                                        onChange={(e) => setPasswordConfirmation(e.target.value)}
+                                        className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 hover:bg-gray-100 transition-colors duration-300 focus:border-blue-500 block w-full pr-10 p-2.5"
+                                        placeholder="Confirme a password"/>
                                 </div>
                                 {error != "" &&
                                     <div className="text-[12px] w-[80%] mt-3 mb-6">

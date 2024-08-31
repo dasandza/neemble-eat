@@ -1,8 +1,9 @@
 import {Link} from "react-router-dom";
-import {HamburgerMenuIcon} from "../../assets/icons";
+import {HamburgerMenuIcon} from "../../../assets/icons";
 import {useState} from "react";
-import DarkBackground from "../DarkBackground.tsx";
-import LeftMenu from "../LeftMenu.tsx";
+import DarkBackground from "../../DarkBackground.tsx";
+import LeftMenu from "../../LeftMenu.tsx";
+
 
 interface props {
     menuOptions: {
@@ -22,17 +23,17 @@ function Banner({menuOptions}: props) {
     }
 
     return (
-        <div className='flex justify-center py-4 prevent-select'>
+        <nav className='py-4 prevent-select flex justify-center'>
 
             <DarkBackground isSelected={isLeftMenuOpen} toggle={toggleLeftMenu}/>
             <LeftMenu isOpen={isLeftMenuOpen} options={menuOptions}/>
 
-            <div className='container'>
-                <div className='flex justify-between'>
+            <div className='container max-w-[1080px]'>
+                <div className='flex items-center justify-between'>
                     <div className='laptop:pr-24'>
                         <Link to="/neemble-eat/">
                             <p className='cursor-pointer font-poppins-semibold text-xl'>
-                                Neemble Eat
+                                NeembleEat
                             </p>
                         </Link>
                     </div>
@@ -42,7 +43,7 @@ function Banner({menuOptions}: props) {
                                 menuOptions.map((option, index) =>
                                     <Link key={index} to={option.path}>
                                         <li
-                                            className={`hidden laptop:block cursor-pointer hover:bg-gray-100 transition durantion-200 px-2 py-0.5 rounded-md`}>
+                                            className={`hidden laptop:block cursor-pointer hover:bg-gray-100 transition durantion-200 px-2 py-0.5 rounded-md text-sm`}>
                                             {option.name}
                                         </li>
                                     </Link>
@@ -64,13 +65,15 @@ function Banner({menuOptions}: props) {
                             </Link>
                         </ul>
                     </div>
-                    <div className='laptop:hidden'>
+                    <div className='laptop:hidden mr-2'>
                         <HamburgerMenuIcon
+                            width={"22px"}
+                            height={"22px"}
                             onClick={toggleLeftMenu}/>
                     </div>
                 </div>
             </div>
-        </div>
+        </nav>
 
     );
 }

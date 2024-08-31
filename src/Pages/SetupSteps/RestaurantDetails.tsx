@@ -7,15 +7,16 @@ interface RestaurantDetailsProps {
     phoneNumber: string,
     address: string,
     description: string,
-    selectedImage: string | null,
+    selectedImageURL: string | null,
+    selectedImageFile: File | null,
     error: string | null,
 
     setRestaurantName: (name: string) => void,
     setPhoneNumber: (phoneNumber: string) => void,
     setAddress: (address: string) => void,
     setDescription: (description: string) => void,
-    setSelectedImage: (imageURL: string | null) => void,
-
+    setSelectedImageURL: (imageURL: string | null) => void,
+    setSelectedImageFile: (imageFile: File | null) => void,
 }
 
 function RestaurantDetails({
@@ -23,8 +24,9 @@ function RestaurantDetails({
                                restaurantName,
                                address,
                                setAddress,
-                               setSelectedImage,
-                               selectedImage,
+                               setSelectedImageURL,
+                               selectedImageURL,
+                               setSelectedImageFile,
                                setDescription,
                                description,
                                setPhoneNumber,
@@ -37,14 +39,15 @@ function RestaurantDetails({
     }, [error]);
 
     function handleImageRemoval() {
-        setSelectedImage(null)
+        setSelectedImageURL(null)
     }
 
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file && file.type.startsWith('image/')) {
-            setSelectedImage(URL.createObjectURL(file));
-            console.log(URL.createObjectURL(file))
+            setSelectedImageURL(URL.createObjectURL(file));
+            setSelectedImageFile(file)
+            console.log(file)
         } else {
             alert('Por favor selecione uma imagem.');
         }
@@ -61,9 +64,9 @@ function RestaurantDetails({
                     <div className='w-fit'>
                         <div className="flex flex-col items-center justify-center p-4">
                             {
-                                !selectedImage &&
+                                !selectedImageURL &&
                                 <label
-                                    className={`${error && !selectedImage && "border border-red-500"} w-40 h-24 flex flex-col items-center justify-center px-4 py-4 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase cursor-pointer hover:bg-gray-100 transition-colors duration-300`}>
+                                    className={`${error && !selectedImageURL && "border border-red-500"} w-40 h-24 flex flex-col items-center justify-center px-4 py-4 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase cursor-pointer hover:bg-gray-100 transition-colors duration-300`}>
                                     <ImageUpload/>
                                     <input
                                         type="file"
@@ -75,13 +78,13 @@ function RestaurantDetails({
                                 </label>
                             }
 
-                            {selectedImage && (
+                            {selectedImageURL && (
                                 <div>
                                     <div
                                         className='flex items-center justify-center border-[1px] border-gray-300 rounded-lg pb-3 mb-4 bg-gray-100'>
                                         <div
                                             className="flex items-center justify-center mt-4 w-32 h-20 overflow-hidden">
-                                            <img src={selectedImage} alt="Banner Preview"
+                                            <img src={selectedImageURL} alt="Banner Preview"
                                                  className="object-contain w-full h-full"/>
                                         </div>
                                     </div>

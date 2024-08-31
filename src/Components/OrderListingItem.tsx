@@ -1,10 +1,11 @@
-import {AirtableOrders} from "../interfaces.tsx";
 import {PriceTag, QrCode} from "../assets/icons";
+import {OrderJson} from "../schema.ts";
 
 interface props {
-    order: AirtableOrders,
+    order: OrderJson,
     onClick: () => void
 }
+
 
 function OrderListingItem({order, onClick}: props) {
     return (
@@ -15,54 +16,54 @@ function OrderListingItem({order, onClick}: props) {
             <div className=''>
                 <div className='flex mb-2'>
                     <h1 className='truncate max-w-36 hover:overflow-clip laptop:hover:max-w-fit font-poppins-semibold '>
-                        {order.fields["Name (from Item)"]}
+                        {order.orderedItemName}
                     </h1>
                     <p className='text-gray-400 font-poppins-semibold'>
-                        &nbsp;{order.fields.Quantity}
+                        &nbsp;{order.quantity}
                     </p>
                 </div>
                 <div className='flex items-center prevent-select'>
                     <h2 className='flex items-center rounded-md border border-gray-200 text-sm w-fit text-gray-500 px-1.5 font-poppins-semibold mr-2'>
                         <PriceTag className='mr-1'/>
-                        {order.fields["Total"]}&nbsp;Kz
+                        {order.total}&nbsp;Kz
                     </h2>
                     <h2 className='flex items-center rounded-md border border-gray-200 text-sm w-fit text-gray-500 px-1.5 font-poppins-semibold'>
                         <QrCode className='mr-1'/>
-                        Mesa {order.fields["Table Number"]}
+                        Mesa {order.tableNumber}
                     </h2>
                 </div>
 
             </div>
             <div className='prevent-select'>
                 {
-                    order.fields["Order Status"] == "Done" &&
+                    order.prepStatus == "Done" &&
                     <div className=''>
-                        <p className='bg-green-200 rounded-full text-xs px-2.5 py-0.5'>
+                        <p className='font-poppins-medium bg-green-200 rounded-full text-xs px-2.5 py-0.5'>
                             Pronto
                         </p>
                     </div>
 
                 }
                 {
-                    order.fields["Order Status"] == "In progress" &&
+                    order.prepStatus == "In Progress" &&
                     <div className=''>
-                        <p className='bg-yellow-300 rounded-full text-xs px-2.5 py-0.5'>
+                        <p className='font-poppins-medium bg-yellow-300 rounded-full text-xs px-2.5 py-0.5'>
                             Em Preparo
                         </p>
                     </div>
                 }
                 {
-                    order.fields["Order Status"] == "New" &&
+                    order.prepStatus == "New" &&
                     <div className=''>
-                        <p className='bg-blue-200 rounded-full text-xs px-2.5 py-0.5'>
+                        <p className='font-poppins-medium bg-blue-200 rounded-full text-xs px-2.5 py-0.5'>
                             Novo
                         </p>
                     </div>
                 }
                 {
-                    order.fields["Order Status"] == "Cancelled" &&
+                    order.prepStatus == "Cancelled" &&
                     <div className=''>
-                        <p className='bg-red-200 rounded-full text-xs px-2.5 py-0.5'>
+                        <p className='font-poppins-medium bg-red-200 rounded-full text-xs px-2.5 py-0.5'>
                             Cancelado
                         </p>
                     </div>

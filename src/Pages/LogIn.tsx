@@ -2,14 +2,14 @@ import Image from '../assets/images/cooking (1).png'
 import {Mail, HugeiconsView, HugeiconsViewOff} from "../assets/icons";
 import React, {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import auth from "../firebase/firebase.ts";
+import {auth} from "../firebase/firebase.ts";
 import {signInWithEmailAndPassword} from "firebase/auth";
-import fetchAirtableRecords from "../utils/fetcher.ts";
-import {AirtableRepresentant} from "../interfaces.tsx";
+import {fetchRepresentantByUUID} from "../api";
+import {RepresentantJson} from "../schema.ts";
 
 
 function LogIn() {
-    
+
     const navigate = useNavigate();
     const [UUID, setUUID] = useState<string | null>(null)
     const [password, setPassword] = useState('')
@@ -20,16 +20,15 @@ function LogIn() {
 
     useEffect(() => {
         async function fetch() {
-            const representants: AirtableRepresentant[] = await fetchAirtableRecords("Representant")
-            for (const representant of representants) {
-                if (representant.fields.UUID == UUID) {
-                    navigate(`/neemble-eat/user/rep/${representant.id}/`)
-                }
+            if (UUID != undefined) {
+                const representant: RepresentantJson = await fetchRepresentantByUUID({UUID: UUID})
+                navigate(`/neemble-eat/user/rep/${representant.id}/`)
             }
-
         }
 
         fetch().then()
+
+
     }, [UUID]);
 
     function handleSubmition(e: React.FormEvent<HTMLFormElement>) {
@@ -51,14 +50,14 @@ function LogIn() {
 
     return (
         <div className="">
-            <div className="font-poppins flex items-center justify-center mx-auto max-w-[1020px]">
-                <div className='w-full flex justify-between py-10'>
-                    <div className='laptop:flex items-center'>
+            <div className="font-poppins flex items-center justify-center mx-auto max-w-[920px]">
+                <div className='w-full flex justify-between py-10 '>
+                    <div className='laptop:flex items-center '>
                         <div className='mx-10 mt-[20%] laptop:mt-0 laptop:mx-0'>
                             <h1 className='font-poppins-semibold text-2xl'>
-                                Bem-vindo(a) ao <span className='text-stone-500'>neemble eat</span>
+                                Bem-vindo(a) de volta ao <span className='text-stone-500'>neemble eat</span>
                             </h1>
-                            <form action="" onSubmit={handleSubmition} className='mt-12'>
+                            <form action="" onSubmit={handleSubmition} className='mt-8'>
                                 <label htmlFor="email" className='text-sm ml-1'>Email<span
                                     className='text-red-500'>*</span></label>
                                 <div className="relative mb-6">
@@ -128,7 +127,7 @@ function LogIn() {
                             </form>
                         </div>
                     </div>
-                    <div className='flex items-center justify-center'>
+                    <div className='flex  items-center justify-center'>
                         <img src={Image}
                              alt=""
                              className='h-[80%] hidden laptop:block'/>

@@ -42,8 +42,7 @@ function formatDateString(dateString: string): string {
     const formattedTime = new Intl.DateTimeFormat('pt-PT', timeOptions).format(date);
 
     // Combine the date and time parts
-    const [day, month, dayNum] = formattedDate.split(',')[1].trim().split(' ');
-    console.log("IGNORE:", day, dayNum);
+    const [, month,] = formattedDate.split(',')[1].trim().split(' ');
     return `${weekDaysTranslationMapping[formattedDate.split(",")[0]]}, ${month}  |  ${formattedTime}`;
 }
 

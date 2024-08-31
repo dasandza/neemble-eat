@@ -1,20 +1,20 @@
-import {ProductProps} from "../../../interfaces.tsx";
+import {MenuItem} from "../../../schema.ts";
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {ImageUpload} from "../../../assets/icons";
 
 interface AddItemProps {
     isOpen: boolean;
-    addItem: (item: ProductProps) => void;
+    addItem: (item: MenuItem) => void;
     close: () => void;
-    restaurantId: string;
     categoryName: string;
 }
 
-function AddItem({isOpen, close, addItem, restaurantId, categoryName}: AddItemProps) {
+function AddItem({isOpen, close, addItem, categoryName}: AddItemProps) {
     const [name, setName] = useState<string>("")
     const [description, setDescription] = useState<string>("")
     const [price, setPrice] = useState<string>("")
     const [imageURL, setImageURL] = useState<string | null>(null)
+    const [imageFile, setImageFile] = useState<File | null>(null)
 
 
     useEffect(() => {
@@ -31,14 +31,14 @@ function AddItem({isOpen, close, addItem, restaurantId, categoryName}: AddItemPr
     function handleSave(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
-        if (name !== "") {
+        if (name !== "" && imageFile) {
             addItem({
                 name: name,
                 description: description ? description : "",
                 price: Number(price ? price : "0"),
-                imageURL: imageURL ? imageURL : "",
-                record_id: restaurantId
-            } as ProductProps);
+                imageURL: imageURL,
+                imageFile: imageFile
+            } as MenuItem);
         }
         handleClose()
     }
@@ -46,20 +46,21 @@ function AddItem({isOpen, close, addItem, restaurantId, categoryName}: AddItemPr
     function handleClose() {
         setName("")
         setPrice("")
-        setImageURL(null)
+        handleImageRemoval()
         setDescription("")
         close()
     }
 
     function handleImageRemoval() {
         setImageURL(null)
+        setImageFile(null)
     }
 
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file && file.type.startsWith('image/')) {
+            setImageFile(file)
             setImageURL(URL.createObjectURL(file));
-            console.log(URL.createObjectURL(file))
         } else {
             alert('Please select a valid image file.');
         }

@@ -1,13 +1,13 @@
 import {MenuItem, CartItem, ProductPageParams} from "../interfaces.tsx";
-import TestImage from '../assets/images/img_2.png'
 import React, {useEffect, useRef, useState} from "react";
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {decodeString} from "../utils/urlhandler.ts";
 import fetchAirtableRecords from "../utils/fetcher.ts";
 import {initializeCartInLocalStorage, getCartFromLocalStorage, saveCartToLocalStorage} from "../utils/cartCRUD.ts";
-import LoadingProduct from "./LoadingPages/LoadingProduct.tsx";
+import {LoadingProduct} from "./LoadingPages";
 import {CartIcon} from "../assets/icons";
 import CartPopUp from "../Components/CartPopUp.tsx";
+
 
 const Product = () => {
     const [cart, setCart] = useState<Array<CartItem>>(() => getCart());
@@ -29,6 +29,11 @@ const Product = () => {
     useEffect(() => {
         saveCartToLocalStorage(cart)
     }, [cart]);
+
+    useEffect(() => {
+        const navigate = useNavigate();
+        const storedItemsData = sessionStorage.getItem('Items');
+    }, []);
 
 
     useEffect(() => {
@@ -65,16 +70,6 @@ const Product = () => {
         };
     }, [isCartPopUpOpen]);
 
-    useEffect(() => {
-        if (item != undefined) {
-            if (item.fields.Image == null) {
-                setImage(TestImage);
-            } else {
-                setImage(item.fields.Image[0].url)
-            }
-        }
-
-    }, [item]);
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();

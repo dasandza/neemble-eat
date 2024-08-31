@@ -1,6 +1,4 @@
 import {useEffect, useState} from "react";
-import {AirtableOrders, AirtableSession} from "../interfaces.tsx";
-import fetchAirtableRecords from "../utils/fetcher.ts";
 import SessionListingItem from "../Components/SessionListingItem.tsx";
 
 import {
@@ -11,12 +9,12 @@ import {
     QrCode,
 } from "../assets/icons";
 import timeCalculator from "../utils/TimeCalculator.ts";
-import updateFieldsInAirtable from "../utils/updateFieldsInAirtable.ts";
-import getLastSessions from "../utils/getLastSessions.ts";
 import filterLastXhSessions from "../utils/filterLastXhSessions.ts";
-import addRecord from "../utils/writeAirtable.ts";
-import filterLastXhOrders from "../utils/filterLastXhOrders.ts";
 import exportDataToCSV from "../utils/ExportToCSV.ts";
+import {SessionStatus, TableSessionJson} from "../schema.ts";
+import fetchLastSessions from "../api/functions/fetchLastSessions.ts";
+import {useParams} from "react-router-dom";
+import {closeSession} from "../api";
 
 
 interface filterProps {
@@ -27,11 +25,12 @@ interface filterProps {
 
 function SessionsInterface() {
 
-    const [orders, setOrders] = useState<AirtableOrders[]>([])
-    const [sessions, setSessions] = useState<AirtableSession[]>([])
+
+    const {restaurantID} = useParams() as unknown as { restaurantID: string }
+    const [sessions, setSessions] = useState<TableSessionJson[]>([])
     const [error, setError] = useState<string>("")
-    const [sessionSelected, setSessionSelected] = useState<AirtableSession | null>(null)
-    const [filteredSessions, setFilteredSessions] = useState<AirtableSession[]>(sessions)
+    const [sessionSelected, setSessionSelected] = useState<TableSessionJson | null>(null)
+    const [filteredSessions, setFilteredSessions] = useState<TableSessionJson[]>(sessions)
     const [filterMode, setFilterMode] = useState<filterProps>({name: "Todos", tag: "All"})
     const [isLeftMenuOpen, setIsLeftMenuOpen] = useState<boolean>(false)
     const [isTableSelectMenuOpen, setIsTableSelectMenuOpen] = useState(false);
@@ -47,37 +46,31 @@ function SessionsInterface() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const ordersData = await fetchAirtableRecords("Orders")
-                const sessionsData = await fetchAirtableRecords("Sessions");
-                const s1 = getLastSessions(sessionsData)
-                const s = s1.filter((session) => filterLastXhSessions(session))
+                const sessionsData = await fetchLastSessions({restaurantID: restaurantID})
+                const s = sessionsData.filter((session) => filterLastXhSessions(session))
 
                 if (filterMode.tag != "All") {
-                    setSessions(s.filter(session => session.fields.Status == filterMode.tag))
+                    setSessions(s.filter(session => session.status == filterMode.tag))
                     setFilteredSessions(tableSelection != "Todas" ?
                         s.filter(session =>
-                            session.fields.Status === filterMode.tag &&
-                            session.fields["Table Number"][0] == tableSelection) :
+                            session.status === filterMode.tag &&
+                            session.tableNumber == Number(tableSelection)) :
                         s.filter(session =>
-                            session.fields.Status === filterMode.tag)
+                            session.status === filterMode.tag)
                     )
                 } else {
                     setSessions(s)
                     setFilteredSessions(s.filter(session => tableSelection == "Todas" ?
                         session :
-                        session.fields["Table Number"][0] == tableSelection
+                        session.tableNumber == Number(tableSelection)
                     ))
                 }
-
-                // Orders
-                const last24HOrders = ordersData.filter((order: AirtableOrders) => filterLastXhOrders(order))
-                setOrders(last24HOrders)
 
                 // Tables
                 const temp = allTablesNumbers
                 for (const session of s) {
-                    if (!temp.includes(session.fields["Table Number"][0])) {
-                        temp.push(session.fields["Table Number"][0])
+                    if (!temp.includes(session.tableNumber.toString())) {
+                        temp.push(session.tableNumber.toString())
                     }
                 }
                 setAllTablesNumbers(temp)
@@ -91,98 +84,11 @@ function SessionsInterface() {
 
     }, []);
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const ordersData = await fetchAirtableRecords("Orders")
-                const sessionsData = await fetchAirtableRecords("Sessions");
-                const s1 = getLastSessions(sessionsData)
-                const s = s1.filter((session) => filterLastXhSessions(session))
-
-                if (filterMode.tag != "All") {
-                    setSessions(s.filter(session => session.fields.Status == filterMode.tag))
-                    setFilteredSessions(tableSelection != "Todas" ?
-                        s.filter(session =>
-                            session.fields.Status === filterMode.tag &&
-                            session.fields["Table Number"][0] == tableSelection) :
-                        s.filter(session =>
-                            session.fields.Status === filterMode.tag)
-                    )
-                } else {
-                    setSessions(s)
-                    setFilteredSessions(s.filter(session => tableSelection == "Todas" ?
-                        session :
-                        session.fields["Table Number"][0] == tableSelection
-                    ))
-                }
-
-                // Orders
-                const last24HOrders = ordersData.filter((order: AirtableOrders) => filterLastXhOrders(order))
-                setOrders(last24HOrders)
-
-                // Tables
-                const temp = allTablesNumbers
-                for (const session of s) {
-                    if (!temp.includes(session.fields["Table Number"][0])) {
-                        temp.push(session.fields["Table Number"][0])
-                    }
-                }
-                setAllTablesNumbers(temp)
-            } catch (err) {
-                setError(`Failed to fetch data: ${err}`);
-                console.error("Error fetching data:", err);
-            }
-        }
-
-        fetchData().then(r => r);
-
-    }, [filterMode]);
-
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const sessionsData = await fetchAirtableRecords("Sessions");
-                const s1 = getLastSessions(sessionsData)
-                const s = s1.filter((session) => filterLastXhSessions(session))
-
-                if (filterMode.tag != "All") {
-                    setSessions(s.filter(session => session.fields.Status == filterMode.tag))
-                    setFilteredSessions(tableSelection != "Todas" ?
-                        s.filter(session =>
-                            session.fields.Status === filterMode.tag &&
-                            session.fields["Table Number"][0] == tableSelection) :
-                        s.filter(session =>
-                            session.fields.Status === filterMode.tag)
-                    )
-                } else {
-                    setSessions(s)
-                    setFilteredSessions(s.filter(session => tableSelection == "Todas" ?
-                        session :
-                        session.fields["Table Number"][0] == tableSelection
-                    ))
-                }
-                const temp = allTablesNumbers
-                for (const session of s) {
-                    if (!temp.includes(session.fields["Table Number"][0])) {
-                        temp.push(session.fields["Table Number"][0])
-                    }
-                }
-                setAllTablesNumbers(temp)
-            } catch (err) {
-                setError(`Failed to fetch data: ${err}`);
-                console.error("Error fetching data:", err);
-            }
-        }
-
-        fetchData().then(r => r);
-
-    }, [sessionSelected]);
-
 
     function filterSessions(mode: filterProps) {
         setFilterMode(mode)
         if (mode.tag != "All") {
-            setFilteredSessions(sessions.filter(session => session.fields.Status == mode.tag))
+            setFilteredSessions(sessions.filter(session => session.status == mode.tag))
         } else {
             setFilteredSessions(sessions)
         }
@@ -192,31 +98,11 @@ function SessionsInterface() {
         setIsLeftMenuOpen(!isLeftMenuOpen)
     }
 
-    function upddateStatus(newStatus: string): void {
-        for (const sessionIndex in filteredSessions) {
-            if (filteredSessions[sessionIndex].id == sessionSelected?.id) {
-                const session = filteredSessions[sessionIndex]
-                const name = "Sessions"
-                const recordId = session.id
-                const fieldsToUpdate = {"Status": newStatus}
-
-                updateFieldsInAirtable({
-                    tableName: name,
-                    recordId: recordId,
-                    fieldsToUpdate: fieldsToUpdate
-                }).then(() => {
-                    if (newStatus == "Cancelled") {
-                        addRecord("Sessions", {
-                            "Table": filteredSessions[sessionIndex].fields.Table
-                        })
-                    }
-
-                })
-                //alert(`Pedido alterado para ${newStatus}`);
-                session.fields["Status"] = newStatus;
-                setSessionSelected(session)
-                setFilteredSessions(filteredSessions.map(x => x == session ? session : x))
-            }
+    function updateStatus(status: SessionStatus): void {
+        if (sessionSelected) {
+            sessionSelected.status = status
+            setSessions(sessions.map((session) => sessionSelected.id == session.id ? sessionSelected : session))
+            closeSession({sessionID: sessionSelected?.id, status: status})
         }
     }
 
@@ -231,12 +117,12 @@ function SessionsInterface() {
         if (table == "Todas") {
             setFilteredSessions(sessions)
         } else {
-            setFilteredSessions(sessions.filter(session => session.fields["Table Number"][0] == table))
+            setFilteredSessions(sessions.filter(session => session.tableNumber == Number(table)))
         }
     }
 
     function getDayLog() {
-        exportDataToCSV(orders)
+        exportDataToCSV([])
     }
 
     if (error != "") return <div>{error}</div>
@@ -374,12 +260,12 @@ function SessionsInterface() {
                         <div className='w-full'>
                             <div className='flex flex-col-reverse laptop:flex-row laptop:justify-between'>
                                 <h1 className='text-2xl w-[80%] leading-tight text-gray-700'>
-                                    Mesa {sessionSelected?.fields["Table Number"][0]}
+                                    Mesa {sessionSelected?.tableNumber}
                                 </h1>
                                 <div className='prevent-select w-fit mb-2 laptop:mb-0'>
                                     {
                                         sessionSelected &&
-                                        sessionSelected.fields.Status == "Billed" ?
+                                        sessionSelected.status == "Billed" ?
                                             <div className=''>
                                                 <p className='bg-green-200 rounded-full text-xs px-2.5 py-0.5'>
                                                     Fatura
@@ -390,7 +276,6 @@ function SessionsInterface() {
                                                     Em consumo
                                                 </p>
                                             </div>
-
                                     }
                                 </div>
                             </div>
@@ -401,7 +286,7 @@ function SessionsInterface() {
                                         <PriceTag className='mr-1'/>
                                         {
                                             sessionSelected != null ?
-                                                sessionSelected.fields["Total"] :
+                                                sessionSelected.total :
                                                 "0.00"
                                         }
                                     </h2>
@@ -409,7 +294,7 @@ function SessionsInterface() {
                                         <CutleryIcon className='mr-1'/>
                                         {
                                             sessionSelected != null ?
-                                                `${sessionSelected.fields.Orders.length} ${sessionSelected.fields.Orders.length == 1 ? "Pedido" : "Pedidos"}` :
+                                                `${sessionSelected.orders?.length} ${sessionSelected.orders && sessionSelected.orders.length == 1 ? "Pedido" : "Pedidos"}` :
                                                 "0 Pedidos"
                                         }&nbsp;
                                     </h2>
@@ -417,12 +302,12 @@ function SessionsInterface() {
                                 <div className='flex space-x-3'>
                                     <h2 className='flex items-center rounded-md border border-gray-300 text-sm w-fit text-gray-500 px-1.5 font-poppins-semibold prevent-select'>
                                         <QrCode className='mr-1'/>
-                                        Mesa {sessionSelected ? sessionSelected.fields["Table Number"][0] :
+                                        Mesa {sessionSelected ? sessionSelected.tableNumber :
                                         "null"}
                                     </h2>
                                     <h2 className='flex items-center rounded-md border border-gray-300 text-sm w-fit text-gray-500 px-1.5 font-poppins-semibold prevent-select'>
                                         <ClockIcon className='mr-1'/>
-                                        {sessionSelected ? timeCalculator(sessionSelected.createdTime) : "now"}
+                                        {sessionSelected && sessionSelected.created_time ? timeCalculator(sessionSelected.created_time?.toString()) : "now"}
                                     </h2>
                                 </div>
                             </div>
@@ -434,18 +319,18 @@ function SessionsInterface() {
                             sessionSelected != null &&
                             <div className='flex space-x-2'>
                                 {
-                                    sessionSelected.fields.Status == "Open" &&
-                                    <button onClick={() => upddateStatus("Billed")}
+                                    sessionSelected.status == "Open" &&
+                                    <button onClick={() => updateStatus("Billed" as SessionStatus)}
                                             className='bg-black text-white font-poppins-semibold w-fit px-8 py-1.5 rounded-lg'>
                                         Fechar Conta
                                     </button>
 
                                 }
 
-                                {sessionSelected?.fields.Status != "Cancelled" &&
+                                {sessionSelected.status != "Cancelled" as SessionStatus &&
                                     <button
                                         onClick={() => {
-                                            upddateStatus("Cancelled")
+                                            updateStatus("Cancelled" as SessionStatus)
                                         }}
                                         className='bg-red-500 hover:bg-red-600 text-white font-poppins-semibold w-fit px-8 py-1.5 rounded-lg'>
                                         Cancelar
@@ -453,9 +338,10 @@ function SessionsInterface() {
                                 }
                             </div>
                         }
-                        <div className='my-3 space-y-2'>
-                            <h1 className='text-xl font-poppins-semibold'>Pedidos:</h1>
-                            {
+                        {/*
+                            <div className='my-3 space-y-2'>
+                                <h1 className='text-xl font-poppins-semibold'>Pedidos:</h1>
+                                {
                                 orders.map((order, index) =>
                                     sessionSelected?.fields.Orders.includes(order.id) &&
                                     <div key={index}
@@ -471,8 +357,10 @@ function SessionsInterface() {
 
                                     </div>
                                 )
-                            }
-                        </div>
+                            )}
+                            </div>
+                        */}
+
                     </div>
                 </div>
             </div>

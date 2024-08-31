@@ -1,3 +1,11 @@
-import LoadingMenu from "./LoadingMenu.tsx";
+import LoadingMenu from "./pages/LoadingMenu.tsx";
+import LoadingOrders from "./pages/LoadingOrders.tsx";
+import LoadingProduct from "./pages/LoadingProduct.tsx";
+import LoadingAccountSetUp from "./pages/LoadingAccountSetUp.tsx";
 
-export {LoadingMenu}
+export {
+    LoadingAccountSetUp,
+    LoadingMenu,
+    LoadingOrders,
+    LoadingProduct
+}

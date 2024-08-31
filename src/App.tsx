@@ -1,12 +1,11 @@
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import {
-    Menu,
     Product,
     Cart,
     Orders,
     LogIn,
     SignUp,
-    MainPage,
+    Home,
     AccountSetUp,
     OrdersInterface,
     About,
@@ -16,6 +15,10 @@ import {
     SessionsInterface, UserHomePage
 } from './Pages'
 import {CharmCross} from "./assets/icons";
+import NewMenu from "./Pages/NewMenu.tsx";
+import Test from "./Pages/Test.tsx";
+import AuthError from "./Pages/AuthError.tsx";
+
 
 function App() {
 
@@ -43,18 +46,13 @@ function App() {
         },
     ]
 
-    // THE APP IS NOT WORKING BECAUSE OF THE API, IF NOTHING WORKS, PASTE IT INTO THE FIREBASE.TS FILE FODASE (IT IS IN THE .ENV FILE)
-    // UPDATE: THE APU KEY IS VULNERABLE, ANY ONE CAN SEE IT AND THAT'S SMOKE TO THE GANG. NEXT TASK: HIDE THIS SHIT
-    // NOTE: MAKE SURE TO DELETE THESE COMMENTS BEFORE PUSHING IT INTO GITHUB
 
     return (
         <div className="App">
             <Router>
                 <Routes>
-                    <Route path="/neemble-eat/b/:encodedPlaceName/:tableNumber"
-                           element={<Menu/>}/>
                     <Route path="/neemble-eat/"
-                           element={<MainPage menuOptions={menuOptions}/>}/>
+                           element={<Home menuOptions={menuOptions}/>}/>
                     <Route path="/neemble-eat/about-us"
                            element={<About menuOptions={menuOptions}/>}/>
                     <Route path="/neemble-eat/demo"
@@ -63,24 +61,31 @@ function App() {
                            element={<Contact menuOptions={menuOptions}/>}/>
                     <Route path="/neemble-eat/support"
                            element={<Support menuOptions={menuOptions}/>}/>
-                    <Route path="/neemble-eat/p/:encodedBusinessName/:tableNumber/:productId"
+                    <Route path="/neemble-eat/p/:restaurantID/:menuID/:tableNumber/:productId"
                            element={<Product/>}/>
-                    <Route path='/neemble-eat/c/:encodedBusinessName/:tableNumber'
+                    <Route path='/neemble-eat/c/:restaurantID/:menuID/:tableNumber'
                            element={<Cart/>}/>
-                    <Route path="/neemble-eat/o/:encodedBusinessName/:tableNumber"
+                    <Route path="/neemble-eat/o/:restaurantID/:menuID/:tableNumber"
                            element={<Orders/>}/>
                     <Route path="/neemble-eat/login"
                            element={<LogIn/>}/>
                     <Route path="/neemble-eat/signup"
                            element={<SignUp/>}/>
-                    <Route path="/neemble-eat/setup/:recordID/:name"
+                    <Route path="/neemble-eat/setup/:representantID/:name"
                            element={<AccountSetUp/>}/>
-                    <Route path="/neemble-eat/orders"
+                    <Route path="/neemble-eat/orders/:restaurantID"
                            element={<OrdersInterface/>}/>
-                    <Route path="/neemble-eat/sessions"
+                    <Route path="/neemble-eat/sessions/:restaurantID"
                            element={<SessionsInterface/>}/>
                     <Route path="/neemble-eat/user/rep/:representantID"
                            element={<UserHomePage/>}/>
+                    <Route path="/neemble-eat/menu/:restaurantID/:menuID/:tableNumber"
+                           element={<NewMenu/>}/>
+                    <Route path="/neemble-eat/test"
+                           element={<Test/>}/>
+                    <Route path="/neemble-eat/auth-error"
+                           element={<AuthError/>}/>
+
                 </Routes>
             </Router>
         </div>

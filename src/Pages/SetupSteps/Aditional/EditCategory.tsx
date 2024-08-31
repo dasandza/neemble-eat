@@ -1,25 +1,24 @@
 import React, {useEffect, useState} from "react";
-import {Category, ProductProps} from "../../../interfaces.tsx";
+import {Category, MenuItem} from "../../../schema.ts";
 import AddItem from "./AddItem.tsx";
 import EditItem from "./EditItem.tsx";
 import {BinIcon} from "../../../assets/icons";
 
 
 interface EditCategoryProps {
-    isOpen: boolean;
-    editCategory: (category: Category) => void;
-    close: () => void;
-    restaurantId: string;
-    category: Category
+    isOpen: boolean,
+    editCategory: (category: Category) => void,
+    close: () => void,
+    category: Category,
 }
 
-function EditCategory({isOpen, close, editCategory, restaurantId, category}: EditCategoryProps) {
+function EditCategory({isOpen, close, editCategory, category}: EditCategoryProps) {
 
 
     const [isEditItemPageOpen, setIsEditItemPageOpen] = useState<boolean>(false)
     const [isCreateItemPageOpen, setIsCreateItemPageOpen] = useState<boolean>(false)
     const [name, setName] = useState<string>("")
-    const [categoryItems, setCategoryItems] = useState<ProductProps[]>(category.menuItems.length != 0 ? category.menuItems : [])
+    const [items, setItems] = useState<MenuItem[]>(category.items ? category.items : [])
     const [itemBeingEditedIndex, setItemBeingEditedIndex] = useState<number>(-1)
 
     useEffect(() => {
@@ -34,16 +33,15 @@ function EditCategory({isOpen, close, editCategory, restaurantId, category}: Edi
     }, [isOpen]); // Only re-run the effect if isOpen changes
 
     useEffect(() => {
-        if (categoryItems != null) {
-            setCategoryItems(category.menuItems)
+        if (items != null) {
+            setItems(category.items)
         }
 
-    }, [category.menuItems]);
+    }, [category.items]);
 
 
-    function addItem(item: ProductProps) {
-        //console.log("NEW ITEM:", item)
-        category.menuItems = category.menuItems.concat(item)
+    function addItem(item: MenuItem) {
+        category.items = category.items.concat(item)
     }
 
     function openEditItemPage(index: number) {
@@ -56,12 +54,12 @@ function EditCategory({isOpen, close, editCategory, restaurantId, category}: Edi
         setIsEditItemPageOpen(false)
     }
 
-    function deleteItem(itemToBeDeleted: ProductProps) {
-        setCategoryItems(category.menuItems.filter((item) => item != itemToBeDeleted))
+    function deleteItem(itemToBeDeleted: MenuItem) {
+        setItems(category.items.filter((item) => item != itemToBeDeleted))
     }
 
-    function editItem(item: ProductProps) {
-        category.menuItems[itemBeingEditedIndex] = item
+    function editItem(item: MenuItem) {
+        category.items[itemBeingEditedIndex] = item
     }
 
     function handleSave(e: React.FormEvent<HTMLFormElement>) {
@@ -71,7 +69,7 @@ function EditCategory({isOpen, close, editCategory, restaurantId, category}: Edi
             category.name = name
 
         }
-        category.menuItems = categoryItems
+        category.items = items
         editCategory(category);
         handleClose()
     }
@@ -85,7 +83,7 @@ function EditCategory({isOpen, close, editCategory, restaurantId, category}: Edi
         console.log("CATEGORIA:", category)
     }
 
-    if (category.name == "" && category.menuItems.length == 0) return <div></div>
+    if (category.name == "" && category.items.length == 0) return <div></div>
 
     if (!isOpen) return null;
 
@@ -151,10 +149,10 @@ function EditCategory({isOpen, close, editCategory, restaurantId, category}: Edi
                                     </p>
                                 </button>
                                 <div
-                                    className={category.menuItems.length == 0 ? 'bg-gray-200 rounded-lg my-3 py-16 px-8 ' : 'space-y-1 pt-3'}>
+                                    className={category.items.length == 0 ? 'bg-gray-200 rounded-lg my-3 py-16 px-8 ' : 'space-y-1 pt-3'}>
                                     {
-                                        categoryItems.length > 0 &&
-                                        categoryItems.map((item, index) => (
+                                        items.length > 0 &&
+                                        items.map((item, index) => (
                                             <div key={index}
                                                  className='flex'>
                                                 <div
@@ -182,10 +180,14 @@ function EditCategory({isOpen, close, editCategory, restaurantId, category}: Edi
                                         ))
                                     }
                                     {
-                                        category.menuItems.length == 0 &&
-                                        <p className='prevent-select justify-center text-gray-500 italic flex items-center'>
-                                            Nenhum prato adicionado à esta categoria
-                                        </p>
+                                        category.items ?
+                                            category.items.length == 0 &&
+                                            <p className='prevent-select justify-center text-gray-500 italic flex items-center'>
+                                                Nenhum prato adicionado à esta categoria
+                                            </p> :
+                                            <p className='prevent-select justify-center text-gray-500 italic flex items-center'>
+                                                Nenhum prato adicionado à esta categoria
+                                            </p>
                                     }
                                 </div>
                             </div>
@@ -198,7 +200,6 @@ function EditCategory({isOpen, close, editCategory, restaurantId, category}: Edi
                 <AddItem isOpen={isCreateItemPageOpen}
                          close={() => setIsCreateItemPageOpen(false)}
                          addItem={(item) => addItem(item)}
-                         restaurantId={restaurantId}
                          categoryName={name}/>
             }
 
@@ -208,13 +209,11 @@ function EditCategory({isOpen, close, editCategory, restaurantId, category}: Edi
                           editItem={(item) => editItem(item)}
                           close={closeEditItemPage}
                           categoryName={name}
-                          item={itemBeingEditedIndex != -1 ? category.menuItems[itemBeingEditedIndex] : {
+                          item={itemBeingEditedIndex != -1 ? category.items[itemBeingEditedIndex] : {
                               name: "",
                               price: 0,
-                              imageURL: "",
                               description: "",
-                              record_id: restaurantId
-                          } as ProductProps}/>
+                          } as MenuItem}/>
             }
 
         </div>

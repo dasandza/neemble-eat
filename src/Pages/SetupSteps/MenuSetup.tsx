@@ -2,15 +2,14 @@ import {AddIcon, SearchIcon, BinIcon} from "../../assets/icons";
 import {useState} from "react";
 import AddCategory from "./Aditional/AddCategory.tsx";
 import EditCategory from "./Aditional/EditCategory.tsx";
-import {Category} from "../../interfaces.tsx";
+import {Category} from "../../schema.ts";
 
 interface MenuSetupParams {
     categories: Category[],
     setCategories: (categories: Category[]) => void;
-    restaurantID: string
 }
 
-function MenuSetup({categories, setCategories, restaurantID}: MenuSetupParams) {
+function MenuSetup({categories, setCategories}: MenuSetupParams) {
 
     const [isEditCategoryPageOpen, setIsEditCategoryPageOpen] = useState<boolean>(false)
     const [isCreateCategoryPageOpen, setIsCreateCategoryPageOpen] = useState<boolean>(false)
@@ -23,13 +22,11 @@ function MenuSetup({categories, setCategories, restaurantID}: MenuSetupParams) {
     }
 
     function openEditCategoryPage(index: number) {
-        //console.log("CATEGORY BEING EDITED: ", categories[index])
         setCategoryBeingEditedIndex(index)
         setIsEditCategoryPageOpen(true)
     }
 
     function closeEditCategoryPage() {
-        console.log("RESULTADO DA CATEGORIA EDITADA:", categories[categoryBeingEditedIndex])
         setCategoryBeingEditedIndex(-1)
         setIsEditCategoryPageOpen(false)
     }
@@ -101,7 +98,7 @@ function MenuSetup({categories, setCategories, restaurantID}: MenuSetupParams) {
                                         </th>
                                         <td className="px-6 py-3 w-[10%]"
                                             onClick={() => openEditCategoryPage(index)}>
-                                            {category.menuItems.length} itens
+                                            {category.items == undefined ? 0 : category.items.length} itens
                                         </td>
                                         <td className="px-6 py-3 w-[10%]">
                                             <BinIcon onClick={() => deleteCategory(category)}/>
@@ -121,19 +118,17 @@ function MenuSetup({categories, setCategories, restaurantID}: MenuSetupParams) {
                 isCreateCategoryPageOpen &&
                 <AddCategory isOpen={isCreateCategoryPageOpen}
                              close={() => setIsCreateCategoryPageOpen(false)}
-                             addCategory={(category) => addCategory(category)}
-                             restaurantId={restaurantID}/>
+                             addCategory={(category) => addCategory(category)}/>
 
             }
             {
                 isEditCategoryPageOpen &&
                 <EditCategory close={closeEditCategoryPage}
                               editCategory={(category) => editCategory(category)}
-                              restaurantId={restaurantID}
                               isOpen={isEditCategoryPageOpen}
                               category={categoryBeingEditedIndex != -1 ? categories[categoryBeingEditedIndex] : {
                                   name: "",
-                                  menuItems: []
+                                  menuID: "",
                               } as Category}/>
             }
 

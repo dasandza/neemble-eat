@@ -1,17 +1,17 @@
-import {AirtableOrders} from "../interfaces.tsx";
+import {OrderJson} from "../schema.ts";
 
-function convertToCSV(data: AirtableOrders[]): string {
+function convertToCSV(data: OrderJson[]): string {
     if (data.length === 0) return '';
 
     const csvRows = [];
     // Assume all objects have the same structure, so use the first one to determine headers
-    const headers = Object.keys(data[0].fields).filter(key => !(data[0].fields[key] instanceof Array));
+    const headers = Object.keys(data[0]);
     csvRows.push(headers.join(','));
 
     // Convert each object to a CSV row, ensuring only non-Array fields are included
     for (const item of data) {
         const values = headers.map(header => {
-            const field = item.fields[header];
+            const field = item[header];
             const escaped = ('' + field).replace(/"/g, '\\"');
             return `"${escaped}"`;
         });
@@ -42,8 +42,9 @@ function downloadCSV(csvContent: string, fileName: string) {
 /**
  * Main function to handle conversion and downloading of CSV.
  * @param data Array of AirtableOrders to be processed.
+ * @param fileName
  */
-function exportDataToCSV(data: AirtableOrders[], fileName: string = 'download.csv') {
+function exportDataToCSV(data: OrderJson[], fileName: string = 'download.csv') {
     const csvContent = convertToCSV(data);
     downloadCSV(csvContent, fileName);
 }
