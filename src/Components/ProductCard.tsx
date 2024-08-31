@@ -1,7 +1,7 @@
-import {MenuItem} from "../schema.ts";
+import {MenuItemJson} from "../schema.ts";
 
 interface props {
-    item: MenuItem;
+    item: MenuItemJson;
 }
 
 const ProductCard: React.FC<props> = ({item}) => {
