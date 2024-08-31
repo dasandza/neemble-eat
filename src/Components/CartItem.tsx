@@ -1,5 +1,4 @@
 import {CartItem} from "../interfaces.tsx";
-import {Link} from "react-router-dom";
 import {useState} from "react";
 import {BinIcon} from "../assets/icons";
 
@@ -15,9 +14,6 @@ interface CartItemProps {
 
 function CartSingleItem({
                             cartProduct,
-                            restaurantID,
-                            tableNumber,
-                            menuID,
                             decrement,
                             increment,
                             deleteItem
@@ -98,18 +94,14 @@ function CartSingleItem({
                             </div>
                         </div>
                     </div>
-                    <Link to={`/neemble-eat/p/${restaurantID}/${menuID}/${tableNumber}/${cartProduct.id}`}
-                          className=' ml-1.5 flex items-center'>
+                    <div
+                        className=' ml-1.5 flex items-center'>
                         <div className='flex items-center prevent-select'>
                             <p className='text-zinc-400'>{'>'}</p>
                         </div>
-                    </Link>
-
+                    </div>
                 </div>
-
             </div>
-
-
         </div>
     );
 }

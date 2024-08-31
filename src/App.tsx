@@ -1,6 +1,5 @@
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import {
-    Product,
     Cart,
     Orders,
     LogIn,
@@ -61,8 +60,6 @@ function App() {
                            element={<Contact menuOptions={menuOptions}/>}/>
                     <Route path="/neemble-eat/support"
                            element={<Support menuOptions={menuOptions}/>}/>
-                    <Route path="/neemble-eat/p/:restaurantID/:menuID/:tableNumber/:productId"
-                           element={<Product/>}/>
                     <Route path='/neemble-eat/c/:restaurantID/:menuID/:tableNumber'
                            element={<Cart/>}/>
                     <Route path="/neemble-eat/o/:restaurantID/:menuID/:tableNumber"
