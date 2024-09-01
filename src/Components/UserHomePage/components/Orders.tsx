@@ -16,9 +16,11 @@ function Orders({restaurantID}: props) {
 
         async function fetch() {
 
-            const ordersJson = await fetchAllRestaurantOrders({representatID: restaurantID})
+            const ordersJson = await fetchAllRestaurantOrders({restaurantID: restaurantID})
             setOrders(ordersJson)
         }
+
+        fetch().then()
 
     }, []);
 
