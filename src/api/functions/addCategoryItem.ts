@@ -1,5 +1,5 @@
 import {MenuItemJson} from "../../schema.ts";
-import {apiUrl} from "./key.ts";
+import {apiUrl, online} from "./key.ts";
 
 interface props {
     categoryID: string,
@@ -19,7 +19,7 @@ async function AddCategoryItem({categoryID, imageFile, price, name, description}
     formData.append("imageFile", imageFile)
     formData.append("categoryID", categoryID)
 
-    const response = await fetch(`${window.location.protocol}//${apiUrl}/categories/menuItem`, {
+    const response = await fetch(`${online ? "https:" : "http:"}//${apiUrl}/categories/menuItem`, {
         method: "POST",
         body: formData
     })

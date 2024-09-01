@@ -1,4 +1,4 @@
-import {apiUrl} from "./key.ts";
+import {apiUrl, online} from "./key.ts";
 import {TableSessionJson} from "../../schema.ts";
 
 
@@ -9,7 +9,7 @@ interface props {
 
 
 async function FetchRestaurantOpenTable({tableNumber, restaurantID}: props) {
-    const response = await fetch(`${window.location.protocol}//${apiUrl}/restaurants/${restaurantID}/${tableNumber}/open-session`, {
+    const response = await fetch(`${online ? "https:" : "http:"}//${apiUrl}/restaurants/${restaurantID}/${tableNumber}/open-session`, {
         method: "GET",
     })
     if (response.ok) {

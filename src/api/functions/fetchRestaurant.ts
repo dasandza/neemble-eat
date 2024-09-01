@@ -1,5 +1,5 @@
 import {RestaurantJson} from "../../schema.ts";
-import {apiUrl} from "./key.ts";
+import {apiUrl, online} from "./key.ts";
 
 
 interface props {
@@ -8,7 +8,7 @@ interface props {
 
 
 async function FetchRestaurant({restaurantID}: props) {
-    const response = await fetch(`${window.location.protocol}//${apiUrl}/restaurants/${restaurantID}`)
+    const response = await fetch(`${online ? "https:" : "http:"}//${apiUrl}/restaurants/${restaurantID}`)
     if (response.ok) {
         const data: RestaurantJson = await response.json()
 

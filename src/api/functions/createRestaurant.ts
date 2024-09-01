@@ -1,5 +1,5 @@
 import {Restaurant, RestaurantJson} from "../../schema.ts";
-import {apiUrl} from "./key.ts";
+import {apiUrl, online} from "./key.ts";
 
 async function CreateRestaurant({
                                     name,
@@ -16,7 +16,7 @@ async function CreateRestaurant({
     formData.append("phoneNumber", phoneNumber);
     formData.append("bannerFile", bannerFile);
 
-    const response = await fetch(`${window.location.protocol}//${apiUrl}/restaurants/`, {
+    const response = await fetch(`${online ? "https:" : "http:"}//${apiUrl}/restaurants/`, {
         method: "POST",
         body: formData
     });

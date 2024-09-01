@@ -78,7 +78,7 @@ function OrdersInterface() {
         let ws: WebSocket;
         const connectWebSocket = () => {
             // Using protocol-relative URL to switch between ws and wss dynamically
-            const protocol = window.location.protocol === 'https:' ? 'ws:' : 'ws:';
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
 
             try {
                 ws = new WebSocket(`${protocol}//${BASE_URL}/ws/${restaurantID}/order`);
@@ -132,7 +132,7 @@ function OrdersInterface() {
     useEffect(() => {
         let ws: WebSocket;
         const connectWebSocket = () => {
-            const protocol = window.location.protocol === 'https:' ? 'ws:' : 'ws:';
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
             ws = new WebSocket(`${protocol}//${BASE_URL}/ws/${restaurantID}/billed`);
 
             ws.onopen = () => {

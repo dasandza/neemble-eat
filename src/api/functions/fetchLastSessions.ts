@@ -1,4 +1,4 @@
-import {apiUrl} from "./key.ts";
+import {apiUrl, online} from "./key.ts";
 import {TableSessionJson} from "../../schema.ts";
 
 interface props {
@@ -6,7 +6,7 @@ interface props {
 }
 
 async function FetchLastSessions({restaurantID}: props) {
-    const response = await fetch(`${window.location.protocol}//${apiUrl}/restaurants/${restaurantID}/last-sessions`, {
+    const response = await fetch(`${online ? "https:" : "http:"}//${apiUrl}/restaurants/${restaurantID}/last-sessions`, {
         method: "GET",
     })
     if (response.ok) {

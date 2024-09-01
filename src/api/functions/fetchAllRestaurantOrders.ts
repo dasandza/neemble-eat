@@ -1,5 +1,5 @@
 import {OrderJson, OrderStatus, SessionStatus} from "../../schema.ts";
-import {apiUrl} from "./key.ts";
+import {apiUrl, online} from "./key.ts";
 
 
 interface props {
@@ -8,7 +8,7 @@ interface props {
 
 
 async function FetchAllRestaurantOrders({restaurantID}: props): Promise<OrderJson[]> {
-    const response = await fetch(`${window.location.protocol}//${apiUrl}/restaurants/${restaurantID}/orders`)
+    const response = await fetch(`${online ? "https:" : "http:"}//${apiUrl}/restaurants/${restaurantID}/orders`)
     if (response.ok) {
         const data = await response.json()
         return data.map((order: {

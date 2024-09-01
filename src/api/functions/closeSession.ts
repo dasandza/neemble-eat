@@ -1,5 +1,5 @@
 import {InvoiceJson} from "../../schema.ts";
-import {apiUrl} from "./key.ts";
+import {apiUrl, online} from "./key.ts";
 
 
 interface props {
@@ -8,7 +8,7 @@ interface props {
 }
 
 async function CloseSession({sessionID, status}: props): Promise<InvoiceJson> {
-    const response = await fetch(`${window.location.protocol}//${apiUrl}/table-sessions/${sessionID}/${status}/orders`, {
+    const response = await fetch(`${online ? "https:" : "http:"}//${apiUrl}/table-sessions/${sessionID}/${status}/orders`, {
         method: "POST",
     })
     if (response.ok) {

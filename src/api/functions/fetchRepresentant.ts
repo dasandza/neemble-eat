@@ -1,5 +1,5 @@
 import {RepresentantJson} from "../../schema.ts";
-import {apiUrl} from "./key.ts";
+import {apiUrl, online} from "./key.ts";
 
 interface props {
     representatID: string
@@ -7,7 +7,7 @@ interface props {
 
 
 async function FetchRepresentant({representatID}: props) {
-    const response = await fetch(`${window.location.protocol}//${apiUrl}/representants/${representatID}`, {
+    const response = await fetch(`${online ? "https:" : "http:"}//${apiUrl}/representants/${representatID}`, {
         method: "GET",
     })
     if (response.ok) {

@@ -1,5 +1,5 @@
 import {RepresentantJson, Representant} from "../../schema.ts";
-import {apiUrl} from "./key.ts";
+import {apiUrl, online} from "./key.ts";
 
 
 async function CreateRepresentant({
@@ -11,7 +11,7 @@ async function CreateRepresentant({
                                       role
                                   }: Representant): Promise<RepresentantJson> {
     //const apiUrl = import.meta.env.VITE_FIREBASE_API_KEY;
-    const response = await fetch(`${window.location.protocol}//${apiUrl}/representants/`, {
+    const response = await fetch(`${online ? "https:" : "http:"}//${apiUrl}/representants/`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',

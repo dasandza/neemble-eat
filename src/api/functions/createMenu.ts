@@ -1,9 +1,9 @@
 import {Menu, MenuJson} from "../../schema.ts";
-import {apiUrl} from "./key.ts";
+import {apiUrl, online} from "./key.ts";
 
 
 async function CreateMenu({name, restaurantID}: Menu): Promise<MenuJson> {
-    const response = await fetch(`${window.location.protocol}//${apiUrl}/menus/`, {
+    const response = await fetch(`${online ? "https:" : "http:"}//${apiUrl}/menus/`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',

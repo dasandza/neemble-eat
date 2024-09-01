@@ -1,4 +1,4 @@
-import {apiUrl} from "./key.ts";
+import {apiUrl, online} from "./key.ts";
 import {OrderJson} from "../../schema.ts";
 
 
@@ -8,7 +8,7 @@ interface props {
 }
 
 async function UpdateOrder({orderID, newStatus}: props) {
-    const response = await fetch(`${window.location.protocol}//${apiUrl}/orders/${orderID}/${newStatus}`, {
+    const response = await fetch(`${online ? "https:" : "http:"}//${apiUrl}/orders/${orderID}/${newStatus}`, {
         method: "PUT",
     })
     if (response.ok) {

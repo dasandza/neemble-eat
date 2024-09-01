@@ -1,5 +1,5 @@
 import {RestaurantJson} from "../../schema.ts";
-import {apiUrl} from "./key.ts";
+import {apiUrl, online} from "./key.ts";
 
 interface props {
     restaurantID: string,
@@ -8,7 +8,7 @@ interface props {
 
 
 async function AssignOwner({accountID, restaurantID}: props): Promise<RestaurantJson> {
-    const response = await fetch(`${window.location.protocol}//${apiUrl}/restaurants/${restaurantID}/${accountID}/representant`, {
+    const response = await fetch(`${online ? "https:" : "http:"}//${apiUrl}/restaurants/${restaurantID}/${accountID}/representant`, {
         method: "PUT"
     })
     if (response.ok) {

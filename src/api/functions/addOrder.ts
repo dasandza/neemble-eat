@@ -1,9 +1,9 @@
-import {apiUrl} from "./key.ts";
+import {apiUrl, online} from "./key.ts";
 import {TableSessionJson, Order} from "../../schema.ts";
 
 
 async function AddOrder({sessionID, itemID, quantity, additionalNote}: Order) {
-    const response = await fetch(`${window.location.protocol}//${apiUrl}/table-sessions/${sessionID}/orders`, {
+    const response = await fetch(`${online ? "https:" : "http:"}//${apiUrl}/table-sessions/${sessionID}/orders`, {
         method: "PUT",
         headers: {
             'Content-Type': 'application/json',
