@@ -11,7 +11,7 @@ async function CreateRepresentant({
                                       role
                                   }: Representant): Promise<RepresentantJson> {
     //const apiUrl = import.meta.env.VITE_FIREBASE_API_KEY;
-    const response = await fetch(`http://${apiUrl}/representants/`, {
+    const response = await fetch(`${window.location.protocol}//${apiUrl}/representants/`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',

@@ -7,7 +7,7 @@ interface props {
 
 
 async function FetchRepresentantByUUID({UUID}: props) {
-    const response = await fetch(`http://${apiUrl}/representants/${UUID}/UUID`, {
+    const response = await fetch(`${window.location.protocol}//${apiUrl}/representants/${UUID}/UUID`, {
         method: "GET",
     })
     if (response.ok) {

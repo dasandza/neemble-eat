@@ -10,7 +10,7 @@ interface props {
 
 
 async function AddMenuCategory({menuID, name, description}: props): Promise<CategoryJson> {
-    const response = await fetch(`http://${apiUrl}/menus/${menuID}/categories`, {
+    const response = await fetch(`${window.location.protocol}//${apiUrl}/menus/${menuID}/categories`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',

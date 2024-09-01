@@ -9,7 +9,7 @@ interface props {
 
 
 async function FetchRestaurantOpenTable({tableNumber, restaurantID}: props) {
-    const response = await fetch(`http://${apiUrl}/restaurants/${restaurantID}/${tableNumber}/open-session`, {
+    const response = await fetch(`${window.location.protocol}//${apiUrl}/restaurants/${restaurantID}/${tableNumber}/open-session`, {
         method: "GET",
     })
     if (response.ok) {

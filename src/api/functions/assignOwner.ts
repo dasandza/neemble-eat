@@ -8,7 +8,7 @@ interface props {
 
 
 async function AssignOwner({accountID, restaurantID}: props): Promise<RestaurantJson> {
-    const response = await fetch(`http://${apiUrl}/restaurants/${restaurantID}/${accountID}/representant`, {
+    const response = await fetch(`${window.location.protocol}//${apiUrl}/restaurants/${restaurantID}/${accountID}/representant`, {
         method: "PUT"
     })
     if (response.ok) {

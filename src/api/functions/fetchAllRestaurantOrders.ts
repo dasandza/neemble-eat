@@ -8,7 +8,7 @@ interface props {
 
 
 async function FetchAllRestaurantOrders({restaurantID}: props): Promise<OrderJson[]> {
-    const response = await fetch(`http://${apiUrl}/restaurants/${restaurantID}/orders`)
+    const response = await fetch(`${window.location.protocol}//${apiUrl}/restaurants/${restaurantID}/orders`)
     if (response.ok) {
         const data = await response.json()
         return data.map((order: {

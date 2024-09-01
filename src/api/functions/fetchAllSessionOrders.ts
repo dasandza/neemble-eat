@@ -7,7 +7,7 @@ interface props {
 
 
 async function FetchAllSessionOrders({sessionID}: props): Promise<OrderJson[]> {
-    const response = await fetch(`http://${apiUrl}/table-sessions/${sessionID}/orders`, {
+    const response = await fetch(`${window.location.protocol}//${apiUrl}/table-sessions/${sessionID}/orders`, {
         method: "GET",
     })
     if (response.ok) {

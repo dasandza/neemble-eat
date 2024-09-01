@@ -6,7 +6,7 @@ interface props {
 }
 
 async function FetchLastSessions({restaurantID}: props) {
-    const response = await fetch(`http://${apiUrl}/restaurants/${restaurantID}/last-sessions`, {
+    const response = await fetch(`${window.location.protocol}//${apiUrl}/restaurants/${restaurantID}/last-sessions`, {
         method: "GET",
     })
     if (response.ok) {

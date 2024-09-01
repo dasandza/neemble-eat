@@ -8,7 +8,7 @@ interface props {
 }
 
 async function UpdateOrder({orderID, newStatus}: props) {
-    const response = await fetch(`http://${apiUrl}/orders/${orderID}/${newStatus}`, {
+    const response = await fetch(`${window.location.protocol}//${apiUrl}/orders/${orderID}/${newStatus}`, {
         method: "PUT",
     })
     if (response.ok) {

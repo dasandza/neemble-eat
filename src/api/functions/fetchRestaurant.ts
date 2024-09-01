@@ -8,7 +8,7 @@ interface props {
 
 
 async function FetchRestaurant({restaurantID}: props) {
-    const response = await fetch(`http://${apiUrl}/restaurants/${restaurantID}`)
+    const response = await fetch(`${window.location.protocol}//${apiUrl}/restaurants/${restaurantID}`)
     if (response.ok) {
         const data: RestaurantJson = await response.json()
 

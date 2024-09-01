@@ -16,7 +16,7 @@ async function CreateRestaurant({
     formData.append("phoneNumber", phoneNumber);
     formData.append("bannerFile", bannerFile);
 
-    const response = await fetch(`http://${apiUrl}/restaurants/`, {
+    const response = await fetch(`${window.location.protocol}//${apiUrl}/restaurants/`, {
         method: "POST",
         body: formData
     });

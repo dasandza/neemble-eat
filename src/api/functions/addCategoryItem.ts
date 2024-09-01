@@ -19,7 +19,7 @@ async function AddCategoryItem({categoryID, imageFile, price, name, description}
     formData.append("imageFile", imageFile)
     formData.append("categoryID", categoryID)
 
-    const response = await fetch(`http://${apiUrl}/categories/menuItem`, {
+    const response = await fetch(`${window.location.protocol}//${apiUrl}/categories/menuItem`, {
         method: "POST",
         body: formData
     })

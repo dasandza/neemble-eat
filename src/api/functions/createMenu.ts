@@ -3,7 +3,7 @@ import {apiUrl} from "./key.ts";
 
 
 async function CreateMenu({name, restaurantID}: Menu): Promise<MenuJson> {
-    const response = await fetch(`http://${apiUrl}/menus/`, {
+    const response = await fetch(`${window.location.protocol}//${apiUrl}/menus/`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',

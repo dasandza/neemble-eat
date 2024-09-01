@@ -7,7 +7,7 @@ interface props {
 
 
 async function FetchMenuParsed({menuID}: props) {
-    const response = await fetch(`http://${apiUrl}/menus/${menuID}/parse`, {
+    const response = await fetch(`${window.location.protocol}//${apiUrl}/menus/${menuID}/parse`, {
         method: "GET",
     })
     if (response.ok) {

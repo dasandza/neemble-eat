@@ -7,7 +7,7 @@ interface props {
 
 
 async function CreateRestaurantTable({restaurantID}: props): Promise<TableJson> {
-    const response = await fetch(`http://${apiUrl}/restaurants/${restaurantID}/tables`, {
+    const response = await fetch(`${window.location.protocol}//${apiUrl}/restaurants/${restaurantID}/tables`, {
         method: "PUT",
     })
     if (response.ok) {
