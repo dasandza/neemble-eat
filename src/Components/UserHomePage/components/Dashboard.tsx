@@ -69,7 +69,7 @@ function Dashboard({representant, restaurant}: props) {
                                             Clique no botão abaixo para acessar a sua tela de gerenciamento.
                                         </p>
                                     </div>
-                                    <a href={`https://https://dasandza.github.io:5173/neemble-eat/orders/${restaurant.id}`}
+                                    <a href={`https://https://dasandza.github.io/neemble-eat/orders/${restaurant.id}`}
                                        target="_blank"
                                        rel="noopener noreferrer">
                                         <button
@@ -93,7 +93,7 @@ function Dashboard({representant, restaurant}: props) {
                                             Clique no botão abaixo para acessar a sua tela de gerenciamento.
                                         </p>
                                     </div>
-                                    <a href={`https://https://dasandza.github.io:5173/neemble-eat/sessions/${restaurant.id}`}
+                                    <a href={`https://https://dasandza.github.io/neemble-eat/sessions/${restaurant.id}`}
                                        target="_blank"
                                        rel="noopener noreferrer">
                                         <button
