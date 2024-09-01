@@ -20,9 +20,18 @@ function LogIn() {
 
     useEffect(() => {
         async function fetch() {
+
             if (UUID != undefined) {
-                const representant: RepresentantJson = await fetchRepresentantByUUID({UUID: UUID})
-                navigate(`/neemble-eat/user/rep/${representant.id}/`)
+                console.log("Triggered...")
+                try {
+                    const representant: RepresentantJson | undefined = await fetchRepresentantByUUID({UUID: UUID})
+                    if (representant) {
+                        console.log(representant)
+                        navigate(`/neemble-eat/user/rep/${representant.id}`)
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
             }
         }
 
@@ -35,11 +44,11 @@ function LogIn() {
         e.preventDefault()
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredentials) => {
-                setUUID(userCredentials.user.uid)
                 setError(null)
-            }).catch((error) => {
+                const userID = userCredentials.user.uid
+                setUUID(userID)
+            }).catch(() => {
             setError("Houve um problema ao iniciar sessão. Tente novamente ou troque a sua palavra passe")
-            console.log(error)
         })
 
     }
