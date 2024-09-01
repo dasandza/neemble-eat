@@ -54,7 +54,7 @@ function UserHomePage() {
             notSelectedIcon: <SettingsIconNotSelected/>
         },
     ]
-    
+
     const sideOptions: MenuOption[] = [
         {
             name: "Suporte",
@@ -78,6 +78,7 @@ function UserHomePage() {
 
 
     useEffect(() => {
+
         async function fetch() {
             try {
                 const storedRepresentantData = sessionStorage.getItem("User")
@@ -91,7 +92,7 @@ function UserHomePage() {
 
                 const storedRestaurantantData = sessionStorage.getItem("Restaurant")
                 let restaurantJson: RestaurantJson = storedRestaurantantData ? JSON.parse(storedRestaurantantData) : null
-                if (!storedRestaurantantData) {
+                if (!storedRestaurantantData && representantJson.restaurantID) {
                     restaurantJson = await fetchRestaurant({restaurantID: representantJson.restaurantID})
                 }
                 setRestaurant(restaurantJson)
@@ -122,7 +123,7 @@ function UserHomePage() {
 
     if (!representant || !restaurant) {
         return <div className={`flex justify-center items-center w-full h-dvh`}>
-            Bem vindo
+
         </div>
     }
 

@@ -182,7 +182,7 @@ interface RepresentantJson {
     email: string,
     role: string,
     phoneNumber: string,
-    restaurantID: string
+    restaurantID?: string
 }
 
 interface Restaurant {

@@ -4,8 +4,7 @@ import React, {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {auth} from "../firebase/firebase.ts";
 import {signInWithEmailAndPassword} from "firebase/auth";
-import {fetchRepresentantByUUID} from "../api";
-import {RepresentantJson} from "../schema.ts";
+import handleLogIn from "../utils/handleLogIn.ts";
 
 
 function LogIn() {
@@ -20,15 +19,9 @@ function LogIn() {
 
     useEffect(() => {
         async function fetch() {
-
             if (UUID != undefined) {
-                console.log("Triggered...")
                 try {
-                    const representant: RepresentantJson | undefined = await fetchRepresentantByUUID({UUID: UUID})
-                    if (representant) {
-                        console.log(representant)
-                        navigate(`/neemble-eat/user/rep/${representant.id}`)
-                    }
+                    await handleLogIn({UUID: UUID, navigate: navigate})
                 } catch (error) {
                     console.log(error)
                 }

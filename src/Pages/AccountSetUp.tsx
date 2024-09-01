@@ -62,6 +62,12 @@ function AccountSetUp() {
             categories={categoriesMenuSetupParams}/>,
     };
 
+    useEffect(() => {
+        if (!name || !representantID) {
+            navigate(`/neemble-eat/login/`)
+        }
+    }, []);
+
 
     useEffect(() => {
         async function conclude() {
