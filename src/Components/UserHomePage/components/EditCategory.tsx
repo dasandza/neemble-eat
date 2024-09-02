@@ -12,11 +12,11 @@ interface EditCategoryProps {
 function EditCategory({close, editCategory, category}: EditCategoryProps) {
 
 
-    const [isEditItemPageOpen, setIsEditItemPageOpen] = useState<boolean>(false)
-    const [isCreateItemPageOpen, setIsCreateItemPageOpen] = useState<boolean>(false)
+    const [,] = useState<boolean>(false)
+    const [,] = useState<boolean>(false)
     const [name, setName] = useState<string>("")
     const [items, setItems] = useState<MenuItemJson[]>(category.items ? category.items : [])
-    const [itemBeingEditedIndex, setItemBeingEditedIndex] = useState<number>(-1)
+    const [,] = useState<number>(-1)
 
 
     useEffect(() => {
@@ -27,27 +27,27 @@ function EditCategory({close, editCategory, category}: EditCategoryProps) {
     }, [category.items]);
 
 
-    function addItem(item: MenuItemJson) {
-        category.items = category.items.concat(item)
-    }
-
-    function openEditItemPage(index: number) {
-        setItemBeingEditedIndex(index)
-        setIsEditItemPageOpen(true)
-    }
-
-    function closeEditItemPage() {
-        setItemBeingEditedIndex(-1)
-        setIsEditItemPageOpen(false)
-    }
+    //  function addItem(item: MenuItemJson) {
+    //      category.items = category.items.concat(item)
+    //  }
+//
+    //  function openEditItemPage(index: number) {
+    //      setItemBeingEditedIndex(index)
+    //      setIsEditItemPageOpen(true)
+    //  }
+//
+    //  function closeEditItemPage() {
+    //      setItemBeingEditedIndex(-1)
+    //      setIsEditItemPageOpen(false)
+    //  }
 
     function deleteItem(itemToBeDeleted: MenuItemJson) {
         setItems(category.items.filter((item) => item != itemToBeDeleted))
     }
 
-    function editItem(item: MenuItemJson) {
-        category.items[itemBeingEditedIndex] = item
-    }
+    // function editItem(item: MenuItemJson) {
+    //     category.items[itemBeingEditedIndex] = item
+    // }
 
     function handleSave(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()

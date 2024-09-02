@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {fetchMenuParsed} from "../../../api";
-import {CategoryParsed, MenuItemJson, MenuParsed, RestaurantJson} from "../../../schema.ts";
+import {CategoryParsed, MenuParsed, RestaurantJson} from "../../../schema.ts";
 import {AddIcon, BinIcon, SearchIcon} from "../../../assets/icons";
 import {EditCategory} from "../index.ts";
 
@@ -38,22 +38,8 @@ function Menu({restaurant}: props) {
     }, []);
 
 
-    function handleSubmit() {
-        //
-    }
-
-    function openEditItemPage() {
-
-        //
-    }
-
-    function deleteItem(item: MenuItemJson) {
-        //
-    }
-
-
     function editCategory(category: CategoryParsed) {
-        // depois
+        console.log(category)
     }
 
     function selectCategory(category: CategoryParsed) {
