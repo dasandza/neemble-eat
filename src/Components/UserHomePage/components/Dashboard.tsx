@@ -33,12 +33,12 @@ function Dashboard({representant, restaurant}: props) {
     return (
         <div>
             <div
-                className='font-poppins-semibold text-lg my-4 px-2 text-gray-600 border-b-[1.5px] border-gray-100 mx-2 pb-4 laptop:pb-8 laptop:flex justify-between'>
+                className='font-poppins-semibold text-lg my-4 px-2 text-gray-600 mx-2 pb-4 laptop:pb-8 laptop:flex justify-between'>
                 <div className={`mr-4 w-fit`}>
-                    <h1 className={`font-poppins-medium text-3xl my-1`}>
+                    <h1 className={`font-poppins-medium text-3xl my-1 text-black`}>
                         Olá, {representant.firstName}!
                     </h1>
-                    <p className={`text-gray-500 text-base laptop:text-sm`}>
+                    <p className={`text-gray-500 text-sm`}>
                         Acompanhe por aqui o progresso do seu restaurante.
                     </p>
                 </div>

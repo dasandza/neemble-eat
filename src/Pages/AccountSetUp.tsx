@@ -1,7 +1,6 @@
 import {useEffect, useState} from "react";
 import {MenuSetup, RestaurantDetails, TableConfiguration} from "./SetupSteps";
 import {useNavigate, useParams} from "react-router-dom";
-// import {User} from "firebase/auth";
 import {useAuth} from "../AuthContext.tsx";
 import {Category} from "../schema.ts"
 import ConcludeAccountSetUp from "../service/ConcludeAccountSetUp.ts";

@@ -13,7 +13,7 @@ interface props {
 
 function Body({currentPage, restaurant, representant}: props) {
     return (
-        <div className='p-4'>
+        <div className='mx-4 h-full'>
             {
                 currentPage.name == "Dashboard" &&
                 <Dashboard representant={representant}
@@ -39,8 +39,6 @@ function Body({currentPage, restaurant, representant}: props) {
                 currentPage.name == "Novidades" &&
                 <News/>
             }
-
-
         </div>
     );
 }

@@ -138,9 +138,8 @@ function UserHomePage() {
             {/* Background */}
             <div className='fixed -z-10 bg-white h-dvh w-full'></div>
             <div
-                className={` bg-black ease-in-out transition-all duration-300 ${isLeftMenuOpen ? "opacity-[20%] z-20" : "opacity-[0%] -z-10"} w-full h-dvh fixed top-0 left-0 laptop:hidden`}
+                className={` bg-black ease-in-out transition-opacity duration-300 ${isLeftMenuOpen ? "opacity-[20%] z-20" : "opacity-[0%] -z-50"} w-full h-dvh fixed top-0 left-0 laptop:hidden`}
                 onClick={() => setIsLeftMenuOpen(!isLeftMenuOpen)}>
-
             </div>
             <div className='flex w-full'>
                 <div
@@ -154,7 +153,7 @@ function UserHomePage() {
                 {/* h: 56px */}
                 {/* w: 56px */}
                 <div
-                    className={`pt-2 fixed top-0 right-0 transition-all ease-in-out duration-200 w-full bg-white pl-1 ${isLeftMenuOpen ? " laptop:w-4/5 laptop:pl-0" : "laptop:w-full  laptop:pl-2"}`}>
+                    className={`pt-2 z-10 fixed top-0 right-0 transition-all ease-in-out duration-200 w-full bg-white pl-1 ${isLeftMenuOpen ? " laptop:w-4/5 laptop:pl-0" : "laptop:w-full  laptop:pl-2"}`}>
                     <div className={`w-full h-full`}>
                         <Banner firstName={representant.firstName}
                                 lastName={representant.lastName}
@@ -164,7 +163,7 @@ function UserHomePage() {
 
                 </div>
                 <div
-                    className={`pt-[64px] transition-all ease-in-out w-full duration-200 pl-1 ${isLeftMenuOpen ? "laptop:w-4/5 laptop:ml-[20%] ml-0" : "w-full laptop:ml-2"}`}>
+                    className={`pt-[64px] transition-all ease-in-out w-full duration-200 ${isLeftMenuOpen ? "laptop:w-4/5 laptop:ml-[20%] ml-0" : "w-full laptop:ml-2"}`}>
                     <Body currentPage={currntPage}
                           restaurant={restaurant}
                           representant={representant}

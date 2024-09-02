@@ -65,7 +65,6 @@ function LeftSideBar({mainOptions, sideOptions, setOption, current}: props) {
                         </ul>
                     </div>
                 </div>
-
                 <div
                     className={`pb-4 h-fit w-full flex justify-center absolute left-0 bottom-0 `}>
                     <p className={`px-6 py-1 rounded-lg bg-gray-200 font-poppins-semibold text-sm text-gray-500 hover:text-blue-600 hover:bg-blue-200 cursor-pointer transition duration-300 prevent-select`}>

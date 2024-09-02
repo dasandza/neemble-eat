@@ -1,7 +1,8 @@
 import {useEffect, useState} from "react";
 import {fetchMenuParsed} from "../../../api";
-import {MenuParsed, RestaurantJson} from "../../../schema.ts";
+import {CategoryParsed, MenuItemJson, MenuParsed, RestaurantJson} from "../../../schema.ts";
 import {AddIcon, BinIcon, SearchIcon} from "../../../assets/icons";
+import {EditCategory} from "../index.ts";
 
 
 interface props {
@@ -9,8 +10,10 @@ interface props {
 }
 
 function Menu({restaurant}: props) {
+
     const [menu, setMenu] = useState<MenuParsed>()
     const [nameIncludes, setNameIncludes] = useState<string>("")
+    const [selectedCategory, setSelectedCategory] = useState<CategoryParsed | null>(null)
 
 
     useEffect(() => {
@@ -35,12 +38,39 @@ function Menu({restaurant}: props) {
     }, []);
 
 
+    function handleSubmit() {
+        //
+    }
+
+    function openEditItemPage() {
+
+        //
+    }
+
+    function deleteItem(item: MenuItemJson) {
+        //
+    }
+
+
+    function editCategory(category: CategoryParsed) {
+        // depois
+    }
+
+    function selectCategory(category: CategoryParsed) {
+        setSelectedCategory(category)
+    }
+
+
+    function unselectCategory() {
+        setSelectedCategory(null)
+    }
+
     return (
-        <div>
+        <div className={``}>
             <div>
                 <div className={`mt-10`}>
-                    <div className='laptop:flex justify-between mt-4'>
-                        <div className="relative mb-0 w-40">
+                    <div className='laptop:flex laptop:justify-between mt-4'>
+                        <div className="relative mb-4 laptop:mb-0 w-40 z-0">
                             <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
                                 <SearchIcon/>
                             </div>
@@ -66,48 +96,64 @@ function Menu({restaurant}: props) {
                     </div>
 
                     {
-                        menu?.categories.length != 0 ? <div className="relative overflow-x-auto w-[100%] mx-auto mt-5">
-                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <thead className="text-zinc-800 border-b-2 border-zinc-200">
-                                    <tr>
-                                        <th scope="col" className="px-6 py-3 w-[80%]">
-                                            Categoria
-                                        </th>
-                                        <th scope="col" className="px-6 py-3 w-[10%]">
-                                            Contém
-                                        </th>
-                                        <th scope="col" className="px-6 py-3 w-[10%]">
-                                            &nbsp;
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {
-                                        menu?.categories.map((category, index) => (
-                                            category.name.toLowerCase().includes(nameIncludes.toLowerCase()) &&
-                                            <tr key={index}
-                                                className="text-zinc-800 hover:bg-gray-100 cursor-pointer">
-                                                <th scope="row"
-                                                    onClick={() => {
-                                                    }}
-                                                    className="px-6 py-3 font-medium w-[80%]">
-                                                    {category.name}
-                                                </th>
-                                                <td className="px-6 py-3 w-[10%]"
-                                                    onClick={() => {
-                                                    }}>
-                                                    {category.items == undefined ? 0 : category.items.length} itens
-                                                </td>
-                                                <td className="px-6 py-3 w-[10%]">
-                                                    <BinIcon onClick={() => {
-                                                    }}/>
-                                                </td>
-                                            </tr>
-                                        ))
+                        menu?.categories.length != 0 ?
+                            <div className="relative overflow-x-auto w-[100%] mx-auto mt-5">
+                                <div
+                                    className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                    <div className="text-zinc-800 border-b-2 border-zinc-200">
+                                        <div className={`flex w-full px-6 py-3`}>
+                                            <h1 className="laptop:w-[80%] w-[75%]">
+                                                Categoria
+                                            </h1>
+                                            <h1 className="w-[15%]">
+                                                Contém
+                                            </h1>
+                                            <h1 className="laptop:w-[5%] w-[10%]">
+                                                &nbsp;
+                                            </h1>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        {
+                                            menu?.categories.map((category, index) => (
+                                                category.name.toLowerCase().includes(nameIncludes.toLowerCase()) &&
+                                                <div key={index}>
+                                                    <div
+                                                        className={`px-6 py-3 flex w-full items-center text-zinc-800 font-medium hover:bg-gray-100 ${selectedCategory && selectedCategory.id == category.id && "bg-gray-50"} cursor-pointer`}
+                                                        onClick={() => {
+                                                            selectCategory(category)
+                                                        }}>
+                                                        <h2
+                                                            onClick={() => {
+                                                            }}
+                                                            className="laptop:w-[80%] w-[75%]">
+                                                            {category.name}
+                                                        </h2>
+                                                        <h2 className="w-[15%]"
+                                                            onClick={() => {
+                                                            }}>
+                                                            {category.items == undefined ? 0 : category.items.length} {category.items.length <= 1 ? "item" : "itens"}
+                                                        </h2>
+                                                        <h2 className="laptop:w-[5%] w-[10%] flex justify-center">
+                                                            <BinIcon onClick={() => {
+                                                            }}/>
+                                                        </h2>
+                                                    </div>
+                                                    {
+                                                        selectedCategory && selectedCategory.id == category.id &&
+                                                        <EditCategory category={selectedCategory}
+                                                                      editCategory={(category) => {
+                                                                          editCategory(category)
+                                                                      }}
+                                                                      close={unselectCategory}/>
+                                                    }
+                                                </div>
 
-                                    }
-                                    </tbody>
-                                </table>
+                                            ))
+
+                                        }
+                                    </div>
+                                </div>
                             </div> :
                             <div
                                 className='flex items-center justify-center text-sm text-gray-400 laptop:py-[10%] py-[40%]'>

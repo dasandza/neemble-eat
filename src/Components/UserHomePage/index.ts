@@ -9,8 +9,10 @@ import DashboardTable from "./components/DashboardTable.tsx";
 import Report from "./components/Report.tsx";
 import News from "./components/News.tsx";
 import Support from "./components/Support.tsx";
+import EditCategory from "./components/EditCategory.tsx";
 
 export {
+    EditCategory,
     Support,
     News,
     Report,
