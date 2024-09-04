@@ -1,34 +1,23 @@
-import {MenuItem} from "../../../schema.ts";
-import React, {ChangeEvent, useEffect, useState} from "react";
+import {MenuItemJson} from "../../../schema.ts";
+import {ChangeEvent, useState} from "react";
 import {ImageUpload} from "../../../assets/icons";
+import {Switcher} from "../index.ts";
 
 interface AddItemProps {
-    isOpen: boolean;
-    editItem: (item: MenuItem) => void;
+    editItem: (item: MenuItemJson) => void;
     close: () => void;
     categoryName: string;
-    item: MenuItem;
+    item: MenuItemJson;
 }
 
-function EditItem({isOpen, close, editItem, categoryName, item}: AddItemProps) {
-
+function EditItem({close, editItem, categoryName, item}: AddItemProps) {
 
     const [name, setName] = useState<string>(item.name)
     const [description, setDescription] = useState<string>(item.description ? item.description : "")
     const [price, setPrice] = useState<string>(item.price.toPrecision())
     const [imageURL, setImageURL] = useState<string | null>(item.imageURL)
-    const [imageFile, setImageFile] = useState<File | null>(item.imageFile)
-
-    useEffect(() => {
-        if (isOpen) {
-            // Disable scroll on the body by adding overflow hidden
-            document.body.style.overflow = 'hidden';
-        }
-        return () => {
-            // Re-enable scroll on body by removing overflow hidden
-            document.body.style.overflow = 'unset';
-        };
-    }, [isOpen]); // Only re-run the effect if isOpen changes
+    const [imageFile, setImageFile] = useState<File | null>(null)
+    const [isAvailable, setIsAvailable] = useState<boolean>(item.availability)
 
     function handleSave(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
@@ -36,13 +25,22 @@ function EditItem({isOpen, close, editItem, categoryName, item}: AddItemProps) {
         item.description = description == "" ? description : description
         if (imageURL != null) {
             item.imageURL = imageURL
-            item.imageFile = imageFile
         }
         item.price = price ? price == "" ? Number(item.price) : Number(price) : Number(item.price)
-
-        editItem(item)
+        editItem({
+            created_time: item.created_time,
+            imageFile: imageFile,
+            imageURL: imageURL,
+            name: item.name,
+            price: item.price,
+            description: item.description,
+            categoryID: item.categoryID,
+            id: item.id,
+            availability: isAvailable
+        } as MenuItemJson)
         handleClose()
     }
+
 
     function handleClose() {
         setName("")
@@ -52,13 +50,14 @@ function EditItem({isOpen, close, editItem, categoryName, item}: AddItemProps) {
         close()
     }
 
+
     function handleImageRemoval() {
         setImageURL(null)
         setImageFile(null)
     }
 
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
+        const file = getFile(e);
         if (file && file.type.startsWith('image/')) {
             setImageURL(URL.createObjectURL(file));
             setImageFile(file)
@@ -67,13 +66,12 @@ function EditItem({isOpen, close, editItem, categoryName, item}: AddItemProps) {
         }
     };
 
-
-    if (!isOpen) {
-        return null
+    const getFile = (e: ChangeEvent<HTMLInputElement>): File | undefined => {
+        return e.target.files?.[0]
     }
 
     return (
-        <div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-50 rounded-t rounded-lg">
+        <div className="fixed inset-0 z-50 bg-gray-900 bg-opacity-50 rounded-t rounded-lg text-black">
             <div className="flex items-center justify-center w-full h-full">
                 <form onSubmit={handleSave} className="bg-white w-full h-full overflow-auto">
                     {/* HEADER */}
@@ -93,13 +91,13 @@ function EditItem({isOpen, close, editItem, categoryName, item}: AddItemProps) {
                         <div>
                             <button
                                 type='submit'
-                                className="px-3 py-1 text-sm laptop:text-base bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-poppins-semibold mr-3"
+                                className="px-3 py-1 text-sm laptop:text-base bg-blue-600 hover:bg-blue-700 rounded-md text-white font-poppins-semibold mr-3"
                             >
                                 Salvar
                             </button>
                             <button
                                 type='button'
-                                className="px-3 py-1 text-sm laptop:text-base text-white bg-black rounded-lg font-poppins-semibold border-2 border-gray-300"
+                                className="px-3 py-1 text-sm laptop:text-base text-white bg-black rounded-md font-poppins-semibold"
                                 onClick={handleClose}
                             >
                                 Fechar
@@ -108,9 +106,24 @@ function EditItem({isOpen, close, editItem, categoryName, item}: AddItemProps) {
                     </div>
 
                     {/* BODY */}
-                    <div className="overflow-auto laptop:px-16 px-4 mt-14 laptop:mt-28">
+                    <div className="overflow-auto laptop:px-16 px-4 mt-20 laptop:mt-28">
                         <div className='laptop:w-[60%]'>
                             <div>
+                                <div className={`flex mb-4`}>
+                                    <Switcher isChecked={isAvailable}
+                                              setIsChecked={(value) => setIsAvailable(value)}/>
+                                    <div className={`font-poppins-medium prevent-select `}>
+                                        {
+                                            isAvailable ?
+                                                <h1 className={`text-blue-400 bg-blue-100 px-2 py-0.5 rounded-md transition`}>
+                                                    Disponível
+                                                </h1> :
+                                                <h1 className={`text-gray-400 bg-gray-100 px-2 py-0.5 rounded-md transition`}>
+                                                    Indisponível
+                                                </h1>
+                                        }
+                                    </div>
+                                </div>
                                 <label htmlFor="name" className='text-sm ml-1 font-poppins-semibold'>
                                     Nome<span className='text-red-500'>*</span>
                                 </label>

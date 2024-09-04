@@ -38,8 +38,11 @@ function Menu({restaurant}: props) {
     }, []);
 
 
-    function editCategory(category: CategoryParsed) {
-        console.log(category)
+    function editCategory(editedCategory: CategoryParsed) {
+        if (menu) {
+            menu.categories = menu?.categories.map((category) => category.id == editedCategory.id ? editedCategory : category)
+            // sessionStorage.setItem("Menu", JSON.stringify(menu))
+        }
     }
 
     function selectCategory(category: CategoryParsed) {
@@ -51,6 +54,7 @@ function Menu({restaurant}: props) {
         setSelectedCategory(null)
     }
 
+    
     return (
         <div className={``}>
             <div>
@@ -107,7 +111,7 @@ function Menu({restaurant}: props) {
                                                     <div
                                                         className={`px-6 py-3 flex w-full items-center text-zinc-800 font-medium hover:bg-gray-100 ${selectedCategory && selectedCategory.id == category.id && "bg-gray-50"} cursor-pointer`}
                                                         onClick={() => {
-                                                            selectCategory(category)
+                                                            selectedCategory ? unselectCategory() : selectCategory(category)
                                                         }}>
                                                         <h2
                                                             onClick={() => {
@@ -125,14 +129,17 @@ function Menu({restaurant}: props) {
                                                             }}/>
                                                         </h2>
                                                     </div>
-                                                    {
-                                                        selectedCategory && selectedCategory.id == category.id &&
-                                                        <EditCategory category={selectedCategory}
-                                                                      editCategory={(category) => {
-                                                                          editCategory(category)
-                                                                      }}
-                                                                      close={unselectCategory}/>
-                                                    }
+                                                    <div>
+                                                        {
+                                                            selectedCategory && selectedCategory.id == category.id &&
+                                                            <EditCategory category={selectedCategory}
+                                                                          editCategory={(category) => {
+                                                                              editCategory(category)
+                                                                          }}
+                                                                          close={unselectCategory}/>
+                                                        }
+                                                    </div>
+
                                                 </div>
 
                                             ))

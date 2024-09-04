@@ -79,9 +79,6 @@ function EditCategory({isOpen, close, editCategory, category}: EditCategoryProps
         close()
     }
 
-    if (category.name != "") {
-        console.log("CATEGORIA:", category)
-    }
 
     if (category.name == "" && category.items.length == 0) return <div></div>
 

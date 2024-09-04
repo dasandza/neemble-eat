@@ -10,8 +10,15 @@ import Report from "./components/Report.tsx";
 import News from "./components/News.tsx";
 import Support from "./components/Support.tsx";
 import EditCategory from "./components/EditCategory.tsx";
+import EditItem from "./components/EditItem.tsx";
+import AddItem from "./components/AddItem.tsx";
+import Switcher from "./components/switcher.tsx";
+
 
 export {
+    Switcher,
+    AddItem,
+    EditItem,
     EditCategory,
     Support,
     News,

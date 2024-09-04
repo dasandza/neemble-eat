@@ -96,14 +96,17 @@ interface MenuItem {
 }
 
 interface MenuItemJson {
+    [key: string]: string | number | boolean | undefined | null | File;
+
     id: string,
     created_time: string,
     name: string,
     description?: string,
     categoryID: string,
-    availability?: boolean,
+    availability: boolean,
     price: number,
-    imageURL: string
+    imageURL: string,
+    imageFile?: File | null
 }
 
 
@@ -126,7 +129,7 @@ interface Order {
 }
 
 interface OrderJson {
-    [key: string]: any;
+    [key: string]: string | number | boolean | undefined;
 
     id: string,
     created_time?: string,

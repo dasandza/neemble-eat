@@ -71,7 +71,7 @@ function LogIn() {
                                            value={email}
                                            id="email"
                                            onChange={(e) => setEmail(e.target.value)}
-                                           className="border border-gray-300 text-gray-900 text-sm hover:bg-gray-100 transition-colors duration-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
+                                           className="border border-gray-300 text-gray-900 text-base hover:bg-gray-100 transition-colors duration-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
                                            placeholder="nome@email.com"/>
                                 </div>
                                 <label htmlFor="email" className='text-sm ml-1'>Password<span
@@ -94,7 +94,7 @@ function LogIn() {
                                         id="password"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 hover:bg-gray-100 transition-colors duration-300 focus:border-blue-500 block w-full pr-10 p-2.5"
+                                        className="border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 hover:bg-gray-100 transition-colors duration-300 focus:border-blue-500 block w-full pr-10 p-2.5"
                                         placeholder="password"/>
 
                                 </div>
