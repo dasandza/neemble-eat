@@ -38,10 +38,28 @@ function Menu({restaurant}: props) {
     }, []);
 
 
+    useEffect(() => {
+        const handleBeforeUnload = () => {
+
+            // To show a confirmation dialog:
+            sessionStorage.removeItem("Menu"
+            )
+        };
+
+        // Add event listener for before unload
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        // Cleanup the event listener
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
+
     function editCategory(editedCategory: CategoryParsed) {
         if (menu) {
-            menu.categories = menu?.categories.map((category) => category.id == editedCategory.id ? editedCategory : category)
-            // sessionStorage.setItem("Menu", JSON.stringify(menu))
+            menu.categories = menu.categories.map((category) => category.id == editedCategory.id ? editedCategory : category)
+            setMenu(menu)
+            sessionStorage.setItem("Menu", JSON.stringify(menu))
         }
     }
 
@@ -54,7 +72,7 @@ function Menu({restaurant}: props) {
         setSelectedCategory(null)
     }
 
-    
+
     return (
         <div className={``}>
             <div>

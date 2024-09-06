@@ -7,9 +7,10 @@ interface props {
     addItem: (item: MenuItemJson) => void;
     close: () => void;
     categoryName: string;
+    categoryID: string;
 }
 
-function AddItem({addItem, close, categoryName}: props) {
+function AddItem({addItem, close, categoryName, categoryID}: props) {
 
     const [name, setName] = useState<string>("")
     const [description, setDescription] = useState<string>("")
@@ -29,7 +30,8 @@ function AddItem({addItem, close, categoryName}: props) {
                 price: Number(price ? price : "0"),
                 imageURL: imageURL,
                 imageFile: imageFile,
-                availability: isAvailable
+                availability: isAvailable,
+                categoryID: categoryID
             } as MenuItemJson);
         }
         handleClose()

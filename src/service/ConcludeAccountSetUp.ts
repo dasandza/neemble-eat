@@ -57,7 +57,8 @@ async function ConcludeAccountSetUp({representantID, categories, numberOfTables}
                         description: item.description ? item.description : "",
                         imageFile: item.imageFile,
                         price: item.price,
-                        categoryID: categoryID
+                        categoryID: categoryID,
+                        availability: true
                     })
                 }
             }

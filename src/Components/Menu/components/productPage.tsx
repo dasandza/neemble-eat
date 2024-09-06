@@ -161,7 +161,7 @@ function ProductPage({item, restaurantID, menuID, tableNumber, disSelectItem}: p
                     </div>
                     <div className='flex-grow'></div>
                     <div className='flex-none text-center'>
-                        Menu
+                        {item?.name}
                     </div>
                     <div className='flex-grow'></div>
                     <div className='absolute right-0 flex-none'>

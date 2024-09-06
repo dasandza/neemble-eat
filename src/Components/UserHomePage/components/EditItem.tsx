@@ -4,13 +4,14 @@ import {ImageUpload} from "../../../assets/icons";
 import {Switcher} from "../index.ts";
 
 interface AddItemProps {
-    editItem: (item: MenuItemJson) => void;
+    editItem: (index: number, item: MenuItemJson) => void;
     close: () => void;
     categoryName: string;
     item: MenuItemJson;
+    index: number
 }
 
-function EditItem({close, editItem, categoryName, item}: AddItemProps) {
+function EditItem({close, editItem, categoryName, item, index}: AddItemProps) {
 
     const [name, setName] = useState<string>(item.name)
     const [description, setDescription] = useState<string>(item.description ? item.description : "")
@@ -27,7 +28,8 @@ function EditItem({close, editItem, categoryName, item}: AddItemProps) {
             item.imageURL = imageURL
         }
         item.price = price ? price == "" ? Number(item.price) : Number(price) : Number(item.price)
-        editItem({
+
+        editItem(index, {
             created_time: item.created_time,
             imageFile: imageFile,
             imageURL: imageURL,

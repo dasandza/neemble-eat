@@ -95,6 +95,15 @@ interface MenuItem {
     imageFile: File | null
 }
 
+interface item {
+    categoryID: string,
+    name: string,
+    description: string,
+    price: number,
+    imageFile: File,
+    availability: boolean,
+}
+
 interface MenuItemJson {
     [key: string]: string | number | boolean | undefined | null | File;
 
@@ -307,4 +316,5 @@ export type {
     CategoryParsed,
     RestaurantFirestore,
     OrderFirestore,
+    item
 }

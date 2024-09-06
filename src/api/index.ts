@@ -15,9 +15,11 @@ import addOrder from "./functions/addOrder.ts";
 import fetchAllSessionOrders from "./functions/fetchAllSessionOrders.ts";
 import closeSession from "./functions/closeSession.ts";
 import fetchLastOrders from "./functions/fetchLastSessions.ts";
+import addCategoryItems from "./functions/addCategoryItems.ts";
 
 
 export {
+    addCategoryItems,
     fetchLastOrders,
     closeSession,
     fetchAllSessionOrders,

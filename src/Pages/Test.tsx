@@ -1,29 +1,30 @@
-import {useEffect, useState} from "react";
-import {fetchRepresentantByUUID} from "../api";
-import {RepresentantJson} from "../schema.ts";
+import {useEffect} from "react";
+
 
 function Test() {
 
-    const [representant, setRepresentant] = useState<RepresentantJson>();
-
-    const UUID = "BBvy47WaQCXJvbksPZBBDXaFYQj2"
-
 
     useEffect(() => {
-        fetchRepresentantByUUID({UUID: UUID}).then((representant) => representant ? setRepresentant(representant) : console.log("Nenhum representante encontrado"))
+        async function test() {
+            const response = await fetch("http://localhost:8003/", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({val: "test"})
+            })
+            if (response.ok) {
+                return await response.json()
+            }
+        }
 
+        test().then((response) => console.log(response))
     }, []);
 
 
     return (
         <div>
-            <h1>UUID</h1>
-            <div>
-                Representant:
-            </div>
-            <div>
-                {representant ? `${representant}` : "Produrando..."}
-            </div>
+
         </div>
     );
 }
