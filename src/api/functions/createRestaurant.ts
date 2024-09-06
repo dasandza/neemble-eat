@@ -18,9 +18,6 @@ async function CreateRestaurant({
 
     const response = await fetch(`${online ? "https:" : "http:"}//${apiUrl}/restaurants/`, {
         method: "POST",
-        headers: {
-            "Content-Type": "multipart/form-data"
-        },
         body: formData
     });
     if (response.ok) {

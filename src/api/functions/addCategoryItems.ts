@@ -22,9 +22,6 @@ async function AddCategoryItems({items}: props) {
 
         const response = await fetch(`${online ? "https:" : "http:"}//${apiUrl}/categories/add-menu-items`, {
             method: "POST",
-            headers: {
-                "Content-Type": "multipart/form-data"
-            },
             body: formData
         })
         if (response.ok) {
