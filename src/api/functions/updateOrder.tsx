@@ -15,6 +15,8 @@ async function UpdateOrder({orderID, newStatus}: props) {
         const data: OrderJson = await response.json()
         return data
     }
+    const errorText = await response.text();
+    throw new Error(`Failed to update the order: ${errorText}`);
 }
 
 

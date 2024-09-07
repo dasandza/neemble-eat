@@ -16,9 +16,14 @@ import fetchAllSessionOrders from "./functions/fetchAllSessionOrders.ts";
 import closeSession from "./functions/closeSession.ts";
 import fetchLastOrders from "./functions/fetchLastSessions.ts";
 import addCategoryItems from "./functions/addCategoryItems.ts";
-
+import deleteMenuItems from "./functions/deleteMenuItems.ts";
+import updateItem from "./functions/updateItem.ts";
+import updateCategory from "./functions/updateCategory.ts";
 
 export {
+    updateCategory,
+    updateItem,
+    deleteMenuItems,
     addCategoryItems,
     fetchLastOrders,
     closeSession,

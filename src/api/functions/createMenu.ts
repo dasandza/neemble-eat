@@ -3,8 +3,8 @@ import {apiUrl, online} from "./key.ts";
 
 
 async function CreateMenu({name, restaurantID}: Menu): Promise<MenuJson> {
-    const response = await fetch(`${online ? "https:" : "http:"}//${apiUrl}/menus/`, {
-        method: "POST",
+    const response = await fetch(`${online ? "https:" : "http:"}//${apiUrl}/restaurants/${restaurantID}/menus`, {
+        method: "PUT",
         headers: {
             'Content-Type': 'application/json',
         },
@@ -14,16 +14,11 @@ async function CreateMenu({name, restaurantID}: Menu): Promise<MenuJson> {
         })
     })
     if (response.ok) {
-        const data = await response.json()
-        return {
-            id: data.id,
-            created_time: data.created_time,
-            name: data.name,
-            description: data.description,
-            restaurantID: restaurantID,
-        } as MenuJson
+        const data: MenuJson = await response.json()
+        return data
     }
-    throw new Error("Failed to create the account")
+    const errorText = await response.text();
+    throw new Error(`Failed to create the account: ${errorText}`)
 
 }
 

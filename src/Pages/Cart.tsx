@@ -176,7 +176,7 @@ function Cart() {
                     </Link>
                     <div className='flex-grow'></div>
                     <div className='flex-none text-center '>
-                        Menu
+                        Carrinho
                     </div>
                     <div className='flex-grow'></div>
                 </div>

@@ -1,7 +1,10 @@
 import {MenuItemJson} from "../schema.ts";
 import AddCategoryItem from "../api/functions/addCategoryItem.ts";
+import {deleteMenuItems, updateCategory, updateItem} from "../api";
 
 interface props {
+    restaurantID: string,
+    categoryID: string,
     name: { name?: string },
     updateItems: { [key: string]: { [key: string]: string | number | boolean | undefined | null | File; } },
     addItems: MenuItemJson[],
@@ -10,13 +13,14 @@ interface props {
 }
 
 
-async function UpdateCategory({updateItems, addItems, deleteItems, name}: props) {
+async function UpdateCategory({restaurantID, updateItems, addItems, deleteItems, name, categoryID}: props) {
 
     console.log("New Name: ", name)
     console.log("Updated Items: ", updateItems)
     console.log("Added Items: ", addItems)
     console.log("Deleted Items: ", deleteItems)
 
+    // Add items to the database
     const addedItems: MenuItemJson[] = []
     if (addItems.length > 0) {
         for (const item of addItems) {
@@ -36,6 +40,39 @@ async function UpdateCategory({updateItems, addItems, deleteItems, name}: props)
         }
     }
 
+    // Delete items from the database
+    if (deleteItems.length > 0) {
+        const items = deleteItems.map((item) => item.id)
+        const itemsID = items.filter((id) => id != undefined)
+        await deleteMenuItems({
+            categoryID: categoryID,
+            menuItemsIDArray: itemsID
+        }).then((category) => console.log(category))
+    }
+
+    // Update items in the database
+    const updateIDS = Object.keys(updateItems)
+    if (updateIDS.length > 0) {
+        for (const id in updateItems) {
+            await updateItem(id, {
+                categoryID: categoryID,
+                restaurantID: restaurantID,
+                imageFile: updateItems[id]["imageFile"] as File | undefined,
+                name: updateItems[id]["name"] as string,
+                price: updateItems[id]["price"] as number,
+                description: updateItems[id]["description"] as string,
+                availability: updateItems[id]["availability"] as boolean,
+            })
+        }
+    }
+
+    // Change Category name
+    if (name.name != undefined) {
+        await updateCategory({
+            name: name.name,
+            categoryID: categoryID,
+        })
+    }
 
     return [addedItems]
 }

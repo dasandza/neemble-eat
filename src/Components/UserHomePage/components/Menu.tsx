@@ -26,8 +26,9 @@ function Menu({restaurant}: props) {
                 let menuInfoStored: MenuParsed | null = storedMenuData ? JSON.parse(storedMenuData) : null
                 if (!menuInfoStored) {
                     menuInfoStored = await fetchMenuParsed({menuID: menuID})
-                }
 
+                }
+                console.log(menuInfoStored)
                 sessionStorage.setItem("Menu", JSON.stringify(menuInfoStored))
                 setMenu(menuInfoStored)
             }
@@ -151,6 +152,7 @@ function Menu({restaurant}: props) {
                                                         {
                                                             selectedCategory && selectedCategory.id == category.id &&
                                                             <EditCategory category={selectedCategory}
+                                                                          restaurantID={restaurant.id}
                                                                           editCategory={(category) => {
                                                                               editCategory(category)
                                                                           }}

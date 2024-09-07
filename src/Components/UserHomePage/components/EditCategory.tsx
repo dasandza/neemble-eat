@@ -6,12 +6,13 @@ import UpdateCategory from "../../../service/updateCategory.ts";
 
 
 interface EditCategoryProps {
+    restaurantID: string,
     editCategory: (category: CategoryParsed) => void,
     close: () => void,
     category: CategoryParsed,
 }
 
-function EditCategory({close, editCategory, category}: EditCategoryProps) {
+function EditCategory({restaurantID, close, editCategory, category}: EditCategoryProps) {
 
 
     const [name, setName] = useState<string>("")
@@ -137,7 +138,11 @@ function EditCategory({close, editCategory, category}: EditCategoryProps) {
         category.items = items
 
         const {newName, updateItems, addItems, deleteItems} = findDifferences()
+
+        const categoryID = category.id
         UpdateCategory({
+            restaurantID: restaurantID,
+            categoryID: categoryID,
             name: newName,
             updateItems: updateItems,
             deleteItems: deleteItems,

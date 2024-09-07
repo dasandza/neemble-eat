@@ -117,7 +117,7 @@ function Orders() {
                 </Link>
                 <div className='flex-grow'></div>
                 <div className='flex-none text-center font-semibold'>
-                    Menu
+                    Pedidos
                 </div>
                 <div className='flex-grow'></div>
             </div>
