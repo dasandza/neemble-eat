@@ -54,7 +54,7 @@ async function UpdateCategory({restaurantID, updateItems, addItems, deleteItems,
     const updateIDS = Object.keys(updateItems)
     if (updateIDS.length > 0) {
         for (const id in updateItems) {
-            await updateItem(id, {
+            const item = await updateItem(id, {
                 categoryID: categoryID,
                 restaurantID: restaurantID,
                 imageFile: updateItems[id]["imageFile"] as File | undefined,
@@ -63,6 +63,7 @@ async function UpdateCategory({restaurantID, updateItems, addItems, deleteItems,
                 description: updateItems[id]["description"] as string,
                 availability: updateItems[id]["availability"] as boolean,
             })
+            console.log("Response: ", item)
         }
     }
 
