@@ -34,7 +34,7 @@ async function AddCategoryItem({
         body: formData
     })
     if (response.ok) {
-        const data = await response.json()
+        const data: MenuItemJson = await response.json()
         return data
     }
     const errorText = await response.text();  // Getting text to see more about the error
