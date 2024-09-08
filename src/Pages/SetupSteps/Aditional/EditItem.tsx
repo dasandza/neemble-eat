@@ -17,7 +17,7 @@ function EditItem({isOpen, close, editItem, categoryName, item}: AddItemProps) {
     const [description, setDescription] = useState<string>(item.description ? item.description : "")
     const [price, setPrice] = useState<string>(item.price.toPrecision())
     const [imageURL, setImageURL] = useState<string | null>(item.imageURL)
-    const [imageFile, setImageFile] = useState<File | null>(item.imageFile)
+    const [imageFile, setImageFile] = useState<File | null>(item.imageFile ? item.imageFile : null)
 
     useEffect(() => {
         if (isOpen) {
@@ -36,7 +36,8 @@ function EditItem({isOpen, close, editItem, categoryName, item}: AddItemProps) {
         item.description = description == "" ? description : description
         if (imageURL != null) {
             item.imageURL = imageURL
-            item.imageFile = imageFile
+            if (imageFile)
+                item.imageFile = imageFile
         }
         item.price = price ? price == "" ? Number(item.price) : Number(price) : Number(item.price)
 
