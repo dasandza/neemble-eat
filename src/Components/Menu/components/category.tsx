@@ -1,10 +1,10 @@
-import {Category, MenuItem} from "../../../schema.ts";
+import {Category as CategoryInterface, MenuItem} from "../../../schema.ts";
 import ProductCard from "../../ProductCard.tsx";
 
 
 interface props {
-    category: CategoryParsed
-    selectItem: (item: MenuItemJson) => void
+    category: CategoryInterface
+    selectItem: (item: MenuItem) => void
 
 }
 
