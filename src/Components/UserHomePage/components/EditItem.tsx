@@ -18,7 +18,7 @@ function EditItem({close, editItem, categoryName, item, index}: AddItemProps) {
     const [price, setPrice] = useState<string>(item.price.toPrecision())
     const [imageURL, setImageURL] = useState<string | null>(item.imageURL)
     const [imageFile, setImageFile] = useState<File | null>(null)
-    const [isAvailable, setIsAvailable] = useState<boolean>(item.availability ? item.availability : true)
+    const [isAvailable, setIsAvailable] = useState<boolean>(item.availability != undefined ? item.availability : true)
 
     function handleSave(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()

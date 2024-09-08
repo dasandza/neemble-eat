@@ -21,7 +21,7 @@ function EditMenu({restaurant}: props) {
             if (restaurant.menus) {
                 const menuID = restaurant.menus[0]
 
-                const storedMenuData = sessionStorage.getItem("Menu")
+                const storedMenuData = sessionStorage.getItem("EditMenu")
 
                 let menuInfoStored: Menu | null = storedMenuData ? JSON.parse(storedMenuData) : null
                 if (!menuInfoStored) {
@@ -29,7 +29,7 @@ function EditMenu({restaurant}: props) {
 
                 }
                 console.log(menuInfoStored)
-                sessionStorage.setItem("Menu", JSON.stringify(menuInfoStored))
+                sessionStorage.setItem("EditMenu", JSON.stringify(menuInfoStored))
                 setMenu(menuInfoStored)
             }
         }
@@ -42,7 +42,7 @@ function EditMenu({restaurant}: props) {
         const handleBeforeUnload = () => {
 
             // To show a confirmation dialog:
-            sessionStorage.removeItem("Menu"
+            sessionStorage.removeItem("EditMenu"
             )
         };
 
@@ -60,7 +60,7 @@ function EditMenu({restaurant}: props) {
         if (menu && menu.categories) {
             menu.categories = menu.categories.map((category) => category.id == editedCategory.id ? editedCategory : category)
             setMenu(menu)
-            sessionStorage.setItem("Menu", JSON.stringify(menu))
+            sessionStorage.setItem("EditMenu", JSON.stringify(menu))
         }
     }
 

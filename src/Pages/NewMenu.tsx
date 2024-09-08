@@ -34,6 +34,23 @@ function NewMenu() {
         tableNumber: number
     };
 
+    useEffect(() => {
+        const handleBeforeUnload = () => {
+
+            // To show a confirmation dialog:
+            sessionStorage.removeItem("Menu"
+            )
+        };
+
+        // Add event listener for before unload
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        // Cleanup the event listener
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
+
 
     useEffect(() => {
         if (categories) {
@@ -81,6 +98,7 @@ function NewMenu() {
                 restaurantInfoStored = await fetchRestaurant({restaurantID: restaurantID})
                 menuInfoStored = await fetchMenuParsed({menuID: menuID})
             }
+            console.log(menuInfoStored)
 
             menuInfoStored.categories = menuInfoStored.categories?.filter((category) => {
                 const isEmpty = category.items.length == 0

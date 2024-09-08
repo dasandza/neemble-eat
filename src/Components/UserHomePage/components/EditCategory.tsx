@@ -53,7 +53,7 @@ function EditCategory({restaurantID, close, editCategory, category}: EditCategor
     }
 
     function getOriginalCategory(): Category | null {
-        const savedMenu = sessionStorage.getItem("Menu");
+        const savedMenu = sessionStorage.getItem("EditMenu");
         const parsedMenu: Menu | null = savedMenu ? JSON.parse(savedMenu) : null;
 
         if (parsedMenu && parsedMenu.categories) {
