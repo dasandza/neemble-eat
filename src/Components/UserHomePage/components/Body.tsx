@@ -1,5 +1,5 @@
 import {MenuOption} from "../../../interfaces.tsx";
-import {Dashboard, Menu, Settings, Support, News, Report} from "../index.ts";
+import {Dashboard, EditMenu, Settings, Support, News, Report} from "../index.ts";
 import {RepresentantJson, RestaurantJson} from "../../../schema.ts";
 
 
@@ -21,7 +21,7 @@ function Body({currentPage, restaurant, representant}: props) {
             }
             {
                 currentPage.name == "Menu do restaurante" &&
-                <Menu restaurant={restaurant}/>
+                <EditMenu restaurant={restaurant}/>
             }
             {
                 currentPage.name == "Definições" &&

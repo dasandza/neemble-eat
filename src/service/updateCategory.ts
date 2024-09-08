@@ -1,4 +1,4 @@
-import {MenuItemJson} from "../schema.ts";
+import {MenuItem} from "../schema.ts";
 import AddCategoryItem from "../api/functions/addCategoryItem.ts";
 import {deleteMenuItems, updateCategory, updateItem} from "../api";
 
@@ -7,7 +7,7 @@ interface props {
     categoryID: string,
     name: { name?: string },
     updateItems: { [key: string]: { [key: string]: string | number | boolean | undefined | null | File; } },
-    addItems: MenuItemJson[],
+    addItems: MenuItem[],
     deleteItems: { id?: string }[]
 
 }
@@ -21,7 +21,7 @@ async function UpdateCategory({restaurantID, updateItems, addItems, deleteItems,
     console.log("Deleted Items: ", deleteItems)
 
     // Add items to the database
-    const addedItems: MenuItemJson[] = []
+    const addedItems: MenuItem[] = []
     if (addItems.length > 0) {
         for (const item of addItems) {
             if (item.imageFile && item.id == undefined) {
@@ -31,10 +31,20 @@ async function UpdateCategory({restaurantID, updateItems, addItems, deleteItems,
                     price: item.price,
                     name: item.name,
                     description: item.description ? item.description : "",
-                    availability: item.availability
+                    availability: item.availability ? item.availability : true
                 })
-                addedItems.push(response)
-                console.log("Response: ", response)
+
+                const newCategory: MenuItem = {
+                    id: response.id,
+                    created_time: response.created_time,
+                    availability: response.availability,
+                    name: item.name,
+                    categoryID: response.categoryID,
+                    imageURL: response.imageURL,
+                    price: item.price,
+                    description: response.description
+                }
+                addedItems.push(newCategory)
             }
 
         }

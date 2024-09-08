@@ -50,17 +50,18 @@ function Dashboard({representant, restaurant}: props) {
             </div>
             <div>
                 <div className={`px-4`}>
-                    <div className={`rounded-xl border-dashed border-2 border-gray-300 p-3`}>
-                        <h1 className=' mx-4 font-poppins-medium py-2'>
+                    <div className={`rounded-xl p-3`}>
+                        <h1 className='font-poppins-medium py-2'>
                             Controle:
                         </h1>
                         <div className={`space-y-6 laptop:flex laptop:space-x-8 laptop:space-y-0`}>
-                            <div className='font-poppins-medium bg-gray-100 p-4 rounded-md w-full laptop:w-1/2 shadow'>
+                            <div
+                                className='font-poppins-medium bg-stone-50 p-4 rounded-lg w-full laptop:w-1/2 shadow-md'>
                                 <div className={`flex flex-col justify-between h-full`}>
                                     <div>
                                         <div
-                                            className={`flex items-center w-fit rounded-md bg-blue-50 px-2 py-0.5 text-blue-500 text-sm border border-blue-200`}>
-                                            <h1 className={`mr-2`}>
+                                            className={`flex items-center justify-center w-fit rounded-md bg-blue-50 px-2 py-0.5 text-blue-500 text-sm border border-blue-200`}>
+                                            <h1 className={`w-full`}>
                                                 Os seus pedidos
                                             </h1>
                                         </div>
@@ -73,18 +74,19 @@ function Dashboard({representant, restaurant}: props) {
                                        target="_blank"
                                        rel="noopener noreferrer">
                                         <button
-                                            className={`bg-black text-white rounded-md px-6 py-0.5 mt-4 text-center hover:ring-1 hover:ring-gray-300`}>
+                                            className={`bg-black text-white rounded-md px-6 py-0.5 mt-4 text-center transition duration-150 hover:bg-gray-600 hover:-translate-y-1`}>
                                             Abrir
                                         </button>
                                     </a>
                                 </div>
                             </div>
-                            <div className='font-poppins-medium bg-gray-100 p-4 rounded-md w-full laptop:w-1/2 shadow'>
+                            <div
+                                className='font-poppins-medium bg-stone-50 p-4 rounded-lg w-full laptop:w-1/2 shadow-md'>
                                 <div className={`flex flex-col justify-between h-full`}>
                                     <div>
                                         <div
                                             className={`flex items-center w-fit rounded-md bg-indigo-100 px-2 py-0.5 text-indigo-600 text-sm border border-indigo-200`}>
-                                            <h1 className={`mr-2`}>
+                                            <h1 className={`w-full`}>
                                                 Mesas do restaurante
                                             </h1>
                                         </div>
@@ -97,7 +99,7 @@ function Dashboard({representant, restaurant}: props) {
                                        target="_blank"
                                        rel="noopener noreferrer">
                                         <button
-                                            className={`bg-black text-white rounded-md px-6 py-0.5 mt-4 text-center hover:ring-1 hover:ring-gray-300`}>
+                                            className={`bg-black text-white rounded-md px-6 py-0.5 mt-4 text-center transition duration-150 hover:bg-gray-600 hover:-translate-y-1`}>
                                             Abrir
                                         </button>
                                     </a>

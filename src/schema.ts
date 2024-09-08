@@ -32,6 +32,7 @@ interface CategoryJson {
 }
 
 interface CategoryParsed {
+    created_time?: string
     id: string,
     name: string,
     description?: string,
@@ -84,6 +85,8 @@ interface MenuParsed {
 }
 
 interface MenuItem {
+    [key: string]: string | number | boolean | undefined | null | File;
+
     id?: string,
     created_time?: string,
     name: string,
@@ -92,7 +95,7 @@ interface MenuItem {
     availability?: boolean,
     price: number,
     imageURL: string | null,
-    imageFile: File | null
+    imageFile?: File // DO NOT NEED THIS, IDK WHY I ADDED BUT WONT DELETE IT NOW
 }
 
 interface item {

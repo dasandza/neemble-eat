@@ -1,4 +1,4 @@
-import {MenuParsed} from "../../schema.ts";
+import {Menu} from "../../schema.ts";
 import {apiUrl, online} from "./key.ts";
 
 interface props {
@@ -11,7 +11,7 @@ async function FetchMenuParsed({menuID}: props) {
         method: "GET",
     })
     if (response.ok) {
-        const data: MenuParsed = await response.json()
+        const data: Menu = await response.json()
         return data
 
     }

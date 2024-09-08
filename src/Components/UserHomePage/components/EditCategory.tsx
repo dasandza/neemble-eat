@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {CategoryParsed, MenuItemJson, MenuParsed} from "../../../schema.ts";
+import {Category, MenuItem, Menu} from "../../../schema.ts";
 import {BinIcon, CharmCross} from "../../../assets/icons";
 import {AddItem, EditItem} from "../index.ts";
 import UpdateCategory from "../../../service/updateCategory.ts";
@@ -7,22 +7,25 @@ import UpdateCategory from "../../../service/updateCategory.ts";
 
 interface EditCategoryProps {
     restaurantID: string,
-    editCategory: (category: CategoryParsed) => void,
+    editCategory: (category: Category) => void,
     close: () => void,
-    category: CategoryParsed,
+    category: Category,
 }
 
 function EditCategory({restaurantID, close, editCategory, category}: EditCategoryProps) {
 
-
     const [name, setName] = useState<string>("")
-    const [items, setItems] = useState<MenuItemJson[]>(category.items ? category.items : [])
+    const [items, setItems] = useState<MenuItem[]>(category.items ? category.items : [])
     const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(null)
     const [addingItem, setAddingItem] = useState<boolean>(false)
+    const [saving, setSaving] = useState<boolean>(false)
 
-
-    function addItem(item: MenuItemJson) {
-        setItems(items.concat(item))
+    function addItem(item: MenuItem) {
+        if (category.id) {
+            item.categoryID = category.id
+            console.log("NEW ITEM: ", item)
+            setItems(items => [...items, item])
+        }
     }
 
     function openEditItemPage(index: number) {
@@ -41,19 +44,19 @@ function EditCategory({restaurantID, close, editCategory, category}: EditCategor
         setSelectedItemIndex(null)
     }
 
-    function deleteItem(itemToBeDeleted: MenuItemJson) {
+    function deleteItem(itemToBeDeleted: MenuItem) {
         setItems(category.items.filter((item) => item != itemToBeDeleted))
     }
 
-    function editItem(selectedIndex: number, editedItem: MenuItemJson) {
+    function editItem(selectedIndex: number, editedItem: MenuItem) {
         setItems(items.map((item, index) => index == selectedIndex ? editedItem : item))
     }
 
-    function getOriginal(): CategoryParsed | null {
+    function getOriginalCategory(): Category | null {
         const savedMenu = sessionStorage.getItem("Menu");
-        const parsedMenu: MenuParsed | null = savedMenu ? JSON.parse(savedMenu) : null;
+        const parsedMenu: Menu | null = savedMenu ? JSON.parse(savedMenu) : null;
 
-        if (parsedMenu) {
+        if (parsedMenu && parsedMenu.categories) {
             for (const originalCategory of parsedMenu.categories) {
                 if (originalCategory.id == category.id) {
                     return originalCategory;
@@ -64,51 +67,55 @@ function EditCategory({restaurantID, close, editCategory, category}: EditCategor
     }
 
     function findDifferences() {
-        const original = getOriginal()
-        const newName: { name?: string } = {}
-        const updateItems: {
-            [key: string]: { [key: string]: string | number | boolean | undefined | null | File; }
-        } = {}
-        let addItems: MenuItemJson[] = []
-        let deleteItems: { id?: string }[] = []
+        const original = getOriginalCategory()
+        if (original != null) {
+            const newName: { name?: string } = {}
+            const updateItems: {
+                [key: string]: { [key: string]: string | number | boolean | undefined | null | File; }
+            } = {}
+            let addItems: MenuItem[] = []
+            let deleteItems: { id?: string }[] = []
 
-        if (category.name != original?.name) {
-            newName.name = category.name
-        }
+            if (category.name != original?.name) {
+                newName.name = category.name
+            }
 
-        const itemsID: string[] = category.items.map((item) => item.id)
-        const originalID: string[] = original ? original?.items.map((item) => item.id) : []
+            const itemsIDAux: (string | undefined)[] = items.map((item) => item.id)
+            const itemsID: string[] = itemsIDAux.filter((id) => id != undefined)
 
-        itemsID.forEach((id, index) => {
-            const item = category.items[index]
-            if (originalID.includes(id)) {
-                const originalItem = original?.items.find((item) => item.id === id)
+            const originalCategoryItemsIDAux: (string | undefined)[] = original ? original.items.map((item) => item.id) : []
+            const originalCategoryItemsID: string[] = originalCategoryItemsIDAux.filter((item) => item != undefined)
+            items.forEach((item) => {
+                if (item.id != undefined) {
+                    const originalItem = original.items.find((item) => item.id === item.id)
+                    if (originalItem) {
+                        const compare = deepCompare(item, originalItem)
+                        if (Object.keys(compare).length > 0) {
+                            updateItems[item.id] = compare
+                        }
+                    }
+                } else {
+                    addItems = addItems.concat(item)
+                }
+            })
+
+            originalCategoryItemsID.forEach((id, index) => {
+                const originalItem = original?.items[index]
                 if (originalItem) {
-                    const compare = deepCompare(item, originalItem)
-                    if (Object.keys(compare).length > 0) {
-                        updateItems[id] = compare
+                    if (!itemsID.includes(id)) {
+                        deleteItems = deleteItems.concat({id: id})
                     }
                 }
-            } else {
-                addItems = addItems.concat(item)
-            }
-        })
-
-        originalID.forEach((id, index) => {
-            const originalItem = original?.items[index]
-            if (originalItem) {
-                if (!itemsID.includes(id)) {
-                    deleteItems = deleteItems.concat({id: id})
-                }
-            }
-        })
+            })
 
 
-        return {newName, addItems, updateItems, deleteItems}
+            return {newName, addItems, updateItems, deleteItems}
+        }
+        return null
     }
 
 
-    function deepCompare(obj1: MenuItemJson, obj2: MenuItemJson) {
+    function deepCompare(obj1: MenuItem, obj2: MenuItem) {
         const differences: { [key: string]: string | number | boolean | undefined | null | File; } = {}
 
         if (obj1 === obj2) {
@@ -123,10 +130,25 @@ function EditCategory({restaurantID, close, editCategory, category}: EditCategor
                 if (key == "imageFile" && obj1[key] == null) {
                     continue
                 }
+                if (key == "id" || key == "created_time") {
+                    return {}
+                }
                 differences[key] = obj1[key]
             }
         }
         return differences;
+    }
+
+
+    function needsUpdate(
+        newName: { name?: string },
+        updateItems: { [key: string]: { [key: string]: string | number | boolean | undefined | null | File; } },
+        addItems: MenuItem[],
+        deleteItems: { id?: string }[]): boolean {
+        return Object.keys(newName).length > 0 ||
+            Object.keys(updateItems).length > 0 ||
+            addItems.length > 0 ||
+            deleteItems.length > 0
     }
 
 
@@ -137,26 +159,37 @@ function EditCategory({restaurantID, close, editCategory, category}: EditCategor
         }
         category.items = items
 
-        const {newName, updateItems, addItems, deleteItems} = findDifferences()
+        const differences = findDifferences()
+        if (differences != null) {
+            const {newName, updateItems, addItems, deleteItems} = differences
 
-        const categoryID = category.id
-        UpdateCategory({
-            restaurantID: restaurantID,
-            categoryID: categoryID,
-            name: newName,
-            updateItems: updateItems,
-            deleteItems: deleteItems,
-            addItems: addItems
-        }).then((result) => {
-            const added: MenuItemJson[] = result[0]
-            let itemsCopy = category.items.filter((item) => item.id != undefined)
-            itemsCopy = itemsCopy.concat(added)
-            category.items = itemsCopy
-        })
+            const categoryID = category.id
+            if (categoryID && needsUpdate(newName, updateItems, addItems, deleteItems)) {
+                setSaving(true)
+                UpdateCategory({
+                    restaurantID: restaurantID,
+                    categoryID: categoryID,
+                    name: newName,
+                    updateItems: updateItems,
+                    deleteItems: deleteItems,
+                    addItems: addItems
+                }).then((result) => {
+                    const added: MenuItem[] = result[0]
+                    let itemsCopy = category.items.filter((item) => item.id != undefined)
+                    itemsCopy = itemsCopy.concat(added)
+                    category.items = itemsCopy
+                    editCategory(category);
+                    setSaving(false)
+                    handleClose()
+                })
+            } else {
+                editCategory(category);
+                handleClose()
+            }
+        } else {
+            handleClose()
+        }
 
-        editCategory(category);
-
-        handleClose()
     }
 
     function handleClose() {
@@ -168,7 +201,6 @@ function EditCategory({restaurantID, close, editCategory, category}: EditCategor
     if (addingItem) {
         return <AddItem addItem={(item) => addItem(item)}
                         close={closeAddItemPage}
-                        categoryID={category.id}
                         categoryName={category.name}/>
     }
 
@@ -187,8 +219,9 @@ function EditCategory({restaurantID, close, editCategory, category}: EditCategor
                     Edite a categoria: <span
                     className={`text-gray-500 italic`}>{category.name}</span>
                 </h1>
-                <CharmCross className={`cursor-pointer`}
-                            onClick={close}/>
+                <CharmCross className={`${saving ? "cursor-not-allowed" : "cursor-pointer"}`}
+                            onClick={saving ? () => {
+                            } : close}/>
             </div>
             <form action=""
                   onSubmit={handleSave}
@@ -270,9 +303,9 @@ function EditCategory({restaurantID, close, editCategory, category}: EditCategor
                     </div>
                 </div>
                 <button
-                    type='submit'
-                    className={`px-6 py-1.5 mt-8 text-sm laptop:text-sm bg-black shadow-sm hover:shadow-md hover:-translate-y-0.5 transition duration-150 hover:bg-gray-700 rounded-md text-white font-poppins-semibold`}>
-                    Salvar
+                    type={saving ? "button" : 'submit'}
+                    className={`px-6 py-1.5 mt-8 text-sm bg-black ${saving ? "-translate-y-0.5 bg-gray-700 shadow-md cursor-not-allowed" : "hover:-translate-y-0.5 transition duration-150 hover:bg-gray-700 hover:shadow-md"} shadow-sm rounded-md text-white font-poppins-semibold`}>
+                    {saving ? "Salvando" : "Salvar"}
                 </button>
             </form>
         </div>

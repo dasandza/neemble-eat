@@ -1,20 +1,20 @@
 import {useEffect, useState} from "react";
 import {fetchMenuParsed} from "../../../api";
-import {CategoryParsed, MenuParsed, RestaurantJson} from "../../../schema.ts";
+import {Category, RestaurantJson, MenuItem, Menu} from "../../../schema.ts";
 import {AddIcon, BinIcon, SearchIcon} from "../../../assets/icons";
-import {EditCategory} from "../index.ts";
+import {EditCategory, AddCategory} from "../index.ts";
 
 
 interface props {
     restaurant: RestaurantJson
 }
 
-function Menu({restaurant}: props) {
+function EditMenu({restaurant}: props) {
 
-    const [menu, setMenu] = useState<MenuParsed>()
+    const [menu, setMenu] = useState<Menu>()
     const [nameIncludes, setNameIncludes] = useState<string>("")
-    const [selectedCategory, setSelectedCategory] = useState<CategoryParsed | null>(null)
-
+    const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
+    const [addingCategory, setAddingCategory] = useState<boolean>(false)
 
     useEffect(() => {
         async function fetch() {
@@ -23,7 +23,7 @@ function Menu({restaurant}: props) {
 
                 const storedMenuData = sessionStorage.getItem("Menu")
 
-                let menuInfoStored: MenuParsed | null = storedMenuData ? JSON.parse(storedMenuData) : null
+                let menuInfoStored: Menu | null = storedMenuData ? JSON.parse(storedMenuData) : null
                 if (!menuInfoStored) {
                     menuInfoStored = await fetchMenuParsed({menuID: menuID})
 
@@ -35,7 +35,6 @@ function Menu({restaurant}: props) {
         }
 
         fetch()
-
     }, []);
 
 
@@ -56,21 +55,57 @@ function Menu({restaurant}: props) {
         };
     }, []);
 
-    function editCategory(editedCategory: CategoryParsed) {
-        if (menu) {
+    // Edit Category
+    function editCategory(editedCategory: Category) {
+        if (menu && menu.categories) {
             menu.categories = menu.categories.map((category) => category.id == editedCategory.id ? editedCategory : category)
             setMenu(menu)
             sessionStorage.setItem("Menu", JSON.stringify(menu))
         }
     }
 
-    function selectCategory(category: CategoryParsed) {
-        setSelectedCategory(category)
+    function selectCategory(category: Category) {
+        const items: MenuItem[] = []
+        for (const item of category.items) {
+            const newItem: MenuItem = {
+                created_time: item.created_time,
+                id: item.id,
+                name: item.name,
+                description: item.description,
+                categoryID: item.categoryID,
+                imageURL: item.imageURL,
+                price: item.price,
+                availability: item.availability
+            }
+            items.push(newItem)
+        }
+        const selected: Category = {
+            id: category.id,
+            name: category.name,
+            menuID: category.menuID,
+            created_time: category.created_time,
+            description: category.description,
+            items: items
+        }
+        setSelectedCategory(selected)
     }
 
 
     function unselectCategory() {
         setSelectedCategory(null)
+    }
+
+    // Add Category
+    function addCategory(addedCategory: Category) {
+        console.log("Category: ", addedCategory)
+    }
+
+    function openAddCategoryPage() {
+        setAddingCategory(true)
+    }
+
+    function closeAddCategoryPage() {
+        setAddingCategory(false)
     }
 
 
@@ -92,19 +127,23 @@ function Menu({restaurant}: props) {
                                 placeholder="Pesquisar"
                             />
                         </div>
-                        <button
-                            onClick={() => {
-                            }}
-                            className='text-sm rounded-lg border border-gray-300 px-3 py-1.5 flex items-center space-x-2 hover:bg-gray-100 transition-colors duration-300 h-fit'
-                        >
-                            <AddIcon className='h-5 w-5'/>
-                            <p className="leading-none">
-                                Adicionar categoria
-                            </p>
-                        </button>
+                        {
+                            selectedCategory == null && !addingCategory &&
+                            <button
+                                onClick={openAddCategoryPage}
+                                className='text-sm rounded-lg border border-gray-300 px-3 py-1.5 flex items-center space-x-2 hover:bg-gray-100 transition-colors duration-300 h-fit'
+                            >
+                                <AddIcon className='h-5 w-5'/>
+                                <p className="leading-none">
+                                    Adicionar categoria
+                                </p>
+                            </button>
+                        }
+
                     </div>
 
                     {
+                        menu?.categories &&
                         menu?.categories.length != 0 ?
                             <div className="relative overflow-x-auto w-[100%] mx-auto mt-5">
                                 <div
@@ -158,6 +197,12 @@ function Menu({restaurant}: props) {
                                                                           }}
                                                                           close={unselectCategory}/>
                                                         }
+                                                        {
+                                                            addingCategory &&
+                                                            <AddCategory
+                                                                addCategory={addCategory}
+                                                                close={closeAddCategoryPage}/>
+                                                        }
                                                     </div>
 
                                                 </div>
@@ -179,4 +224,4 @@ function Menu({restaurant}: props) {
     );
 }
 
-export default Menu;
+export default EditMenu;

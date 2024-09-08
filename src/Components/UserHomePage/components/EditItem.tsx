@@ -1,13 +1,13 @@
-import {MenuItemJson} from "../../../schema.ts";
+import {MenuItem} from "../../../schema.ts";
 import {ChangeEvent, useState} from "react";
 import {ImageUpload} from "../../../assets/icons";
 import {Switcher} from "../index.ts";
 
 interface AddItemProps {
-    editItem: (index: number, item: MenuItemJson) => void;
+    editItem: (index: number, item: MenuItem) => void;
     close: () => void;
     categoryName: string;
-    item: MenuItemJson;
+    item: MenuItem;
     index: number
 }
 
@@ -18,7 +18,7 @@ function EditItem({close, editItem, categoryName, item, index}: AddItemProps) {
     const [price, setPrice] = useState<string>(item.price.toPrecision())
     const [imageURL, setImageURL] = useState<string | null>(item.imageURL)
     const [imageFile, setImageFile] = useState<File | null>(null)
-    const [isAvailable, setIsAvailable] = useState<boolean>(item.availability)
+    const [isAvailable, setIsAvailable] = useState<boolean>(item.availability ? item.availability : true)
 
     function handleSave(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
@@ -39,7 +39,7 @@ function EditItem({close, editItem, categoryName, item, index}: AddItemProps) {
             categoryID: item.categoryID,
             id: item.id,
             availability: isAvailable
-        } as MenuItemJson)
+        } as MenuItem)
         handleClose()
     }
 

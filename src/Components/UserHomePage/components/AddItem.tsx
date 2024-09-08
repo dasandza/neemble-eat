@@ -1,16 +1,15 @@
-import {MenuItemJson} from "../../../schema.ts";
+import {MenuItem} from "../../../schema.ts";
 import React, {ChangeEvent, useState} from "react";
 import {ImageUpload} from "../../../assets/icons";
 import {Switcher} from "../index.ts";
 
 interface props {
-    addItem: (item: MenuItemJson) => void;
+    addItem: (item: MenuItem) => void;
     close: () => void;
     categoryName: string;
-    categoryID: string;
 }
 
-function AddItem({addItem, close, categoryName, categoryID}: props) {
+function AddItem({addItem, close, categoryName}: props) {
 
     const [name, setName] = useState<string>("")
     const [description, setDescription] = useState<string>("")
@@ -31,8 +30,7 @@ function AddItem({addItem, close, categoryName, categoryID}: props) {
                 imageURL: imageURL,
                 imageFile: imageFile,
                 availability: isAvailable,
-                categoryID: categoryID
-            } as MenuItemJson);
+            } as MenuItem);
         }
         handleClose()
     }
