@@ -1,4 +1,4 @@
-import {MenuItemJson} from "../../../schema.ts";
+import {MenuItem} from "../../../schema.ts";
 import {CartIcon} from "../../../assets/icons";
 import CartPopUp from "../../CartPopUp.tsx";
 import React, {useEffect, useState} from "react";
@@ -10,7 +10,7 @@ import {
 } from "../../../utils/cartCRUD.ts";
 
 interface props {
-    item: MenuItemJson | null
+    item: MenuItem | null
     restaurantID: string
     menuID: string
     tableNumber: number
@@ -41,33 +41,25 @@ function ProductPage({item, restaurantID, menuID, tableNumber, disSelectItem}: p
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         const note: string = formData.get("note") as string;
-        let data: CartItem;
         if (item == null) {
             console.log("No item found");
             return;
         }
-        console.log(numberOfItems)
-        if (note == "") {
-            data = {
+        if (item.id != undefined && item.imageURL != undefined) {
+            const data: CartItem = {
                 id: item.id,
+                image: item.imageURL,
                 name: item.name,
                 price: item.price,
-                image: item.imageURL,
-                quantity: numberOfItems
-            }
-        } else {
-            data = {
-                id: item.id,
-                name: item.name,
-                price: item.price,
-                image: item.imageURL,
                 quantity: numberOfItems,
                 aditionalNote: note
             }
+            if (note == "")
+                data.aditionalNote = note
+            addItemToCart(data)
         }
-        console.log(data)
         setNumberOfItems(0)
-        addItemToCart(data)
+
         if (!isCartPopUpOpen) {
             setIsCartPopUpOpen(true);
         }
@@ -180,9 +172,13 @@ function ProductPage({item, restaurantID, menuID, tableNumber, disSelectItem}: p
                     </div>
                 </div>
                 <div className='mx-auto rounded-md w-fit items-center overflow-hidden pb-4 px-5'>
-                    <img src={item?.imageURL}
-                         alt=""
-                         className='rounded-md object-cover w-full max-h-52'/>
+                    {
+                        item && item.imageURL &&
+                        <img src={item?.imageURL}
+                             alt=""
+                             className='rounded-md object-cover w-full max-h-52'/>
+                    }
+
                 </div>
                 <div>
                     <h1 className='ml-5 font-semibold text-lg'>

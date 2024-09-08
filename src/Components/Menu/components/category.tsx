@@ -1,4 +1,4 @@
-import {CategoryParsed, MenuItemJson} from "../../../schema.ts";
+import {Category, MenuItem} from "../../../schema.ts";
 import ProductCard from "../../ProductCard.tsx";
 
 

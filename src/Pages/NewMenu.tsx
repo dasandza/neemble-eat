@@ -1,4 +1,4 @@
-import {CategoryParsed, MenuItemJson, MenuParsed, RestaurantJson} from "../schema.ts";
+import {Category as CategoryInterface, MenuItem, Menu, RestaurantJson} from "../schema.ts";
 import {Category, Header, CategoriesBar, Footer, ProductPage} from "../Components/Menu";
 import React, {useEffect, useRef, useState} from "react";
 import {fetchMenuParsed, fetchRestaurant} from "../api";
@@ -15,17 +15,17 @@ function NewMenu() {
 
     const open = true
 
-    const [selectedCategory, setSelectedCategory] = useState<CategoryParsed>()
+    const [selectedCategory, setSelectedCategory] = useState<CategoryInterface>()
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
     const [refs, setRefs] = useState<React.RefObject<HTMLDivElement>[]>([]);
-    const [selectedItem, setSelectedItem] = useState<MenuItemJson | null>()
+    const [selectedItem, setSelectedItem] = useState<MenuItem | null>()
 
     const [restaurant, setRestaurant] = useState<RestaurantJson>()
-    const [menu, setMenu] = useState<MenuParsed>()
-    const [categories, setCategories] = useState<CategoryParsed[]>()
+    const [menu, setMenu] = useState<Menu>()
+    const [categories, setCategories] = useState<CategoryInterface[]>()
 
 
     const {restaurantID, menuID, tableNumber} = useParams() as unknown as {
@@ -47,7 +47,7 @@ function NewMenu() {
             let storedRestaurantData = sessionStorage.getItem('Restaurant');
             let storedMenuData = sessionStorage.getItem("Menu")
             let restaurantInfoStored: RestaurantJson | null = storedRestaurantData ? JSON.parse(storedRestaurantData) : null
-            let menuInfoStored: MenuParsed | null = storedMenuData ? JSON.parse(storedMenuData) : null
+            let menuInfoStored: Menu | null = storedMenuData ? JSON.parse(storedMenuData) : null
 
             if (!restaurantInfoStored) {
                 sessionStorage.clear()
@@ -77,11 +77,24 @@ function NewMenu() {
             }
 
             if (!restaurantInfoStored || !menuInfoStored) {
-                
+
                 restaurantInfoStored = await fetchRestaurant({restaurantID: restaurantID})
                 menuInfoStored = await fetchMenuParsed({menuID: menuID})
             }
 
+            menuInfoStored.categories = menuInfoStored.categories?.filter((category) => {
+                const isEmpty = category.items.length > 0
+
+                if (isEmpty) {
+                    return false
+                }
+                for (const item of category.items) {
+                    if (item.availability) {
+                        return true
+                    }
+                }
+                return false
+            })
 
             sessionStorage.setItem("Menu", JSON.stringify(menuInfoStored))
             sessionStorage.setItem("Restaurant", JSON.stringify(restaurantInfoStored))
@@ -124,7 +137,7 @@ function NewMenu() {
         }
     };
 
-    function handleSelectCategory(category: CategoryParsed, index: number) {
+    function handleSelectCategory(category: CategoryInterface, index: number) {
         setSelectedCategory(category)
         scrollToCategory(index)
     }

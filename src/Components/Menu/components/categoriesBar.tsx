@@ -1,16 +1,15 @@
-import {CategoryParsed} from "../../../schema.ts";
+import {Category} from "../../../schema.ts";
 import {HamburgerMenuIcon} from "../../../assets/icons";
-import React from "react";
 
 interface props {
-    categories: CategoryParsed[]
+    categories: Category[]
     isDragging: boolean
     handleMouseMove: (e: React.MouseEvent<HTMLDivElement>) => void
     handleMouseLeaveOrUp: () => void
     handleMouseDown: (e: React.MouseEvent<HTMLDivElement>) => void
-    selectedCategory: CategoryParsed | undefined
+    selectedCategory: Category | undefined
     scrollContainerRef: React.RefObject<HTMLDivElement>
-    handleSelectCategory: (category: CategoryParsed, index: number) => void
+    handleSelectCategory: (category: Category, index: number) => void
 }
 
 function CategoriesBar({
