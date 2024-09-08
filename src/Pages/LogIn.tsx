@@ -5,6 +5,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {auth} from "../firebase/firebase.ts";
 import {signInWithEmailAndPassword} from "firebase/auth";
 import handleLogIn from "../utils/handleLogIn.ts";
+import LoadingSpinner from "../Components/UserHomePage/components/LoadingSpinner.tsx";
 
 
 function LogIn() {
@@ -15,7 +16,7 @@ function LogIn() {
     const [email, setEmail] = useState('')
     const [error, setError] = useState<string | null>(null)
     const [passwordVisibility, setPasswordVisibility] = useState<boolean>(false)
-
+    const [loading, setLoading] = useState<boolean>(false)
 
     useEffect(() => {
         async function fetch() {
@@ -23,6 +24,7 @@ function LogIn() {
                 try {
                     await handleLogIn({UUID: UUID, navigate: navigate})
                 } catch (error) {
+                    setLoading(false)
                     console.log(error)
                 }
             }
@@ -35,12 +37,14 @@ function LogIn() {
 
     function handleSubmition(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
+        setLoading(true)
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredentials) => {
                 setError(null)
                 const userID = userCredentials.user.uid
                 setUUID(userID)
             }).catch(() => {
+            setLoading(false)
             setError("Houve um problema ao iniciar sessão. Tente novamente ou troque a sua palavra passe")
         })
 
@@ -107,9 +111,18 @@ function LogIn() {
                                 }
                                 <div className="laptop:flex items-center">
                                     <button
-                                        type='submit'
-                                        className='bg-black px-5 py-2 rounded-lg text-white'>
-                                        Entrar
+                                        type={loading ? "button" : "submit"}
+                                        className={`bg-black px-4 py-1 rounded-md text-sm ${loading ? '-translate-y-1 bg-gray-600 cursor-not-allowed' : 'hover:-translate-y-1 hover:bg-gray-600 transition durantion-150'}  text-white`}>
+                                        <div className={`flex items-center space-x-2`}>
+                                            <p>
+                                                {!loading ? "Entrar" : "Carregando"}
+                                            </p>
+                                            {
+                                                loading && <LoadingSpinner
+                                                    size={`12px`}/>
+                                            }
+
+                                        </div>
                                     </button>
                                     <div
                                         className='mt-3 -ml-3 laptop:mt-0 laptop:ml-6 w-fit hover:bg-gray-100 transition-colors duration-[250ms] px-3 py-2 rounded-lg'>

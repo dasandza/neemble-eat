@@ -14,8 +14,10 @@ import EditItem from "./components/EditItem.tsx";
 import AddItem from "./components/AddItem.tsx";
 import Switcher from "./components/switcher.tsx";
 import AddCategory from "./components/AddCategory.tsx";
+import LoadingSpinner from "./components/LoadingSpinner.tsx";
 
 export {
+    LoadingSpinner,
     AddCategory,
     Switcher,
     AddItem,

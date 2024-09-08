@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Category, MenuItem, Menu} from "../../../schema.ts";
 import {BinIcon, CharmCross} from "../../../assets/icons";
-import {AddItem, EditItem} from "../index.ts";
+import {AddItem, EditItem, LoadingSpinner} from "../index.ts";
 import UpdateCategory from "../../../service/updateCategory.ts";
 
 
@@ -263,9 +263,11 @@ function EditCategory({restaurantID, close, editCategory, category}: EditCategor
                                 <div key={index}
                                      className='flex items-center'>
                                     <div
-                                        onClick={() => {
-                                            openEditItemPage(index)
-                                        }}
+                                        onClick={saving ? () => {
+                                            } :
+                                            () => {
+                                                openEditItemPage(index)
+                                            }}
                                         className='w-full px-3 text-sm py-1 flex justify-between rounded-md hover:bg-gray-100 transition-color duration-300 cursor-pointer'>
                                         <p className='font-poppins-semibold text-black max-w-[60%] truncate'>
                                             {item.name}
@@ -304,8 +306,18 @@ function EditCategory({restaurantID, close, editCategory, category}: EditCategor
                 </div>
                 <button
                     type={saving ? "button" : 'submit'}
-                    className={`px-6 py-1.5 mt-8 text-sm bg-black ${saving ? "-translate-y-0.5 bg-gray-700 shadow-md cursor-not-allowed" : "hover:-translate-y-0.5 transition duration-150 hover:bg-gray-700 hover:shadow-md"} shadow-sm rounded-md text-white font-poppins-semibold`}>
-                    {saving ? "Salvando" : "Salvar"}
+                    className={`px-6 transition-all duration-150 py-1.5 mt-8 text-sm bg-black ${saving ? "-translate-y-0.5 bg-gray-700 shadow-md cursor-not-allowed" : "hover:-translate-y-0.5 transition duration-150 hover:bg-gray-700 hover:shadow-md"} shadow-sm rounded-md text-white font-poppins-semibold`}>
+                    <div className={`flex items-center space-x-2`}>
+                        <p>
+                            {saving ? "Salvando" : "Salvar"}
+                        </p>
+                        {
+                            saving && <LoadingSpinner
+                                size={`12px`}/>
+                        }
+
+                    </div>
+
                 </button>
             </form>
         </div>

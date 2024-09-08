@@ -3,13 +3,6 @@ import {RepresentantJson, RestaurantJson} from "../../../schema.ts";
 import formatDateString from "../../../utils/DateFormat.tsx";
 
 
-interface data {
-    item: string
-    price: number
-    amount: number
-}
-
-
 interface props {
     restaurant: RestaurantJson
     representant: RepresentantJson
@@ -19,16 +12,6 @@ interface props {
 function Dashboard({representant, restaurant}: props) {
 
     const time = formatDateString(new Date(new Date().getTime()).toString())
-
-    const data: data[] = [
-        {item: 'Apple', price: 2000, amount: 10},
-        {item: 'Banana', price: 5000, amount: 9},
-        {item: 'Orange', price: 3500, amount: 8},
-        {item: 'Orange', price: 3500, amount: 7},
-        {item: 'Orange', price: 3500, amount: 6},
-        {item: 'Orange', price: 3500, amount: 5},
-    ];
-
 
     return (
         <div className={`py-4 laptop:px-4`}>
@@ -187,7 +170,7 @@ function Dashboard({representant, restaurant}: props) {
                     </h1>
                     <div className={`w-full laptop:w-1/2`}>
                         <div className={`rounded-3xl p-1.5 bg-gray-50`}>
-                            <DashboardTable data={data}/>
+                            <DashboardTable restaurantID={restaurant.id}/>
                         </div>
                     </div>
                 </section>

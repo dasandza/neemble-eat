@@ -19,8 +19,10 @@ import addCategoryItems from "./functions/addCategoryItems.ts";
 import deleteMenuItems from "./functions/deleteMenuItems.ts";
 import updateItem from "./functions/updateItem.ts";
 import updateCategory from "./functions/updateCategory.ts";
+import fetchTopOrders from "./functions/fetchTopOrders.ts";
 
 export {
+    fetchTopOrders,
     updateCategory,
     updateItem,
     deleteMenuItems,
