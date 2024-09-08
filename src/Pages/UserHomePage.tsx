@@ -136,7 +136,7 @@ function UserHomePage() {
     return (
         <div>
             {/* Background */}
-            <div className='fixed -z-10 bg-white h-dvh w-full'></div>
+            <div className='fixed -z-10 bg-gray-100 h-dvh w-full'></div>
             <div
                 className={` bg-black ease-in-out transition-opacity duration-300 ${isLeftMenuOpen ? "opacity-[20%] z-20" : "opacity-[0%] -z-50"} w-full h-dvh fixed top-0 left-0 laptop:hidden`}
                 onClick={() => setIsLeftMenuOpen(!isLeftMenuOpen)}>
@@ -163,7 +163,7 @@ function UserHomePage() {
 
                 </div>
                 <div
-                    className={`pt-[64px] transition-all ease-in-out w-full duration-200 ${isLeftMenuOpen ? "laptop:w-4/5 laptop:ml-[20%] ml-0" : "w-full laptop:ml-2"}`}>
+                    className={`pt-[58px] transition-all ease-in-out w-full duration-200 ${isLeftMenuOpen ? "laptop:w-4/5 laptop:ml-[20%] ml-0" : "w-full laptop:ml-2"}`}>
                     <Body currentPage={currntPage}
                           restaurant={restaurant}
                           representant={representant}

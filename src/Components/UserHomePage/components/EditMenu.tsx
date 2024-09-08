@@ -110,7 +110,7 @@ function EditMenu({restaurant}: props) {
 
 
     return (
-        <div className={``}>
+        <div className={`bg-white p-4 h-full`}>
             <div>
                 <div className={`mt-10`}>
                     <div className='laptop:flex laptop:justify-between mt-4'>

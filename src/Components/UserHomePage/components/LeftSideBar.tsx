@@ -1,4 +1,5 @@
 import {MenuOption} from "../../../interfaces.tsx";
+import {useState} from "react";
 
 interface props {
     mainOptions: MenuOption[],
@@ -10,6 +11,15 @@ interface props {
 
 function LeftSideBar({mainOptions, sideOptions, setOption, current}: props) {
 
+    const [optionHover, setOptionHover] = useState<string | null>(null)
+
+    function selectOption(name: string) {
+        setOptionHover(name)
+    }
+
+    function removeOption() {
+        setOptionHover(null)
+    }
 
     return (
         <div className='w-full bg-white h-dvh z-40 red relative'>
@@ -24,10 +34,14 @@ function LeftSideBar({mainOptions, sideOptions, setOption, current}: props) {
                         {mainOptions.map((option, index) =>
                             option.name != current.name ?
                                 <div key={index}
+                                     onMouseEnter={() => {
+                                         selectOption(option.name)
+                                     }}
+                                     onMouseLeave={() => removeOption()}
                                      onClick={() => setOption(option)}
                                      className='cursor-pointer flex items-center space-x-2 px-4 py-2 text-gray-400 hover:bg-gray-100 hover:text-gray-700 hover:font-poppins-semibold rounded-md prevent-select'>
                                     <div>
-                                        {option.notSelectedIcon}
+                                        {optionHover == option.name ? option.selectedIcon : option.notSelectedIcon}
                                     </div>
                                     <p className={`text-sm`}>
                                         {option.name}

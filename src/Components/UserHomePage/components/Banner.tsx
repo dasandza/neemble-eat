@@ -79,7 +79,7 @@ function Banner({firstName, lastName, toggleMenu, logout}: props) {
                 )}
             </div>
             <div className={`w-full flex justify-center px-3`}>
-                <div className={`w-full border-b-[1.5px] border-gray-200`}></div>
+                <div className={`w-full`}></div>
 
             </div>
 
