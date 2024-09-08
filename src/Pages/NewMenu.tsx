@@ -83,7 +83,7 @@ function NewMenu() {
             }
 
             menuInfoStored.categories = menuInfoStored.categories?.filter((category) => {
-                const isEmpty = category.items.length > 0
+                const isEmpty = category.items.length == 0
 
                 if (isEmpty) {
                     return false
