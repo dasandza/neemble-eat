@@ -15,7 +15,7 @@ const PopUpButton = ({close, restaurantID, menuID, tableNumber, cart}: PopUpButt
 
     return (
         <div
-            className="absolute top-full mt-0 right-0 w-48 p-4 bg-white border rounded shadow-lg z-10">
+            className="absolute top-full mt-0 right-0 w-48 p-4 bg-white rounded-xl shadow-md z-10">
             <div className='flex justify-end '>
                 <button type='button'
                         onClick={close}>
@@ -44,9 +44,9 @@ const PopUpButton = ({close, restaurantID, menuID, tableNumber, cart}: PopUpButt
                                 </div>
                             ))}
                         </div>
-                        <div className='mt-2'>
+                        <div className='mt-3'>
                             <Link to={`/neemble-eat/c/${restaurantID}/${menuID}/${tableNumber}`}
-                                  className='flex justify-center w-full bg-black rounded-full text-sm py-1 text-white'>
+                                  className='flex hover:bg-gray-600 transition duration-150 justify-center w-full bg-black rounded-full text-sm py-1 text-white'>
                                 Ver carrinho
                             </Link>
                         </div>

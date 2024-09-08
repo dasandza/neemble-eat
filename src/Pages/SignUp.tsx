@@ -7,6 +7,7 @@ import {auth} from "../firebase/firebase.ts";
 import {useNavigate} from 'react-router-dom';
 import {createRepresentant} from "../api";
 import {Representant} from "../schema.ts";
+import LoadingSpinner from "../Components/UserHomePage/components/LoadingSpinner.tsx";
 
 
 function SignUp() {
@@ -24,6 +25,7 @@ function SignUp() {
     const [passwordConfirmation, setPasswordConfirmation] = useState('')
     const [email, setEmail] = useState('')
     const [error, setError] = useState("")
+    const [loading, setLoading] = useState<boolean>(false)
 
 
     useEffect(() => {
@@ -31,9 +33,11 @@ function SignUp() {
             const account = await accountRecordID
             if (account) {
                 navigate(`/neemble-eat/setup/${account.id}/${firstName}`);
+
                 setSignInAttempt(false)
             } else {
                 if (signInAttempt) {
+                    setLoading(false)
                     setSignInAttempt(false)
                     setError("Houve um erro!")
                 }
@@ -54,14 +58,15 @@ function SignUp() {
 
     function handleSubmition(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
+        setLoading(true)
         if (passwordConfirmation == password) {
             setSignInAttempt(true)
             if (firstName == "" || lastName == "" || phoneNumber == "") {
                 setError("Preencha todos os campos")
+                setLoading(false)
             } else {
                 createUserWithEmailAndPassword(auth, email, password)
                     .then((userCredentials) => {
-                        //console.log(userCredentials.user.uid)
                         const user = createRepresentant({
                             UUID: userCredentials.user.uid,
                             firstName: firstName,
@@ -72,19 +77,21 @@ function SignUp() {
                         })
                         setAccountRecordID(user)
                     }).catch((error) => {
-
+                    setLoading(false)
                     // FIREBASE ERRORS: https://firebase.google.com/docs/reference/node/firebase.auth.Error
                     if (error.code === "auth/email-already-in-use") {
+
                         setError("O email inserido ja está em uso.")
                     } else if (error.code === "auth/invalid-api-key") {
                         // Thrown if the provided API key is invalid.
                     } else {
                         setError("Houve um problema ao criar a sua conta.")
                     }
-                    console.log(error)
+                    console.error(error)
                 })
             }
         } else {
+            setLoading(false)
             setError("As palavras passe diferentes")
         }
 
@@ -92,7 +99,14 @@ function SignUp() {
 
     return (
         <div className="">
-            <div className="font-poppins flex items-center justify-center mx-auto max-w-[920px]">
+            <div className='p-8'>
+                <Link to="/neemble-eat/">
+                    <p className='cursor-pointer font-poppins-semibold text-xl'>
+                        NeembleEat
+                    </p>
+                </Link>
+            </div>
+            <div className="font-poppins flex items-center justify-center mx-auto max-w-[1080px]">
                 <div className='w-full flex justify-between py-10'>
                     <div className='laptop:flex items-center'>
                         <div className='laptop:pl-12 mx-8 my-12 laptop:mt-0 laptop:mx-0'>
@@ -100,104 +114,126 @@ function SignUp() {
                                 Crie a sua conta!
                             </h1>
                             <form action="" onSubmit={handleSubmition} className='mt-8'>
-                                <div className='flex space-x-5'>
-                                    <div>
-                                        <label htmlFor="firstName" className='text-sm ml-1'>Primeiro Nome<span
-                                            className='text-red-500'>*</span></label>
-                                        <div className="relative mb-6">
-                                            <input type="text" id="firstName"
-                                                   value={firstName}
-                                                   onChange={(e) => setFirstName(e.target.value)}
-                                                   className="border border-gray-300 text-gray-900 text-sm hover:bg-gray-100 transition-colors duration-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  p-2.5"
-                                                   placeholder="Primeiro Nome"/>
+
+                                {/* Fields */}
+                                <div className={`space-y-4`}>
+                                    {/* First and Last Name */}
+                                    <div className='flex space-x-5'>
+                                        <div>
+                                            <label htmlFor="firstName" className='text-sm ml-1'>Primeiro Nome<span
+                                                className='text-red-500'>*</span></label>
+                                            <div className="relative">
+                                                <input type="text" id="firstName"
+                                                       value={firstName}
+                                                       onChange={(e) => setFirstName(e.target.value)}
+                                                       className="border border-gray-300 text-gray-900 text-sm hover:bg-gray-100 transition-colors duration-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  p-2.5"
+                                                       placeholder="Primeiro Nome"/>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label htmlFor="ultimoNome" className='text-sm ml-1'>Último Name<span
+                                                className='text-red-500'>*</span></label>
+                                            <div className="relative">
+                                                <input type="text" id="ultimoNome"
+                                                       value={lastName}
+                                                       onChange={(e) => setLastName(e.target.value)}
+                                                       className="border border-gray-300 text-gray-900 text-sm hover:bg-gray-100 transition-colors duration-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                                       placeholder="Último Nome"/>
+                                            </div>
                                         </div>
                                     </div>
+
+                                    {/* Phone Number */}
                                     <div>
-                                        <label htmlFor="ultimoNome" className='text-sm ml-1'>Último Name<span
+                                        <label htmlFor="tel" className='text-sm ml-1'>Número de Telefone<span
                                             className='text-red-500'>*</span></label>
-                                        <div className="relative mb-6">
-                                            <input type="text" id="ultimoNome"
-                                                   value={lastName}
-                                                   onChange={(e) => setLastName(e.target.value)}
-                                                   className="border border-gray-300 text-gray-900 text-sm hover:bg-gray-100 transition-colors duration-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                                   placeholder="Último Nome"/>
+                                        <div className="relative">
+                                            <div
+                                                className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                                                <PhoneIcon/>
+                                            </div>
+                                            <input type="tel" id="tel"
+                                                   value={phoneNumber}
+                                                   onChange={(e) => setPhoneNumber(e.target.value)}
+                                                   className="border border-gray-300 text-gray-900 text-sm hover:bg-gray-100 transition-colors duration-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
+                                                   placeholder="XXX XXX XXX"/>
+                                        </div>
+                                    </div>
+
+                                    {/* Email */}
+                                    <div>
+                                        <label htmlFor="email" className='text-sm ml-1'>Email<span
+                                            className='text-red-500'>*</span></label>
+                                        <div className="relative">
+                                            <div
+                                                className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                                                <Mail/>
+                                            </div>
+                                            <input type="email" id="email"
+                                                   value={email}
+                                                   onChange={(e) => setEmail(e.target.value)}
+                                                   className="border border-gray-300 text-gray-900 text-sm hover:bg-gray-100 transition-colors duration-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
+                                                   placeholder="nome@email.com"/>
+                                        </div>
+                                    </div>
+
+                                    {/* Password */}
+                                    <div>
+                                        <label htmlFor="password" className='text-sm ml-1'>Password<span
+                                            className='text-red-500'>*</span></label>
+                                        <div className={error != "" ? "relative mt-1" : "relative"}>
+                                            <div
+                                                className="absolute inset-y-0 right-0 flex items-center pr-3.5">
+                                                {
+                                                    passwordVisibility ?
+                                                        <HugeiconsView
+                                                            className='rounded-[4px] cursor-pointer hover:bg-gray-100 transition-colors duration-300 p-1'
+                                                            onClick={handleVisibility}/> :
+                                                        <HugeiconsViewOff
+                                                            className='rounded-[4px] cursor-pointer hover:bg-gray-100 transition-colors duration-300 p-1'
+                                                            onClick={handleVisibility}/>
+                                                }
+                                            </div>
+                                            <input
+                                                type={passwordVisibility ? "text" : "password"}
+                                                id="password"
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                                className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 hover:bg-gray-100 transition-colors duration-300 focus:border-blue-500 block w-full pr-10 p-2.5"
+                                                placeholder="password"/>
+                                        </div>
+                                    </div>
+
+                                    {/* Confirm Password */}
+                                    <div>
+                                        <label htmlFor="confirm password" className='text-sm ml-1'>Confirmar
+                                            Password<span
+                                                className='text-red-500'>*</span></label>
+                                        <div className={error != "" ? "relative mt-1" : "relative"}>
+                                            <div
+                                                className="absolute inset-y-0 right-0 flex items-center pr-3.5">
+                                                {
+                                                    passwordConfirmationVisibility ?
+                                                        <HugeiconsView
+                                                            className='rounded-[4px] cursor-pointer hover:bg-gray-100 transition-colors duration-300 p-1'
+                                                            onClick={handleConfimationVisibility}/> :
+                                                        <HugeiconsViewOff
+                                                            className='rounded-[4px] cursor-pointer hover:bg-gray-100 transition-colors duration-300 p-1'
+                                                            onClick={handleConfimationVisibility}/>
+                                                }
+                                            </div>
+                                            <input
+                                                type={passwordConfirmationVisibility ? "text" : "password"}
+                                                id="confirm password"
+                                                value={passwordConfirmation}
+                                                onChange={(e) => setPasswordConfirmation(e.target.value)}
+                                                className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 hover:bg-gray-100 transition-colors duration-300 focus:border-blue-500 block w-full pr-10 p-2.5"
+                                                placeholder="Confirme a password"/>
                                         </div>
                                     </div>
                                 </div>
 
-                                <label htmlFor="tel" className='text-sm ml-1'>Número de Telefone<span
-                                    className='text-red-500'>*</span></label>
-                                <div className="relative mb-6">
-                                    <div
-                                        className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                                        <PhoneIcon/>
-                                    </div>
-                                    <input type="tel" id="tel"
-                                           value={phoneNumber}
-                                           onChange={(e) => setPhoneNumber(e.target.value)}
-                                           className="border border-gray-300 text-gray-900 text-sm hover:bg-gray-100 transition-colors duration-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
-                                           placeholder="XXX XXX XXX"/>
-                                </div>
 
-                                <label htmlFor="email" className='text-sm ml-1'>Email<span
-                                    className='text-red-500'>*</span></label>
-                                <div className="relative mb-6">
-                                    <div
-                                        className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                                        <Mail/>
-                                    </div>
-                                    <input type="email" id="email"
-                                           value={email}
-                                           onChange={(e) => setEmail(e.target.value)}
-                                           className="border border-gray-300 text-gray-900 text-sm hover:bg-gray-100 transition-colors duration-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
-                                           placeholder="nome@email.com"/>
-                                </div>
-                                <label htmlFor="email" className='text-sm ml-1'>Password<span
-                                    className='text-red-500'>*</span></label>
-                                <div className={error != "" ? "relative mt-1" : "relative mb-6"}>
-                                    <div
-                                        className="absolute inset-y-0 right-0 flex items-center pr-3.5">
-                                        {
-                                            passwordVisibility ?
-                                                <HugeiconsView
-                                                    className='rounded-[4px] cursor-pointer hover:bg-gray-100 transition-colors duration-300 p-1'
-                                                    onClick={handleVisibility}/> :
-                                                <HugeiconsViewOff
-                                                    className='rounded-[4px] cursor-pointer hover:bg-gray-100 transition-colors duration-300 p-1'
-                                                    onClick={handleVisibility}/>
-                                        }
-                                    </div>
-                                    <input
-                                        type={passwordVisibility ? "text" : "password"}
-                                        id="password"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 hover:bg-gray-100 transition-colors duration-300 focus:border-blue-500 block w-full pr-10 p-2.5"
-                                        placeholder="password"/>
-                                </div>
-                                <label htmlFor="email" className='text-sm ml-1'>Confirmar Password<span
-                                    className='text-red-500'>*</span></label>
-                                <div className={error != "" ? "relative mt-1" : "relative mb-6"}>
-                                    <div
-                                        className="absolute inset-y-0 right-0 flex items-center pr-3.5">
-                                        {
-                                            passwordConfirmationVisibility ?
-                                                <HugeiconsView
-                                                    className='rounded-[4px] cursor-pointer hover:bg-gray-100 transition-colors duration-300 p-1'
-                                                    onClick={handleConfimationVisibility}/> :
-                                                <HugeiconsViewOff
-                                                    className='rounded-[4px] cursor-pointer hover:bg-gray-100 transition-colors duration-300 p-1'
-                                                    onClick={handleConfimationVisibility}/>
-                                        }
-                                    </div>
-                                    <input
-                                        type={passwordConfirmationVisibility ? "text" : "password"}
-                                        id="password"
-                                        value={passwordConfirmation}
-                                        onChange={(e) => setPasswordConfirmation(e.target.value)}
-                                        className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 hover:bg-gray-100 transition-colors duration-300 focus:border-blue-500 block w-full pr-10 p-2.5"
-                                        placeholder="Confirme a password"/>
-                                </div>
                                 {error != "" &&
                                     <div className="text-[12px] w-[80%] mt-3 mb-6">
                                         <p className='text-red-600 italic'>
@@ -205,11 +241,19 @@ function SignUp() {
                                         </p>
                                     </div>
                                 }
-                                <div className="laptop:flex items-center">
+                                <div className="laptop:flex items-center my-4">
                                     <button
-                                        type='submit'
-                                        className='bg-black px-5 py-2 rounded-lg text-white'>
-                                        Criar Conta
+                                        type={loading ? "button" : "submit"}
+                                        className={`bg-black px-4 py-1.5 rounded-md text-sm ${loading ? '-translate-y-1 bg-gray-600 cursor-not-allowed' : 'hover:-translate-y-1 hover:bg-gray-600 transition durantion-150'}  text-white`}>
+                                        <div className={`flex items-center space-x-2`}>
+                                            {
+                                                loading && <LoadingSpinner
+                                                    size={`12px`}/>
+                                            }
+                                            <p>
+                                                {!loading ? "Criar Conta" : "Carregando..."}
+                                            </p>
+                                        </div>
                                     </button>
                                 </div>
                                 <div className='flex text-sm mt-6'>

@@ -48,14 +48,14 @@ function CartSingleItem({
         <div className=''>
             <div className="">
                 <div className='flex justify-between pt-3 pb-1 px-3'>
-                    <div className='flex justify-between'>
+                    <div className='flex w-full'>
                         <div
                             className='flex items-center shadow-sm justify-center overflow-hidden rounded-xl mr-4 w-28 h-28 min-w-28 min-h-28'>
                             <img src={localItem.image}
                                  alt=""
                                  className='rounded-md object-cover w-full h-full'/>
                         </div>
-                        <div className=''>
+                        <div className='w-full'>
                             <h1 className='font-semibold text-zinc-800'>
                                 {localItem.name}
                             </h1>

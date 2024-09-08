@@ -2,7 +2,7 @@ import {BlueQRCode, LaptopPhoneIcon} from "../../../assets/icons";
 
 function Features() {
     return (
-        <section className={`w-full flex justify-center shadow-inner`}>
+        <section className={`w-full flex justify-center bg-gray-100`}>
             <div className={`max-w-[1080px] px-4 py-8 w-full`}>
                 <div>
                     <h1 className={`text-xl py-8 font-poppins-semibold text-center`}>

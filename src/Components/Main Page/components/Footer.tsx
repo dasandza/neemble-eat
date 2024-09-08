@@ -6,25 +6,25 @@ function Footer() {
                     <h1 className={`text-gray-400`}>
                         Contacte-nos
                     </h1>
-                    <p className={`text-sm text-white`}>email</p>
-                    <p className={`text-sm text-white`}>phone number</p>
+                    <p className={`text-sm text-white hover:underline cursor-pointer`}>email</p>
+                    <p className={`text-sm text-white hover:underline cursor-pointer`}>phone number</p>
                 </div>
                 <div>
                     <h1 className={`text-gray-400`}>
                         Redes Sociais
                     </h1>
-                    <p className={`text-sm text-white`}>linkedin</p>
-                    <p className={`text-sm text-white`}>twitter</p>
-                    <p className={`text-sm text-white`}>facebook</p>
-                    <p className={`text-sm text-white`}>instagram</p>
+                    <p className={`text-sm text-white hover:underline cursor-pointer`}>linkedin</p>
+                    <p className={`text-sm text-white hover:underline cursor-pointer`}>twitter</p>
+                    <p className={`text-sm text-white hover:underline cursor-pointer`}>facebook</p>
+                    <p className={`text-sm text-white hover:underline cursor-pointer`}>instagram</p>
                 </div>
                 <div>
                     <h1 className={`text-gray-400`}>
                         Empresa
                     </h1>
-                    <p className={`text-sm text-white`}>Sobre Nos</p>
-                    <p className={`text-sm text-white`}>Demo</p>
-                    <p className={`text-sm text-white`}>Suporte</p>
+                    <p className={`text-sm text-white hover:underline cursor-pointer`}>Sobre Nos</p>
+                    <p className={`text-sm text-white hover:underline cursor-pointer`}>Demo</p>
+                    <p className={`text-sm text-white hover:underline cursor-pointer`}>Suporte</p>
                 </div>
             </div>
             <div className={`text-gray-400 text-sm mx-8`}>

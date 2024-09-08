@@ -6,7 +6,7 @@ const getCartFromLocalStorage = () => {
 };
 
 const filterCart = (cart: CartItem[]) => {
-    const newCart: Array<CartItem> = cart.filter((item: CartItem) => item !== undefined || item !== null);
+    const newCart: Array<CartItem> = cart.filter((item: CartItem) => item != undefined || item != null);
     return newCart
 }
 

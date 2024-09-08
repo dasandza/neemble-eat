@@ -4,6 +4,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {fetchMenuParsed, fetchRestaurant} from "../api";
 import {getCartFromLocalStorage, initializeCartInLocalStorage} from "../utils/cartCRUD.ts";
 import {useParams} from "react-router-dom";
+import {LoadingMenu} from "./LoadingPages";
 
 
 function NewMenu() {
@@ -170,9 +171,7 @@ function NewMenu() {
     }
 
     if (!categories || !menu || !restaurant) {
-        return <div>
-            Loading
-        </div>
+        return <LoadingMenu/>
     }
 
     return (

@@ -1,6 +1,6 @@
 import {Navigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {Banner, LeftSideBar, Body} from "../Components/UserHomePage";
+import {Banner, LeftSideBar, Body, LoadingSpinner} from "../Components/UserHomePage";
 import {MenuOption} from "../interfaces.tsx";
 import {fetchRepresentant, fetchRestaurant} from "../api";
 import {RepresentantJson, RestaurantJson} from "../schema.ts";
@@ -123,7 +123,9 @@ function UserHomePage() {
 
     if (!representant || !restaurant) {
         return <div className={`flex justify-center items-center w-full h-dvh`}>
-
+            <LoadingSpinner
+                color={`gray-800`}
+                size={`20px`}/>
         </div>
     }
 

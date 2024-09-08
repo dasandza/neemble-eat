@@ -25,7 +25,7 @@ function LogIn() {
                     await handleLogIn({UUID: UUID, navigate: navigate})
                 } catch (error) {
                     setLoading(false)
-                    console.log(error)
+                    console.error(error)
                 }
             }
         }
@@ -56,10 +56,17 @@ function LogIn() {
 
     return (
         <div className="">
-            <div className="font-poppins flex items-center justify-center mx-auto max-w-[920px]">
-                <div className='w-full flex justify-between py-10 '>
-                    <div className='laptop:flex items-center '>
-                        <div className='mx-10 mt-[20%] laptop:mt-0 laptop:mx-0'>
+            <div className='p-8'>
+                <Link to="/neemble-eat/">
+                    <p className='cursor-pointer font-poppins-semibold text-xl'>
+                        NeembleEat
+                    </p>
+                </Link>
+            </div>
+            <div className="font-poppins flex items-center justify-center mx-auto max-w-[1080px] mt-4 laptop:mt-0">
+                <div className='w-full flex justify-between'>
+                    <div className='laptop:flex items-center'>
+                        <div className='mx-10'>
                             <h1 className='font-poppins-semibold text-2xl'>
                                 Bem-vindo(a) de volta ao <span className='text-stone-500'>neemble eat</span>
                             </h1>
@@ -102,7 +109,8 @@ function LogIn() {
                                         placeholder="password"/>
 
                                 </div>
-                                {error != "" &&
+                                {
+                                    error != "" &&
                                     <div className="text-[12px] w-[80%] mb-6">
                                         <p className='text-red-600 italic'>
                                             {error}
@@ -114,14 +122,13 @@ function LogIn() {
                                         type={loading ? "button" : "submit"}
                                         className={`bg-black px-4 py-1 rounded-md text-sm ${loading ? '-translate-y-1 bg-gray-600 cursor-not-allowed' : 'hover:-translate-y-1 hover:bg-gray-600 transition durantion-150'}  text-white`}>
                                         <div className={`flex items-center space-x-2`}>
-                                            <p>
-                                                {!loading ? "Entrar" : "Carregando"}
-                                            </p>
                                             {
                                                 loading && <LoadingSpinner
                                                     size={`12px`}/>
                                             }
-
+                                            <p>
+                                                {!loading ? "Entrar" : "Carregando..."}
+                                            </p>
                                         </div>
                                     </button>
                                     <div
@@ -142,7 +149,7 @@ function LogIn() {
                             </form>
                         </div>
                     </div>
-                    <div className='flex  items-center justify-center'>
+                    <div className='flex items-center justify-center'>
                         <img src={Image}
                              alt=""
                              className='h-[80%] hidden laptop:block'/>

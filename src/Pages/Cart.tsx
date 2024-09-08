@@ -30,7 +30,6 @@ function Cart() {
     const [session, setSession] = useState<TableSessionJson | null>(null)
     const [error, setError] = useState<string | null>(null);
 
-
     const filter_Cart = (cart: CartItem[]) => {
         return filterCart(cart)
     }
@@ -89,11 +88,11 @@ function Cart() {
             const item = cart[i];
             if (item.id == id) {
                 if (cart[i].quantity == 1) {
-                    delete cart[i];
-                    setCart(filter_Cart(cart))
+                    setCart(filter_Cart(cart.filter((item) => item.id != id)))
                     return;
                 } else {
-                    cart[i].quantity--;
+                    item.quantity--
+                    cart[i].quantity = item.quantity
                     setCart(filter_Cart(cart))
                     return cart[i]
                 }
@@ -106,8 +105,7 @@ function Cart() {
         for (let i = 0; i < cart.length; i++) {
             const item = cart[i];
             if (item.id == id) {
-                delete cart[i];
-                setCart(filter_Cart(cart))
+                setCart(filter_Cart(cart.filter((item) => item.id != id)))
                 return;
             }
 

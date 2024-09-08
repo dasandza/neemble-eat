@@ -30,16 +30,18 @@ function OurSolutions() {
 
 
     return (
-        <section className={`w-full bg-gray-100 flex justify-center shadow-inner `}>
-            <div className={`max-w-[1080px] p-4`}>
+        <section className={`w-full bg-gray-100 flex justify-center py-8`}>
+            <div
+                className={`max-w-[1080px] py-4 px-4 laptop:px-12 rounded-3xl bg-white shadow-[0px_0px_10px_1px_#D4D4D4] overflow-hidden`}>
                 <div className={`w-full text-center`}>
                     <h1 className={`text-2xl font-poppins-semibold py-6`}>
                         Explore as nossas soluções
                     </h1>
-                    <p className={`text-sm text-gray-500 hidden laptop:block`}>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque dolor dolorem eaque laboriosam
-                        nihil officiis placeat quaerat quasi unde voluptas. Ad, consequuntur doloribus ex minima
-                        nesciunt omnis quia sint voluptatum!
+                    <p className={`text-sm text-gray-700 hidden laptop:block`}>
+                        Integre facilmente o nosso sistema de menu digital acessível por QR Code.
+                        Connosco, os seus clientes poderão efetuar pedidos de forma rápida e eficiente, agilizando o
+                        trabalho
+                        da sua equipe. Faça parte da nova e moderna geração de resturantes de sucesso
                     </p>
                 </div>
                 <div className={`flex divide-x divide-gray-200 py-8`}>
@@ -49,7 +51,7 @@ function OurSolutions() {
                                 soluctions.map((solutionCard, index) =>
                                     solutionCard.title == solution.title ?
                                         <li key={index}
-                                            className={`border-l-4 border-blue-400 p-4 bg-gray-200 transition duration-200 cursor-pointer`}>
+                                            className={`border-l-4 border-blue-400 p-4 bg-gray-200 cursor-pointer`}>
                                             <h1 className={`text-md font-poppins-semibold`}>
                                                 {solutionCard.title}
                                             </h1>
@@ -59,7 +61,7 @@ function OurSolutions() {
                                         </li> :
                                         <li key={index}
                                             onClick={() => setSolution(solutionCard)}
-                                            className={`p-4 hover:bg-gray-200 transition duration-200 cursor-pointer`}>
+                                            className={`p-4 hover:bg-gray-200 cursor-pointer`}>
                                             <h1 className={`text-md font-poppins-semibold`}>
                                                 {solutionCard.title}
                                             </h1>
