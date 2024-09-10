@@ -109,7 +109,7 @@ function Orders() {
 
     return (
         <div className='min-h-svh px-4 font-poppins pt-7'>
-            <div className={`bg-gray-200 fixed w-full h-dvh top-0`}></div>
+            <div className={`bg-gray-200 fixed w-full h-dvh top-0 left-0`}></div>
             <div className='flex relative justify-between items-center mb-5'>
                 <Link to={`/neemble-eat/menu/${restaurantID}/${menuID}/${tableNumber}`} className='absolute flex-none'>
                     <div className="text-left">
