@@ -10,7 +10,7 @@ interface props {
 
 function Category({category, selectItem}: props) {
     return (
-        <div className={`mt-4 px-4`}>
+        <div className={`pt-4 px-4`}>
             <h1 className={`text-2xl font-poppins-semibold laptop:px-4`}>
                 {category.name}
             </h1>
@@ -19,7 +19,7 @@ function Category({category, selectItem}: props) {
                     category.items.map((item, index) =>
                         item.availability &&
                         <div key={index}
-                             className={` break-inside-avoid laptop:p-3`}
+                             className={`break-inside-avoid laptop:p-3`}
                              onClick={() => selectItem(item)}>
                             <ProductCard item={item}/>
                         </div>

@@ -99,7 +99,6 @@ function NewMenu() {
                 restaurantInfoStored = await fetchRestaurant({restaurantID: restaurantID})
                 menuInfoStored = await fetchMenuParsed({menuID: menuID})
             }
-            console.log(menuInfoStored)
 
             menuInfoStored.categories = menuInfoStored.categories?.filter((category) => {
                 const isEmpty = category.items.length == 0
@@ -176,7 +175,7 @@ function NewMenu() {
 
     return (
         <div className=''>
-            <div className={``}>
+            <div>
                 <Header
                     menuID={menuID}
                     tableNumber={tableNumber}
@@ -184,6 +183,8 @@ function NewMenu() {
                     restaurantID={restaurant.id}
                     restaurantName={restaurant?.name}
                     description={restaurant.description}/>
+            </div>
+            <div className={`sticky top-[0px] z-50 border-b border-gray-200 shadow-sm`}>
                 {
                     categories &&
                     <CategoriesBar categories={categories}
@@ -196,7 +197,7 @@ function NewMenu() {
                                    scrollContainerRef={scrollContainerRef}/>
                 }
             </div>
-            <div className={``}>
+            <div>
                 {
                     categories &&
                     categories.map((category, index) =>
@@ -207,10 +208,10 @@ function NewMenu() {
                         </div>
                     )
                 }
-                <div>
-                    <Footer restaurantName={restaurant.name}
-                            phoneNumber={restaurant.phoneNumber}/>
-                </div>
+            </div>
+            <div>
+                <Footer restaurantName={restaurant.name}
+                        phoneNumber={restaurant.phoneNumber}/>
             </div>
         </div>
     );

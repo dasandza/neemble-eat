@@ -25,12 +25,14 @@ function CategoriesBar({
 
 
     return (
-        <div>
-            <div className='sticky top-0 bg-white z-10 px-4'>
+        <div className={`bg-white`}>
+            <div className='z-10 px-4'>
                 <div className='flex items-center'>
-                    <div><HamburgerMenuIcon className='menuicon mr-4'/></div>
+                    <div>
+                        <HamburgerMenuIcon className='menuicon mr-4'/>
+                    </div>
                     <div
-                        className='border-b border-gray-200 overflow-x-auto styled-scrollbar mt-4 flex-1 cursor-default'
+                        className='overflow-x-auto styled-scrollbar mt-4 flex-1 cursor-default'
                         ref={scrollContainerRef}
                         onMouseDown={handleMouseDown}
                         onMouseLeave={handleMouseLeaveOrUp}
@@ -42,7 +44,7 @@ function CategoriesBar({
                             className='categories flex items-center text-gray-600 font-semibold cursor-pointer prevent-select whitespace-nowrap w-fit'>
                             {categories.map((category, index) => <div
                                 key={index}
-                                className={`mb-0 pb-4 text-sm mr-7 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 ${category ? selectedCategory?.name === category.name ? 'text-blue-500 border-b-2 border-blue-500' : '' : ''}`}
+                                className={`mb-0 pb-4 text-sm mr-7 hover:text-blue-500 ${category ? selectedCategory?.name === category.name ? 'text-blue-500 border-b-2 border-blue-500' : '' : ''}`}
                                 onClick={() => handleSelectCategory(category, index)}
                             >
                                 {category.name}

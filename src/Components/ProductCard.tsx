@@ -15,7 +15,7 @@ const ProductCard: React.FC<props> = ({item}) => {
     return (
 
         <div
-            className='flex cursor-pointer border-b laptop:border laptop:rounded-2xl laptop:overflow-hidden laptop:hover:shadow-md transition-shadow duration-200'>
+            className='flex cursor-pointer bg-white border-b laptop:border laptop:rounded-2xl laptop:overflow-hidden shadow-sm laptop:hover:shadow-md transition-shadow duration-150'>
             <div className='product-info laptop:ml-5 my-3 laptop:w-3/4 tablet:w-3/4 w-3/5 mr-3'>
                 <h1 className='font-bold'>{item.name}</h1>
                 <p className='line-clamp-2 mt-0.5 text-sm text-zinc-800'>

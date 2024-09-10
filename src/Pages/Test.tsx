@@ -1,30 +1,19 @@
-import {useEffect} from "react";
-
-
 function Test() {
 
 
-    useEffect(() => {
-        async function test() {
-            const response = await fetch("http://localhost:8003/", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({val: "test"})
-            })
-            if (response.ok) {
-                return await response.json()
-            }
-        }
-
-        test().then((response) => console.log(response))
-    }, []);
-
-
     return (
-        <div>
+        <div className="relative">
+            <div className="h-[485px] bg-blue-200">
+                Header Content Here
+            </div>
 
+            <div className="sticky top-[0px] z-50 bg-red-200">
+                CategoriesBar should stick
+            </div>
+
+            <div className="h-screen bg-green-200">
+                Scrollable content here
+            </div>
         </div>
     );
 }
