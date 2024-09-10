@@ -19,6 +19,9 @@ interface props {
 
 
 function ProductPage({item, restaurantID, menuID, tableNumber, disSelectItem}: props) {
+
+    document.title = item ? item.name : "Neemble Eat"
+
     const [productAdded, setProductAdded] = useState<boolean>(false)
 
     const [numberOfItems, setNumberOfItems] = useState(0);

@@ -15,6 +15,8 @@ import {addOrder, fetchRestaurantOpenTable} from "../api";
 
 function Cart() {
 
+    document.title = "Carrinho"
+
     const [customerName, setCustomerName] = useState<string>('');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [cart, setCart] = useState<Array<CartItem>>(() => getCart());
@@ -162,7 +164,8 @@ function Cart() {
 
     return (
         <div className="w-full overflow-hidden prevent-select">
-            <div className='font-poppins absolute min-w-full bg-gray-200 min-h-full pb-32'>
+            <div className={`bg-gray-200 fixed w-full h-dvh top-0`}></div>
+            <div className='font-poppins absolute min-w-full min-h-full pb-32'>
                 <div className='flex relative justify-between items-center mx-6 mt-7'>
                     <Link to={`/neemble-eat/menu/${restaurantID}/${menuID}/${tableNumber}`}
                           className='absolute flex-none'>

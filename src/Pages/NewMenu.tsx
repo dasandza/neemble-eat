@@ -114,8 +114,12 @@ function NewMenu() {
                 return false
             })
 
+
             sessionStorage.setItem("Menu", JSON.stringify(menuInfoStored))
             sessionStorage.setItem("Restaurant", JSON.stringify(restaurantInfoStored))
+
+            document.title = restaurantInfoStored.name
+
             setRestaurant(restaurantInfoStored)
             setMenu(menuInfoStored)
             setCategories(menuInfoStored.categories)
