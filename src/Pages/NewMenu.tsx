@@ -16,6 +16,8 @@ function NewMenu() {
 
     const open = true
 
+    // const [scrollPosition, setScrollPosition] = useState(0);
+
     const [selectedCategory, setSelectedCategory] = useState<CategoryInterface>()
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const [isDragging, setIsDragging] = useState(false);
@@ -51,14 +53,6 @@ function NewMenu() {
             window.removeEventListener('beforeunload', handleBeforeUnload);
         };
     }, []);
-
-
-    useEffect(() => {
-        if (categories) {
-            setRefs(categories.map(() => React.createRef<HTMLDivElement>()));
-        }
-    }, [categories]);
-
 
     useEffect(() => {
         async function fetch() {
@@ -128,6 +122,26 @@ function NewMenu() {
         fetch().then()
     }, []);
 
+    useEffect(() => {
+        if (categories) {
+            setRefs(categories.map(() => React.createRef<HTMLDivElement>()));
+        }
+    }, [categories]);
+
+    // useEffect(() => {
+    //     window.addEventListener('scroll', handleScroll);
+//
+    //     // Cleanup function to remove the listener
+    //     return () => {
+    //         window.removeEventListener('scroll', handleScroll);
+    //     };
+    // }, []);
+
+    // const handleScroll = () => {
+    //     const position = window.pageYOffset;
+    //     setScrollPosition(position);
+    // };
+
     const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
         if (scrollContainerRef.current) {  // Null check
             setIsDragging(true);
@@ -153,7 +167,7 @@ function NewMenu() {
     const scrollToCategory = (index: number) => {
         if (refs[index] && refs[index].current) {
             const element = refs[index].current;
-            const yOffset = -90; // Adjust this value as needed
+            const yOffset = -55; // Adjust this value as needed
             const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
             window.scrollTo({top: y, behavior: 'smooth'});
         }

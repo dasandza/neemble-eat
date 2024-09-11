@@ -37,6 +37,7 @@ function UserHomePage() {
     const [restaurant, setRestaurant] = useState<RestaurantJson | null>(null)
     const [isLeftMenuOpen, setIsLeftMenuOpen] = useState<boolean>(false)
 
+
     const mainOptions: MenuOption[] = [
         {
             name: "Dashboard",

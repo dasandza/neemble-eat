@@ -1,6 +1,8 @@
 import {DashboardTable} from "../index.ts";
 import {RepresentantJson, RestaurantJson} from "../../../schema.ts";
 import formatDateString from "../../../utils/DateFormat.tsx";
+import {useEffect, useState} from "react";
+import {fetchTopOrders} from "../../../api";
 
 
 interface props {
@@ -12,6 +14,23 @@ interface props {
 function Dashboard({representant, restaurant}: props) {
 
     const time = formatDateString(new Date(new Date().getTime()).toString())
+    const [salesData, setSalesData] = useState<[string, number][]>([])
+
+    useEffect(() => {
+        async function fetch() {
+            const topOrdersStored = sessionStorage.getItem("TopOrders")
+            let topOrders: [string, number][] | null = topOrdersStored ? JSON.parse(topOrdersStored) : null
+            if (topOrdersStored == null)
+                topOrders = await fetchTopOrders({restaurantID: restaurant.id})
+
+            if (topOrders) {
+                sessionStorage.setItem("TopOders", JSON.stringify(topOrders))
+                setSalesData(topOrders)
+            }
+        }
+
+        fetch().then()
+    }, []);
 
     return (
         <div className={`py-4 laptop:px-4`}>
@@ -32,7 +51,6 @@ function Dashboard({representant, restaurant}: props) {
                 </div>
             </div>
             <div className={`px-4 mt-8 space-y-6`}>
-
                 <section>
                     <h1 className='font-poppins-medium text-gray-600 pb-2'>
                         Painel
@@ -170,7 +188,7 @@ function Dashboard({representant, restaurant}: props) {
                     </h1>
                     <div className={`w-full laptop:w-1/2`}>
                         <div className={`rounded-3xl p-1.5 bg-gray-50`}>
-                            <DashboardTable restaurantID={restaurant.id}/>
+                            <DashboardTable data={salesData}/>
                         </div>
                     </div>
                 </section>

@@ -1,31 +1,8 @@
-import {useEffect, useState} from "react";
-import {fetchTopOrders} from "../../../api";
-
-
 interface props {
-    restaurantID: string
+    data: [string, number][]
 }
 
-function DashboardTable({restaurantID}: props) {
-
-    const [data, setData] = useState<[string, number][]>([])
-
-    useEffect(() => {
-        async function fetch() {
-            const topOrdersStored = sessionStorage.getItem("TopOrders")
-            let topOrders: [string, number][] | null = topOrdersStored ? JSON.parse(topOrdersStored) : null
-            if (topOrdersStored == null)
-                topOrders = await fetchTopOrders({restaurantID: restaurantID})
-
-            if (topOrders) {
-                sessionStorage.setItem("TopOders", JSON.stringify(topOrders))
-                setData(topOrders)
-                console.log(topOrders)
-            }
-        }
-
-        fetch()
-    }, []);
+function DashboardTable({data}: props) {
 
 
     return (

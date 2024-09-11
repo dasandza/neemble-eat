@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {fetchMenuParsed} from "../../../api";
 import {Category, RestaurantJson, MenuItem, Menu} from "../../../schema.ts";
 import {AddIcon, BinIcon, SearchIcon} from "../../../assets/icons";
-import {EditCategory, AddCategory} from "../index.ts";
+import {EditCategory, AddCategory, LoadingSpinner} from "../index.ts";
 
 
 interface props {
@@ -15,6 +15,7 @@ function EditMenu({restaurant}: props) {
     const [nameIncludes, setNameIncludes] = useState<string>("")
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
     const [addingCategory, setAddingCategory] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(true)
 
     useEffect(() => {
         async function fetch() {
@@ -31,10 +32,11 @@ function EditMenu({restaurant}: props) {
                 console.log(menuInfoStored)
                 sessionStorage.setItem("EditMenu", JSON.stringify(menuInfoStored))
                 setMenu(menuInfoStored)
+                setLoading(false)
             }
         }
 
-        fetch()
+        fetch().then()
     }, []);
 
 
@@ -110,7 +112,9 @@ function EditMenu({restaurant}: props) {
 
 
     return (
-        <div className={`bg-white p-4 h-full`}>
+        <div className={`p-4 h-full`}>
+            <div className={`bg-white fixed w-full h-dvh top-0 left-0`}></div>
+            {/* Background*/}
             <div>
                 <div className={`mt-10`}>
                     <div className='laptop:flex laptop:justify-between mt-4'>
@@ -143,80 +147,88 @@ function EditMenu({restaurant}: props) {
                     </div>
 
                     {
-                        menu?.categories &&
-                        menu?.categories.length != 0 ?
-                            <div className="relative overflow-x-auto w-[100%] mx-auto mt-5">
-                                <div
-                                    className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <div className="text-zinc-800 border-b-2 border-zinc-200">
-                                        <div className={`flex w-full px-6 py-3`}>
-                                            <h1 className="laptop:w-[80%] w-[75%]">
-                                                Categoria
-                                            </h1>
-                                            <h1 className="w-[15%]">
-                                                Contém
-                                            </h1>
-                                            <h1 className="laptop:w-[5%] w-[10%]">
-                                                &nbsp;
-                                            </h1>
+                        loading ?
+                            <div
+                                className={`flex items-center justify-center text-sm text-gray-400 laptop:py-[10%] py-[40%]`}>
+                                <LoadingSpinner
+                                    color={`gray-800`}
+                                    size={`20px`}/>
+                            </div>
+                            :
+                            menu?.categories &&
+                            menu?.categories.length != 0 ?
+                                <div className="relative overflow-x-auto w-[100%] mx-auto mt-5">
+                                    <div
+                                        className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                        <div className="text-zinc-800 border-b-2 border-zinc-200">
+                                            <div className={`flex w-full px-6 py-3`}>
+                                                <h1 className="laptop:w-[80%] w-[75%]">
+                                                    Categoria
+                                                </h1>
+                                                <h1 className="w-[15%]">
+                                                    Contém
+                                                </h1>
+                                                <h1 className="laptop:w-[5%] w-[10%]">
+                                                    &nbsp;
+                                                </h1>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            {
+                                                menu?.categories.map((category, index) => (
+                                                    category.name.toLowerCase().includes(nameIncludes.toLowerCase()) &&
+                                                    <div key={index}>
+                                                        <div
+                                                            className={`px-6 py-3 flex w-full items-center text-zinc-800 font-medium hover:bg-gray-100 ${selectedCategory && selectedCategory.id == category.id && "bg-gray-50"} cursor-pointer`}
+                                                            onClick={() => {
+                                                                selectedCategory ? unselectCategory() : selectCategory(category)
+                                                            }}>
+                                                            <h2
+                                                                onClick={() => {
+                                                                }}
+                                                                className="laptop:w-[80%] w-[75%]">
+                                                                {category.name}
+                                                            </h2>
+                                                            <h2 className="w-[15%]"
+                                                                onClick={() => {
+                                                                }}>
+                                                                {category.items == undefined ? 0 : category.items.length} {category.items.length <= 1 ? "item" : "itens"}
+                                                            </h2>
+                                                            <h2 className="laptop:w-[5%] w-[10%] flex justify-center">
+                                                                <BinIcon onClick={() => {
+                                                                }}/>
+                                                            </h2>
+                                                        </div>
+                                                        <div>
+                                                            {
+                                                                selectedCategory && selectedCategory.id == category.id &&
+                                                                <EditCategory category={selectedCategory}
+                                                                              restaurantID={restaurant.id}
+                                                                              editCategory={(category) => {
+                                                                                  editCategory(category)
+                                                                              }}
+                                                                              close={unselectCategory}/>
+                                                            }
+                                                            {
+                                                                addingCategory &&
+                                                                <AddCategory
+                                                                    addCategory={addCategory}
+                                                                    close={closeAddCategoryPage}/>
+                                                            }
+                                                        </div>
+
+                                                    </div>
+
+                                                ))
+
+                                            }
                                         </div>
                                     </div>
-                                    <div>
-                                        {
-                                            menu?.categories.map((category, index) => (
-                                                category.name.toLowerCase().includes(nameIncludes.toLowerCase()) &&
-                                                <div key={index}>
-                                                    <div
-                                                        className={`px-6 py-3 flex w-full items-center text-zinc-800 font-medium hover:bg-gray-100 ${selectedCategory && selectedCategory.id == category.id && "bg-gray-50"} cursor-pointer`}
-                                                        onClick={() => {
-                                                            selectedCategory ? unselectCategory() : selectCategory(category)
-                                                        }}>
-                                                        <h2
-                                                            onClick={() => {
-                                                            }}
-                                                            className="laptop:w-[80%] w-[75%]">
-                                                            {category.name}
-                                                        </h2>
-                                                        <h2 className="w-[15%]"
-                                                            onClick={() => {
-                                                            }}>
-                                                            {category.items == undefined ? 0 : category.items.length} {category.items.length <= 1 ? "item" : "itens"}
-                                                        </h2>
-                                                        <h2 className="laptop:w-[5%] w-[10%] flex justify-center">
-                                                            <BinIcon onClick={() => {
-                                                            }}/>
-                                                        </h2>
-                                                    </div>
-                                                    <div>
-                                                        {
-                                                            selectedCategory && selectedCategory.id == category.id &&
-                                                            <EditCategory category={selectedCategory}
-                                                                          restaurantID={restaurant.id}
-                                                                          editCategory={(category) => {
-                                                                              editCategory(category)
-                                                                          }}
-                                                                          close={unselectCategory}/>
-                                                        }
-                                                        {
-                                                            addingCategory &&
-                                                            <AddCategory
-                                                                addCategory={addCategory}
-                                                                close={closeAddCategoryPage}/>
-                                                        }
-                                                    </div>
-
-                                                </div>
-
-                                            ))
-
-                                        }
-                                    </div>
+                                </div> :
+                                <div
+                                    className='flex items-center justify-center text-sm text-gray-400 laptop:py-[10%] py-[40%]'>
+                                    Adicione a primeira categoria do seu menu.
                                 </div>
-                            </div> :
-                            <div
-                                className='flex items-center justify-center text-sm text-gray-400 laptop:py-[10%] py-[40%]'>
-                                Adicione a primeira categoria do seu menu
-                            </div>
                     }
                 </div>
             </div>
