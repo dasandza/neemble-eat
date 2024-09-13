@@ -3,7 +3,7 @@ import {HamburgerMenuIcon} from "../../../assets/icons";
 import {useState} from "react";
 import DarkBackground from "../../DarkBackground.tsx";
 import LeftMenu from "../../LeftMenu.tsx";
-
+import Logo from "../../../assets/images/NeembleEat.png"
 
 interface props {
     menuOptions: {
@@ -29,15 +29,13 @@ function Banner({menuOptions}: props) {
             <LeftMenu isOpen={isLeftMenuOpen} options={menuOptions}/>
 
             <div className='container max-w-[1080px]'>
-                <div className='flex items-center justify-between'>
-                    <div className='laptop:pr-24'>
+                <div className='flex items-center justify-between w-full '>
+                    <div className='laptop:mx-0 mx-4 flex-1'>
                         <Link to="/neemble-eat/">
-                            <p className='cursor-pointer font-poppins-semibold text-xl'>
-                                NeembleEat
-                            </p>
+                            <img src={Logo} alt="" className={`laptop:w-[40%]`}/>
                         </Link>
                     </div>
-                    <div className=''>
+                    <div className='flex-1 text-center'>
                         <ul className='flex items-center space-x-4 text-sm '>
                             {
                                 menuOptions.map((option, index) =>
@@ -51,7 +49,7 @@ function Banner({menuOptions}: props) {
                             }
                         </ul>
                     </div>
-                    <div>
+                    <div className={`flex-1 flex justify-end`}>
                         <ul className='flex items-center space-x-4 text-sm'>
                             <Link to="/neemble-eat/login">
                                 <li className='hidden laptop:block px-3 py-1 rounded-md cursor-pointer laptop:text-sm'>
@@ -59,7 +57,7 @@ function Banner({menuOptions}: props) {
                                 </li>
                             </Link>
                             <Link to="/neemble-eat/signup">
-                                <li className='hidden laptop:block px-3 py-1 bg-black text-white rounded-md cursor-pointer laptop:text-sm'>
+                                <li className='hidden laptop:block px-3 py-1 bg-black hover:bg-gray-700 d text-white rounded-md cursor-pointer laptop:text-sm'>
                                     Criar Conta
                                 </li>
                             </Link>

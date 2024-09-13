@@ -19,7 +19,6 @@ function Orders() {
         tableNumber: number
     };
 
-
     const [customerName, setCustomerName] = useState<string>("")
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [orders, setOrders] = useState<Array<OrderJson>>([])
@@ -35,7 +34,6 @@ function Orders() {
     useEffect(() => {
         async function fetchData() {
             try {
-                // MAYBE I NEED A LISTENER TO CHECK IF THE SESSION WAS NOT CLOSE, IN CASE MANY PEOPLE ARE WITH THIS PAGE OPEN
                 const session = await fetchRestaurantOpenTable({restaurantID: restaurantID, tableNumber: tableNumber})
                 const orders = await fetchAllSessionOrders({sessionID: session.id})
                 setSession(session)
@@ -109,7 +107,7 @@ function Orders() {
 
     return (
         <div className='min-h-svh px-4 font-poppins pt-7'>
-            <div className={`bg-gray-200 fixed w-full h-dvh top-0 left-0`}></div>
+            <div className={`bg-gray-200 fixed w-full h-dvh top-0 left-0 -z-10`}></div>
             <div className='flex relative justify-between items-center mb-5'>
                 <Link to={`/neemble-eat/menu/${restaurantID}/${menuID}/${tableNumber}`} className='absolute flex-none'>
                     <div className="text-left">
@@ -124,6 +122,7 @@ function Orders() {
                 </div>
                 <div className='flex-grow'></div>
             </div>
+
             <div>
                 <h1 className='text-lg font-semibold'>
                     Pedidos recentes
@@ -132,65 +131,65 @@ function Orders() {
                     Abaixo estão os seus pedidos
                 </p>
             </div>
-            {orders.length == 0 ?
-                <div className='w-full h-fit fixed top-1/2 left-0 flex items-center'>
-                    <div className={`w-1/3 h-1 `}></div>
-                    <p className='text-gray-500 text-center w-1/3'>
-                        Nenhum pedido
-                    </p>
-                    <div className={`w-1/3 h-1`}></div>
-                </div> :
-                <div className='bg-white shadow-sm py-2 px-3 rounded-xl mt-3'>
-                    {
-                        orders.map((order, index) => (
-                            <div key={index}
-                                 className='item'>
-                                <div className='flex justify-between items-center text-sm'>
-                                    <div>
-                                        <div className='flex'>
-                                            <p className='font-semibold'>Pedido:&nbsp;</p>
-                                            <p className='truncate w-32'>
-                                                {order.orderedItemName}
-                                            </p>
-                                            <p>
-                                                x {order.quantity}
-                                            </p>
-                                        </div>
-                                        <p className='text-sm text-gray-400'>
-                                            {formatDateString(order.orderTime)}
-                                        </p>
-                                    </div>
-                                    <div className='text-sm'>
-                                        <div className='flex'>
-
-                                            <p className={`font-semibold ${order.prepStatus == "Cancelled" && "line-through italic"}`}>
-                                                {order.unitPrice * order.quantity}.00
-                                            </p>
-                                            <p>&nbsp;Kz</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='my-2'>
-                                    {
-                                        order.prepStatus == "Done" ?
-                                            <p className='bg-green-100 border border-green-600 font-semibold text-green-600 w-fit text-sm px-2 py-0.5 rounded-lg flex justify-center items-center'>
-                                                Pronto
-                                            </p> :
-                                            order.prepStatus == "Cancelled" ?
-                                                <p className='bg-red-100 border border-red-600 font-semibold text-red-600 w-fit text-sm px-2 py-0.5 rounded-lg flex justify-center items-center'>
-                                                    Cancelado
-                                                </p> :
-                                                <p className='bg-purple-100 border border-purple-600 font-semibold text-purple-600 w-fit text-sm px-2 py-0.5 rounded-lg flex justify-center items-center'>
-                                                    A ser preparado
+            {
+                orders.length == 0 ?
+                    <div className='w-full h-fit fixed top-1/2 left-0 flex items-center'>
+                        <div className={`w-1/3 h-1 `}></div>
+                        <p className='text-gray-500 text-center w-1/3'>
+                            Nenhum pedido
+                        </p>
+                        <div className={`w-1/3 h-1`}></div>
+                    </div> :
+                    <div className='bg-white shadow-sm py-3 px-3 rounded-2xl mt-3'>
+                        {
+                            orders.map((order, index) => (
+                                <div key={index}
+                                     className='item'>
+                                    <div className='flex justify-between items-center text-sm'>
+                                        <div>
+                                            <div className='flex'>
+                                                <p className='font-semibold'>Pedido:&nbsp;</p>
+                                                <p className='truncate w-32'>
+                                                    {order.orderedItemName}
                                                 </p>
-                                    }
+                                                <p>
+                                                    x {order.quantity}
+                                                </p>
+                                            </div>
+                                            <p className='text-sm text-gray-400'>
+                                                {formatDateString(order.orderTime)}
+                                            </p>
+                                        </div>
+                                        <div className='text-sm'>
+                                            <div className='flex'>
 
+                                                <p className={`font-semibold ${order.prepStatus == "Cancelled" && "line-through italic"}`}>
+                                                    {order.unitPrice * order.quantity}.00
+                                                </p>
+                                                <p>&nbsp;Kz</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className='my-2'>
+                                        {
+                                            order.prepStatus == "Done" ?
+                                                <p className='bg-green-100 border border-green-600 font-semibold text-green-600 w-fit text-sm px-2 py-0.5 rounded-lg flex justify-center items-center'>
+                                                    Pronto
+                                                </p> :
+                                                order.prepStatus == "Cancelled" ?
+                                                    <p className='bg-red-100 border border-red-600 font-semibold text-red-600 w-fit text-sm px-2 py-0.5 rounded-lg flex justify-center items-center'>
+                                                        Cancelado
+                                                    </p> :
+                                                    <p className='bg-purple-100 border border-purple-600 font-semibold text-purple-600 w-fit text-sm px-2 py-0.5 rounded-lg flex justify-center items-center'>
+                                                        A ser preparado
+                                                    </p>
+                                        }
+
+                                    </div>
                                 </div>
-                            </div>
-                        ))
-                    }
-
-                </div>
+                            ))
+                        }
+                    </div>
             }
             {orders.length != 0 &&
                 <div>

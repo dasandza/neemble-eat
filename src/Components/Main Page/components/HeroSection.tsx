@@ -16,12 +16,12 @@ function HeroSection() {
                     </div>
                     <div className=' flex justify-center laptop:justify-start space-x-3 my-16'>
                         <Link to="/neemble-eat/signup">
-                            <p className='px-4 py-2 bg-blue-500 font-poppins-semibold text-white rounded-lg cursor-pointer w-fit text-sm shadow-sm hover:shadow-md hover:bg-blue-600 prevent-select transition duration-150 hover:-translate-y-1'>
+                            <p className='px-4 py-2 bg-blue-500 font-poppins-semibold text-white rounded-full cursor-pointer w-fit text-sm shadow-sm hover:shadow-md hover:bg-blue-600 prevent-select transition duration-150 hover:-translate-y-1'>
                                 Acesse Já
                             </p>
                         </Link>
                         <button
-                            className={`px-4 font-poppins-semibold py-2 border border-black text-black rounded-lg cursor-pointer w-fit text-sm shadow-sm hover:shadow-md prevent-select transition duration-150 hover:-translate-y-1`}>
+                            className={`px-4 font-poppins-semibold py-2 text-black rounded-full cursor-pointer w-fit text-sm prevent-select transition duration-150 hover:-translate-y-1`}>
                             <p className=''>
                                 Veja como funciona
                             </p>

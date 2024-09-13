@@ -30,11 +30,11 @@ function OurSolutions() {
 
 
     return (
-        <section className={`w-full bg-gray-100 flex justify-center py-8`}>
+        <section className={`w-full bg-gray-100 flex justify-center px-4 laptop:px-0 py-8`}>
             <div
-                className={`max-w-[1080px] py-4 px-4 laptop:px-12 rounded-3xl bg-white shadow-[0px_0px_10px_1px_#D4D4D4] overflow-hidden`}>
+                className={`max-w-[1080px] py-4 px-4 laptop:px-12 rounded-3xl bg-white border border-gray-200 overflow-hidden`}>
                 <div className={`w-full text-center`}>
-                    <h1 className={`text-2xl font-poppins-semibold py-6`}>
+                    <h1 className={`text-2xl font-poppins-semibold py-4 laptop:py-6`}>
                         Explore as nossas soluções
                     </h1>
                     <p className={`text-sm text-gray-700 hidden laptop:block`}>

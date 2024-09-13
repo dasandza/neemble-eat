@@ -113,6 +113,8 @@ function OrdersInterface() {
                 if (!event.wasClean) {
                     console.log('Reconnecting WebSocket...');
                     setTimeout(connectWebSocket, 2000); // Try to reconnect every 2 seconds
+                } else {
+                    setTimeout(connectWebSocket, 3000);
                 }
             };
         };
@@ -162,6 +164,8 @@ function OrdersInterface() {
                 if (!event.wasClean) {
                     console.log('Reconnecting WebSocket...');
                     setTimeout(connectWebSocket, 3000); // Try to reconnect every 3 seconds
+                } else {
+                    setTimeout(connectWebSocket, 3000);
                 }
             };
         };

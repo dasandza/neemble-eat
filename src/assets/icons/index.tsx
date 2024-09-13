@@ -36,9 +36,16 @@ import SettingsIconSelected from "./SettingsIconSelected.tsx";
 import SettingsIconNotSelected from "./SettingsIconNotSelected.tsx";
 import BlueQRCode from "./BlueQRCode.tsx";
 import LaptopPhoneIcon from "./LaptopPhoneIcon.tsx";
-
+import LucideScanQrCode from "./LucideScanQrCode.tsx";
+import LucideTabletSmartphone from "./LucideTabletSmartphone.tsx";
+import LucideNotebookPen from "./LucideNotebookPen.tsx";
+import LucideMonitorCheck from "./LucideMonitorCheck.tsx";
 
 export {
+    LucideMonitorCheck,
+    LucideNotebookPen,
+    LucideTabletSmartphone,
+    LucideScanQrCode,
     LaptopPhoneIcon,
     BlueQRCode,
     SettingsIconNotSelected,
