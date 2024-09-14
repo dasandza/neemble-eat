@@ -91,7 +91,7 @@ function OrdersInterface() {
             }
 
             ws.onopen = () => {
-                console.log('WebSocket Connected');
+                console.log('New Order WebSocket Connected');
             };
 
             ws.onmessage = (event) => {
@@ -107,15 +107,15 @@ function OrdersInterface() {
             };
 
             ws.onerror = (error) => {
-                console.error('WebSocket Error:', error);
-                console.log('Reconnecting WebSocket...');
+                console.error('New Order WebSocket Error:', error);
+                console.log('Reconnecting New Order  WebSocket...');
                 setTimeout(connectWebSocket, 1000);
             };
 
             ws.onclose = (event) => {
-                console.log('WebSocket Disconnected: ', event);
+                console.log('New Order WebSocket Disconnected: ', event);
                 if (!event.wasClean) {
-                    console.log('Reconnecting WebSocket...');
+                    console.log('New Order Reconnecting WebSocket...');
                     setTimeout(connectWebSocket, 1000); // Try to reconnect every 2 seconds
                 } else {
                     setTimeout(connectWebSocket, 1000);
@@ -142,7 +142,7 @@ function OrdersInterface() {
             ws = new WebSocket(`${protocol}//${BASE_URL}/ws/${restaurantID}/billed`);
 
             ws.onopen = () => {
-                console.log('WebSocket Connected');
+                console.log('New Billed WebSocket Connected');
             };
 
             ws.onmessage = (event) => {
@@ -159,15 +159,15 @@ function OrdersInterface() {
             };
 
             ws.onerror = (error) => {
-                console.error('WebSocket Error:', error);
-                console.log('Reconnecting WebSocket...');
+                console.error('New Billed WebSocket Error:', error);
+                console.log('Reconnecting New Billed WebSocket...');
                 setTimeout(connectWebSocket, 1000);
             };
 
             ws.onclose = (event) => {
-                console.log('WebSocket Disconnected: ', event);
+                console.log('New Billed WebSocket Disconnected: ', event);
                 if (!event.wasClean) {
-                    console.log('Reconnecting WebSocket...');
+                    console.log('New Billed Reconnecting WebSocket...');
                     setTimeout(connectWebSocket, 1000); // Try to reconnect every 3 seconds
                 } else {
                     setTimeout(connectWebSocket, 1000);
