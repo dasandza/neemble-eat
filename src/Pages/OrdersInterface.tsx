@@ -43,7 +43,6 @@ function OrdersInterface() {
     const [allTablesNumbers, setAllTablesNumbers] = useState<string[]>(["Todas"])
     const [tableSelection, setTableSelection] = useState("Todas")
 
-    const [loading, setLoading] = useState<boolean>(true)
 
     const filterModes: filterProps[] = [
         {name: "Todos", tag: "All"},
@@ -71,7 +70,6 @@ function OrdersInterface() {
             }
 
             setAllTablesNumbers(temp)
-            setLoading(false)
         }
 
         fetch().then(() => {
@@ -132,7 +130,7 @@ function OrdersInterface() {
             }
         };
 
-    }, [loading]);
+    }, [BASE_URL, allTablesNumbers, restaurantID]);
 
 
     useEffect(() => {
@@ -184,7 +182,7 @@ function OrdersInterface() {
             }
         };
 
-    }, [loading]);
+    }, [BASE_URL, orders, restaurantID]);
 
 
     useEffect(() => {
