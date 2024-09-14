@@ -43,6 +43,8 @@ function OrdersInterface() {
     const [allTablesNumbers, setAllTablesNumbers] = useState<string[]>(["Todas"])
     const [tableSelection, setTableSelection] = useState("Todas")
 
+    const [loading, setLoading] = useState<boolean>(true)
+
     const filterModes: filterProps[] = [
         {name: "Todos", tag: "All"},
         {name: "Novos", tag: "New"},
@@ -58,6 +60,7 @@ function OrdersInterface() {
             const initial = data.filter((order) => {
                 return filterLastXhOrders(order) && order.sessionStatus !== "Billed";
             })
+
             setOrders(initial)
             setFilteredOrders(sortOrdersByDate(initial, ascendingSorting))
             const temp = allTablesNumbers
@@ -66,7 +69,9 @@ function OrdersInterface() {
                     temp.push(order.tableNumber.toString())
                 }
             }
+
             setAllTablesNumbers(temp)
+            setLoading(false)
         }
 
         fetch().then(() => {
@@ -77,7 +82,6 @@ function OrdersInterface() {
     useEffect(() => {
         let ws: WebSocket;
         const connectWebSocket = () => {
-            // Using protocol-relative URL to switch between ws and wss dynamically
             const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
 
             try {
@@ -105,16 +109,16 @@ function OrdersInterface() {
             ws.onerror = (error) => {
                 console.error('WebSocket Error:', error);
                 console.log('Reconnecting WebSocket...');
-                setTimeout(connectWebSocket, 3000);
+                setTimeout(connectWebSocket, 1000);
             };
 
             ws.onclose = (event) => {
                 console.log('WebSocket Disconnected: ', event);
                 if (!event.wasClean) {
                     console.log('Reconnecting WebSocket...');
-                    setTimeout(connectWebSocket, 2000); // Try to reconnect every 2 seconds
+                    setTimeout(connectWebSocket, 1000); // Try to reconnect every 2 seconds
                 } else {
-                    setTimeout(connectWebSocket, 3000);
+                    setTimeout(connectWebSocket, 1000);
                 }
             };
         };
@@ -128,7 +132,7 @@ function OrdersInterface() {
             }
         };
 
-    }, [restaurantID]);
+    }, [loading]);
 
 
     useEffect(() => {
@@ -144,6 +148,7 @@ function OrdersInterface() {
             ws.onmessage = (event) => {
                 try {
                     const billedOrders: OrderJson[] = JSON.parse(event.data);
+                    console.log("Billed: ", billedOrders)
                     const billedOrdrsIDs = billedOrders.map((order) => order.id)
                     setOrders(orders.filter((order) => !billedOrdrsIDs.includes(order.id)));
                 } catch (error) {
@@ -156,16 +161,16 @@ function OrdersInterface() {
             ws.onerror = (error) => {
                 console.error('WebSocket Error:', error);
                 console.log('Reconnecting WebSocket...');
-                setTimeout(connectWebSocket, 3000);
+                setTimeout(connectWebSocket, 1000);
             };
 
             ws.onclose = (event) => {
                 console.log('WebSocket Disconnected: ', event);
                 if (!event.wasClean) {
                     console.log('Reconnecting WebSocket...');
-                    setTimeout(connectWebSocket, 3000); // Try to reconnect every 3 seconds
+                    setTimeout(connectWebSocket, 1000); // Try to reconnect every 3 seconds
                 } else {
-                    setTimeout(connectWebSocket, 3000);
+                    setTimeout(connectWebSocket, 1000);
                 }
             };
         };
@@ -179,7 +184,7 @@ function OrdersInterface() {
             }
         };
 
-    }, [restaurantID]);
+    }, [loading]);
 
 
     useEffect(() => {
@@ -405,34 +410,43 @@ function OrdersInterface() {
                         <div className='w-full'>
                             <div className='flex flex-col-reverse laptop:flex-row laptop:justify-between'>
                                 <h1 className='text-2xl w-[80%] leading-tight text-gray-700'>
-                                    {orderSelected != null ?
-                                        orderSelected.orderedItemName :
-                                        "name"
+                                    {
+                                        orderSelected != null ?
+                                            orderSelected.orderedItemName :
+                                            "name"
                                     }
                                 </h1>
                                 <div className='prevent-select w-fit mb-2 laptop:mb-0'>
                                     {
                                         orderSelected ?
                                             orderSelected.prepStatus == "Done" ?
-                                                <div className=''>
-                                                    <p className='font-poppins-medium bg-green-200 rounded-full text-xs px-2.5 py-0.5'>
+                                                <div
+                                                    className='flex space-x-1.5 items-center px-2.5 py-0.5 rounded-full bg-green-200'>
+                                                    <div className={`h-1 w-1 bg-green-400 rounded-full`}></div>
+                                                    <p className='font-poppins-medium text-xs'>
                                                         Pronto
                                                     </p>
                                                 </div> :
                                                 orderSelected.prepStatus == "In Progress" ?
-                                                    <div className=''>
-                                                        <p className='font-poppins-medium bg-yellow-300 rounded-full text-xs px-2.5 py-0.5'>
+                                                    <div
+                                                        className='flex space-x-1.5 items-center px-2.5 py-0.5 bg-yellow-300 rounded-full'>
+                                                        <div className={`h-1 w-1 bg-yellow-500 rounded-full`}></div>
+                                                        <p className='font-poppins-medium text-xs'>
                                                             Em Preparo
                                                         </p>
                                                     </div> :
                                                     orderSelected.prepStatus == "New" ?
-                                                        <div className=''>
-                                                            <p className='font-poppins-medium bg-blue-200 rounded-full text-xs px-2.5 py-0.5'>
+                                                        <div
+                                                            className='flex space-x-1.5 items-center px-2.5 py-0.5 bg-blue-200 rounded-full'>
+                                                            <div className={`h-1 w-1 bg-blue-400 rounded-full`}></div>
+                                                            <p className='font-poppins-medium text-xs'>
                                                                 Novo
                                                             </p>
                                                         </div> :
-                                                        <div className=''>
-                                                            <p className='font-poppins-medium bg-red-200 rounded-full text-xs px-2.5 py-0.5'>
+                                                        <div
+                                                            className='flex space-x-1.5 items-center px-2.5 py-0.5 bg-red-200 rounded-full'>
+                                                            <div className={`h-1 w-1 bg-red-400 rounded-full`}></div>
+                                                            <p className='font-poppins-medium text-xs'>
                                                                 Cancelado
                                                             </p>
                                                         </div> :

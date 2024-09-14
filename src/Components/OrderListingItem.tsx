@@ -37,8 +37,9 @@ function OrderListingItem({order, onClick}: props) {
             <div className='prevent-select'>
                 {
                     order.prepStatus == "Done" &&
-                    <div className=''>
-                        <p className='font-poppins-medium bg-green-200 rounded-full text-xs px-2.5 py-0.5'>
+                    <div className='flex space-x-1.5 items-center rounded-full px-2.5 py-0.5 bg-green-200'>
+                        <div className={`h-1 w-1 bg-green-400 rounded-full`}></div>
+                        <p className='font-poppins-medium text-xs'>
                             Pronto
                         </p>
                     </div>
@@ -46,24 +47,27 @@ function OrderListingItem({order, onClick}: props) {
                 }
                 {
                     order.prepStatus == "In Progress" &&
-                    <div className=''>
-                        <p className='font-poppins-medium bg-yellow-300 rounded-full text-xs px-2.5 py-0.5'>
+                    <div className='flex space-x-1.5 items-center px-2.5 py-0.5 bg-yellow-300 rounded-full'>
+                        <div className={`h-1 w-1 bg-yellow-500 rounded-full`}></div>
+                        <p className='font-poppins-medium text-xs'>
                             Em Preparo
                         </p>
                     </div>
                 }
                 {
                     order.prepStatus == "New" &&
-                    <div className=''>
-                        <p className='font-poppins-medium bg-blue-200 rounded-full text-xs px-2.5 py-0.5'>
+                    <div className='flex space-x-1.5 items-center px-2.5 py-0.5 bg-blue-200 rounded-full'>
+                        <div className={`h-1 w-1 bg-blue-400 rounded-full`}></div>
+                        <p className='font-poppins-medium text-xs'>
                             Novo
                         </p>
                     </div>
                 }
                 {
                     order.prepStatus == "Cancelled" &&
-                    <div className=''>
-                        <p className='font-poppins-medium bg-red-200 rounded-full text-xs px-2.5 py-0.5'>
+                    <div className='flex space-x-1.5 items-center px-2.5 py-0.5 bg-red-200 rounded-full'>
+                        <div className={`h-1 w-1 bg-red-400 rounded-full`}></div>
+                        <p className='font-poppins-medium text-xs'>
                             Cancelado
                         </p>
                     </div>
