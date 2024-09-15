@@ -193,9 +193,14 @@ function SessionsInterface() {
         setFilterMode(mode)
         if (mode.tag != "All") {
             if (mode.tag == "Free") {
-                setFilteredSessions(sessions.filter((session) => session.orders.length == 0))
+                setFilteredSessions(sessions.filter((session) => {
+                    if (!session.orders) {
+                        return true
+                    }
+                    return session.orders.length == 0
+                }))
             } else {
-                setFilteredSessions(sessions.filter(session => session.status == mode.tag))
+                setFilteredSessions(sessions.filter(session => session.status == mode.tag && (session.orders && session.orders.length != 0)))
             }
         } else {
             setFilteredSessions(sessions)
