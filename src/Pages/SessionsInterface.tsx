@@ -381,12 +381,16 @@ function SessionsInterface() {
                                             </div> :
                                             <div className=''>
                                                 {
-                                                    sessionSelected?.orders.length == 0 ?
+                                                    sessionSelected?.orders ?
+                                                        sessionSelected?.orders.length == 0 ?
+                                                            <p className='bg-yellow-300 rounded-full text-xs px-2.5 py-0.5'>
+                                                                Sem Pedidos
+                                                            </p> :
+                                                            <p className='bg-yellow-300 rounded-full text-xs px-2.5 py-0.5'>
+                                                                Em consumo
+                                                            </p> :
                                                         <p className='bg-yellow-300 rounded-full text-xs px-2.5 py-0.5'>
                                                             Sem Pedidos
-                                                        </p> :
-                                                        <p className='bg-yellow-300 rounded-full text-xs px-2.5 py-0.5'>
-                                                            Em consumo
                                                         </p>
                                                 }
 
@@ -409,7 +413,9 @@ function SessionsInterface() {
                                         <CutleryIcon className='mr-1'/>
                                         {
                                             sessionSelected != null ?
-                                                `${sessionSelected.orders?.length} ${sessionSelected.orders && sessionSelected.orders.length == 1 ? "Pedido" : "Pedidos"}` :
+                                                sessionSelected.orders ?
+                                                    `${sessionSelected.orders?.length} ${sessionSelected.orders && sessionSelected.orders.length == 1 ? "Pedido" : "Pedidos"}` :
+                                                    "0 Pedidos" :
                                                 "0 Pedidos"
                                         }&nbsp;
                                     </h2>
