@@ -11,10 +11,11 @@ import {
 import timeCalculator from "../utils/TimeCalculator.ts";
 import filterLastXhSessions from "../utils/filterLastXhSessions.ts";
 import exportDataToCSV from "../utils/ExportToCSV.ts";
-import {SessionStatus, TableSessionJson} from "../schema.ts";
+import {OrderJson, SessionStatus, TableSessionJson} from "../schema.ts";
 import fetchLastSessions from "../api/functions/fetchLastSessions.ts";
 import {useParams} from "react-router-dom";
 import {closeSession} from "../api";
+import {apiUrl} from "../api/functions/key.ts";
 
 
 interface filterProps {
@@ -25,6 +26,10 @@ interface filterProps {
 
 function SessionsInterface() {
 
+
+    document.title = "Gestão das mesas"
+
+    const BASE_URL = apiUrl
 
     const {restaurantID} = useParams() as unknown as { restaurantID: string }
     const [sessions, setSessions] = useState<TableSessionJson[]>([])
@@ -48,23 +53,16 @@ function SessionsInterface() {
             try {
                 const sessionsData = await fetchLastSessions({restaurantID: restaurantID})
                 const s = sessionsData.filter((session) => filterLastXhSessions(session))
+                console.log(s)
+                setSessions(s.filter(session => session.status == filterMode.tag))
+                setFilteredSessions(tableSelection != "Todas" ?
+                    s.filter(session =>
+                        session.status === filterMode.tag &&
+                        session.tableNumber == Number(tableSelection)) :
+                    s.filter(session =>
+                        session.status === filterMode.tag)
+                )
 
-                if (filterMode.tag != "All") {
-                    setSessions(s.filter(session => session.status == filterMode.tag))
-                    setFilteredSessions(tableSelection != "Todas" ?
-                        s.filter(session =>
-                            session.status === filterMode.tag &&
-                            session.tableNumber == Number(tableSelection)) :
-                        s.filter(session =>
-                            session.status === filterMode.tag)
-                    )
-                } else {
-                    setSessions(s)
-                    setFilteredSessions(s.filter(session => tableSelection == "Todas" ?
-                        session :
-                        session.tableNumber == Number(tableSelection)
-                    ))
-                }
 
                 // Tables
                 const temp = allTablesNumbers
@@ -84,6 +82,117 @@ function SessionsInterface() {
 
     }, []);
 
+
+    useEffect(() => {
+        let ws: WebSocket;
+
+        const connectWebSocket = () => {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+
+            const reconnect = () => {
+                console.log("Reconnecting WebSocket...")
+                setTimeout(connectWebSocket, 1000)
+            }
+
+            try {
+                ws = new WebSocket(`${protocol}//${BASE_URL}/ws/${restaurantID}/closed_session`);
+            } catch (error) {
+                console.log("Could not open the websocket: ", error)
+            }
+
+            ws.onopen = () => {
+                console.log('WebSocket Connected');
+            }
+
+            ws.onmessage = (event) => {
+                try {
+                    const newSession: TableSessionJson = JSON.parse(event.data)
+                    const tableNumber = newSession.tableNumber
+                    setSessions(sessions.map((session) => {
+                        if (session.tableNumber == tableNumber) {
+                            if (session.status == "Open") {
+                                session.status = "Billed" as SessionStatus
+                            } else {
+                                return newSession
+                            }
+                        }
+                        return session
+                    }))
+                } catch (error) {
+                    console.error(error)
+                }
+            }
+
+            ws.onclose = (event) => {
+                console.log("Closed Session Websocket Disconnected");
+                if (!event.wasClean) {
+                    reconnect()
+                }
+            }
+
+            ws.onerror = (error) => {
+                console.error("Could not open the websocket: ", error)
+                reconnect()
+            }
+        }
+
+        setTimeout(connectWebSocket, 1000);
+
+    }, []);
+
+
+    useEffect(() => {
+        let ws: WebSocket;
+
+        const connectWebSocket = () => {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+
+            const reconnect = () => {
+                console.log("Reconnecting WebSocket...")
+                setTimeout(connectWebSocket, 1000)
+            }
+
+            try {
+                ws = new WebSocket(`${protocol}//${BASE_URL}/ws/${restaurantID}/session_order`);
+            } catch (error) {
+                console.log("Could not open the websocket: ", error)
+            }
+
+            ws.onopen = () => {
+                console.log('WebSocket Connected');
+            }
+
+            ws.onmessage = (event) => {
+                try {
+                    const order: OrderJson = JSON.parse(event.data)
+                    const sessionID = order.sessionID
+                    setSessions(sessions.map((session) => {
+                        if (session.id == sessionID) {
+                            session.orders = [...session.orders, order.id]
+                        }
+                        return session
+                    }))
+                } catch (error) {
+                    console.error(error)
+                }
+            }
+
+            ws.onclose = (event) => {
+                console.log("New Order Websocket Disconnected");
+                if (!event.wasClean) {
+                    reconnect()
+                }
+            }
+
+            ws.onerror = (error) => {
+                console.error("Could not open the websocket: ", error)
+                reconnect()
+            }
+        }
+
+        setTimeout(connectWebSocket, 1000);
+
+    }, []);
 
     function filterSessions(mode: filterProps) {
         setFilterMode(mode)
@@ -286,8 +395,8 @@ function SessionsInterface() {
                                         <PriceTag className='mr-1'/>
                                         {
                                             sessionSelected != null ?
-                                                sessionSelected.total :
-                                                "0.00"
+                                                `${sessionSelected.total}   Kz` :
+                                                "0Kz"
                                         }
                                     </h2>
                                     <h2 className='flex items-center rounded-md border border-gray-300 text-sm w-fit text-gray-500 px-1.5 font-poppins-semibold prevent-select'>

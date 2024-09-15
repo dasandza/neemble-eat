@@ -27,6 +27,8 @@ interface filterProps {
 
 function OrdersInterface() {
 
+    document.title = "Gestão dos pedidos"
+
     const BASE_URL = apiUrl
 
     const {restaurantID} = useParams() as unknown as { restaurantID: string }
@@ -74,8 +76,7 @@ function OrdersInterface() {
             setAllTablesNumbers(temp)
         }
 
-        fetch().then(() => {
-        })
+        fetch().then()
     }, []);
 
 
@@ -88,7 +89,7 @@ function OrdersInterface() {
             try {
                 ws = new WebSocket(`${protocol}//${BASE_URL}/ws/${restaurantID}/order`);
             } catch (error) {
-                console.log("ERROR: ", error)
+                console.log("Could not open the websocket: ", error)
             }
 
             ws.onopen = () => {
@@ -536,13 +537,13 @@ function OrdersInterface() {
                         }
                         <div className=''>
                             {orderSelected &&
-                                orderSelected.additionalNote != undefined &&
-                                <div>
-                                    <h1 className='text-lg font-poppins-semibold'>
+                                (orderSelected.additionalNote != undefined && orderSelected.additionalNote != "") &&
+                                <div className={`mt-4`}>
+                                    <h1 className='text-base italic text-gray-700 font-poppins-semibold'>
                                         Detalhes do cliente:
                                     </h1>
-                                    <p className='italic text-gray-700 my-2'>
-                                        "{orderSelected?.additionalNote}"
+                                    <p className='rounded-md text-sm bg-gray-100 border border-gray-300'>
+                                        {orderSelected?.additionalNote}
                                     </p>
                                 </div>
                             }
