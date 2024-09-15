@@ -54,14 +54,8 @@ function SessionsInterface() {
                 const sessionsData = await fetchLastSessions({restaurantID: restaurantID})
                 const s = sessionsData.filter((session) => filterLastXhSessions(session))
                 console.log(s)
-                setSessions(s.filter(session => session.status == filterMode.tag))
-                setFilteredSessions(tableSelection != "Todas" ?
-                    s.filter(session =>
-                        session.status === filterMode.tag &&
-                        session.tableNumber == Number(tableSelection)) :
-                    s.filter(session =>
-                        session.status === filterMode.tag)
-                )
+                setSessions(s)
+                setFilteredSessions(s)
 
 
                 // Tables
