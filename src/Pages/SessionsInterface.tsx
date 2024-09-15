@@ -26,8 +26,7 @@ interface filterProps {
 
 function SessionsInterface() {
 
-
-    document.title = "Gestão das mesas"
+    document.title = "Gestão de Mesas"
 
     const BASE_URL = apiUrl
 
@@ -46,6 +45,7 @@ function SessionsInterface() {
         {name: "Todos", tag: "All"},
         {name: "Faturas", tag: "Billed"},
         {name: "Mesas Ocupadas", tag: "Open"},
+        {name: "Mesas Livres", tag: "Free"},
     ]
 
     useEffect(() => {
@@ -159,6 +159,7 @@ function SessionsInterface() {
             ws.onmessage = (event) => {
                 try {
                     const order: OrderJson = JSON.parse(event.data)
+                    console.log("New Order: ", order)
                     const sessionID = order.sessionID
                     setSessions(sessions.map((session) => {
                         if (session.id == sessionID) {
@@ -191,7 +192,11 @@ function SessionsInterface() {
     function filterSessions(mode: filterProps) {
         setFilterMode(mode)
         if (mode.tag != "All") {
-            setFilteredSessions(sessions.filter(session => session.status == mode.tag))
+            if (mode.tag == "Free") {
+                setFilteredSessions(sessions.filter((session) => session.orders.length == 0))
+            } else {
+                setFilteredSessions(sessions.filter(session => session.status == mode.tag))
+            }
         } else {
             setFilteredSessions(sessions)
         }
@@ -375,9 +380,16 @@ function SessionsInterface() {
                                                 </p>
                                             </div> :
                                             <div className=''>
-                                                <p className='bg-yellow-300 rounded-full text-xs px-2.5 py-0.5'>
-                                                    Em consumo
-                                                </p>
+                                                {
+                                                    sessionSelected?.orders.length == 0 ?
+                                                        <p className='bg-yellow-300 rounded-full text-xs px-2.5 py-0.5'>
+                                                            Sem Pedidos
+                                                        </p> :
+                                                        <p className='bg-yellow-300 rounded-full text-xs px-2.5 py-0.5'>
+                                                            Em consumo
+                                                        </p>
+                                                }
+
                                             </div>
                                     }
                                 </div>
@@ -441,29 +453,6 @@ function SessionsInterface() {
                                 }
                             </div>
                         }
-                        {/*
-                            <div className='my-3 space-y-2'>
-                                <h1 className='text-xl font-poppins-semibold'>Pedidos:</h1>
-                                {
-                                orders.map((order, index) =>
-                                    sessionSelected?.fields.Orders.includes(order.id) &&
-                                    <div key={index}
-                                         className='hover:bg-gray-100 transition-colors duration-300 rounded-lg px-5 py-1'>
-                                        <div className='flex mb-2'>
-                                            <h1 className="truncate max-w-36 hover:overflow-clip laptop:hover:max-w-fit font-poppins-semibold ">
-                                                {order.fields["Name (from Item)"]}
-                                            </h1>
-                                            <p className='text-gray-400 font-poppins-semibold'>
-                                                &nbsp;{order.fields.Quantity}
-                                            </p>
-                                        </div>
-
-                                    </div>
-                                )
-                            )}
-                            </div>
-                        */}
-
                     </div>
                 </div>
             </div>

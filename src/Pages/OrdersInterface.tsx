@@ -27,7 +27,7 @@ interface filterProps {
 
 function OrdersInterface() {
 
-    document.title = "Gestão dos pedidos"
+    document.title = "Gestão de Pedidos"
 
     const BASE_URL = apiUrl
 
@@ -474,8 +474,8 @@ function OrdersInterface() {
                                         <PriceTag className='mr-1'/>
                                         {
                                             orderSelected != null ?
-                                                orderSelected.total :
-                                                "0.00"
+                                                `${orderSelected.total} Kz` :
+                                                "0 Kz"
                                         }
                                     </h2>
                                     <h2 className='flex items-center rounded-md border border-gray-300 text-sm w-fit text-gray-500 px-1.5 font-poppins-semibold prevent-select'>
