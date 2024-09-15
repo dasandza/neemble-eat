@@ -77,6 +77,7 @@ function OrdersInterface() {
     }, []);
 
 
+    // New Orders Websocket
     useEffect(() => {
         let ws: WebSocket;
         const connectWebSocket = () => {
@@ -115,13 +116,11 @@ function OrdersInterface() {
                 if (!event.wasClean) {
                     console.log('New Order Reconnecting WebSocket...');
                     setTimeout(connectWebSocket, 1000); // Try to reconnect every 2 seconds
-                } else {
-                    setTimeout(connectWebSocket, 1000);
                 }
             };
         };
 
-        connectWebSocket()
+        setTimeout(connectWebSocket, 1000);
 
         return () => {
             if (ws) {
@@ -130,14 +129,21 @@ function OrdersInterface() {
             }
         };
 
-    }, [BASE_URL, allTablesNumbers, restaurantID]);
+    }, []);
 
 
+    // Billed Orders Websocket
     useEffect(() => {
         let ws: WebSocket;
         const connectWebSocket = () => {
+
             const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-            ws = new WebSocket(`${protocol}//${BASE_URL}/ws/${restaurantID}/billed`);
+
+            try {
+                ws = new WebSocket(`${protocol}//${BASE_URL}/ws/${restaurantID}/billed`);
+            } catch (error) {
+                console.log("ERROR: ", error)
+            }
 
             ws.onopen = () => {
                 console.log('New Billed WebSocket Connected');
@@ -146,15 +152,13 @@ function OrdersInterface() {
             ws.onmessage = (event) => {
                 try {
                     const billedOrders: OrderJson[] = JSON.parse(event.data);
-                    console.log("Billed: ", billedOrders)
                     const billedOrdrsIDs = billedOrders.map((order) => order.id)
                     setOrders(orders.filter((order) => !billedOrdrsIDs.includes(order.id)));
                 } catch (error) {
                     console.log(`Error parsing the data: ${error}`)
-
                 }
-
             };
+
 
             ws.onerror = (error) => {
                 console.error('New Billed WebSocket Error:', error);
@@ -166,14 +170,12 @@ function OrdersInterface() {
                 console.log('New Billed WebSocket Disconnected: ', event);
                 if (!event.wasClean) {
                     console.log('New Billed Reconnecting WebSocket...');
-                    setTimeout(connectWebSocket, 1000); // Try to reconnect every 3 seconds
-                } else {
                     setTimeout(connectWebSocket, 1000);
                 }
             };
         };
 
-        connectWebSocket();
+        setTimeout(connectWebSocket, 1000);
 
         return () => {
             if (ws) {
@@ -182,7 +184,7 @@ function OrdersInterface() {
             }
         };
 
-    }, [BASE_URL, orders, restaurantID]);
+    }, []);
 
 
     useEffect(() => {

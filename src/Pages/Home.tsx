@@ -17,10 +17,10 @@ function Home({menuOptions}: props) {
             {/* bg-gradient-to-br to-yellow-300 from-gray-100 */}
             {/* bg-gradient-to-br to-slate-600 from-blue-100 */}
             <div className='w-full'>
-                <div className={``}>
+                <div>
                     <Banner menuOptions={menuOptions}/>
                 </div>
-                <div className=''>
+                <div>
                     <Body/>
                 </div>
                 <div>
