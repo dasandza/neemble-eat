@@ -46,7 +46,7 @@ function Cart() {
                         tableNumber: tableNumber,
                         restaurantID: restaurantID
                     })
-                    sessionStorage.setItem("Session", JSON.stringify(session))
+                    // sessionStorage.setItem("Session", JSON.stringify(session))
                 }
 
                 setSession(session)
