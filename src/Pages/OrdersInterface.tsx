@@ -60,6 +60,8 @@ function OrdersInterface() {
                 return filterLastXhOrders(order) && order.sessionStatus !== "Billed";
             })
 
+            console.log("Previous Orders: ", initial)
+
             setOrders(initial)
             setFilteredOrders(sortOrdersByDate(initial, ascendingSorting))
             const temp = allTablesNumbers
@@ -96,10 +98,13 @@ function OrdersInterface() {
             ws.onmessage = (event) => {
                 try {
                     const order: OrderJson = JSON.parse(event.data);
+                    console.log("New Order: ", order)
                     if (!allTablesNumbers.includes(order.tableNumber.toString())) {
                         setAllTablesNumbers(prev => [...prev, order.tableNumber.toString()]);
                     }
+                    console.log("New Orders List: ", [...orders, order])
                     setOrders(prev => [...prev, order]);
+
                 } catch (error) {
                     console.error('Error parsing message data:', error);
                 }
@@ -152,8 +157,13 @@ function OrdersInterface() {
             ws.onmessage = (event) => {
                 try {
                     const billedOrders: OrderJson[] = JSON.parse(event.data);
+
+                    console.log("Billed Orders: ", billedOrders)
+
                     const billedOrdrsIDs = billedOrders.map((order) => order.id)
                     setOrders(orders.filter((order) => !billedOrdrsIDs.includes(order.id)));
+
+                    console.log("New Orders List: ", orders.filter((order) => !billedOrdrsIDs.includes(order.id)))
                 } catch (error) {
                     console.log(`Error parsing the data: ${error}`)
                 }
