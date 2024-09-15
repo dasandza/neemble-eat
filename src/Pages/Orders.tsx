@@ -39,6 +39,7 @@ function Orders() {
                 setSession(session)
                 setOrders(orders)
                 setLoading(false)
+                sessionStorage.setItem("Session", JSON.stringify(session))
             } catch (err) {
                 setError('Failed to fetch data');
                 console.error("Error fetching data:", err);
@@ -81,7 +82,7 @@ function Orders() {
         if (session == null) return;
 
         closeSession({sessionID: session.id, status: "Billed"})
-            .then(() => {
+            .then((newSession) => {
                 setOrders([])
                 const customerName = sessionStorage.getItem('CustomerName');
                 if (customerName != "" && customerName) {
@@ -89,6 +90,7 @@ function Orders() {
                 }
                 togglePopup()
                 sessionStorage.clear();
+                sessionStorage.setItem("Session", JSON.stringify(newSession))
             })
             .catch((error) => console.error(error))
         setOrders([])

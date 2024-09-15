@@ -46,7 +46,7 @@ function Cart() {
                         tableNumber: tableNumber,
                         restaurantID: restaurantID
                     })
-                    // sessionStorage.setItem("Session", JSON.stringify(session))
+                    // ssessionStorage.setItem("Session", JSON.stringify(session))
                 }
 
                 setSession(session)
@@ -144,18 +144,31 @@ function Cart() {
 
     function handleSubmit() {
         const items = cart.map((item) => item)
-        if (session != null) {
+        let sessionID: string | null = null;
+        if (session == null) {
+            fetchRestaurantOpenTable({
+                tableNumber: tableNumber,
+                restaurantID: restaurantID
+            }).then((data) => {
+                sessionID = data.id
+            })
+        } else {
+            sessionID = session.id
+        }
+
+        if (sessionID) {
             for (const item of items) {
                 addOrder({
-                    sessionID: session.id,
+                    sessionID: sessionID,
                     itemID: item.id,
                     quantity: item.quantity,
                     additionalNote: item.aditionalNote
                 }).catch((error) => console.error(error))
             }
-            setCart([])
-            togglePopup()
         }
+
+        setCart([])
+        togglePopup()
 
     }
 
