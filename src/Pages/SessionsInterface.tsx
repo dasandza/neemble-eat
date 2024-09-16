@@ -402,7 +402,7 @@ function SessionsInterface() {
                                             <div>
                                                 {
                                                     sessionSelected?.orders ?
-                                                        sessionSelected?.orders.length == 0 ?
+                                                        sessionSelected.orders.length == 0 ?
                                                             <Free/> : <Open/> : <Free/>
                                                 }
                                             </div>
@@ -425,7 +425,7 @@ function SessionsInterface() {
                                         {
                                             sessionSelected != null ?
                                                 sessionSelected.orders ?
-                                                    `${sessionSelected.orders?.length} ${sessionSelected.orders && sessionSelected.orders.length == 1 ? "Pedido" : "Pedidos"}` :
+                                                    `${sessionSelected.orders.length} ${sessionSelected.orders && sessionSelected.orders.length == 1 ? "Pedido" : "Pedidos"}` :
                                                     "0 Pedidos" :
                                                 "0 Pedidos"
                                         }&nbsp;
