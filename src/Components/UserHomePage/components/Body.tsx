@@ -13,7 +13,7 @@ interface props {
 
 function Body({currentPage, restaurant, representant}: props) {
     return (
-        <div className='h-full'>
+        <div className='h-full shadow-inner'>
             {
                 currentPage.name == "Dashboard" &&
                 <Dashboard representant={representant}

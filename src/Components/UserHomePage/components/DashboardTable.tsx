@@ -6,7 +6,7 @@ function DashboardTable({data}: props) {
 
 
     return (
-        <div className="overflow-x-auto w-full rounded-3xl shadow-sm">
+        <div className="overflow-x-auto w-full rounded-3xl border border-gray-200 shadow-sm">
             <div className="overflow-hidden rounded-3xl">
                 <table className="w-full bg-white">
                     <thead>

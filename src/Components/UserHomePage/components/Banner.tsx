@@ -26,7 +26,8 @@ function Banner({firstName, lastName, toggleMenu, logout}: props) {
 
     return (
         <div>
-            <div className='h-[58px] flex justify-between items-center px-4 laptop:px-8 bg-white rounded-t-xl'>
+            <div
+                className='h-[58px] flex justify-between items-center px-4 laptop:px-8 bg-white rounded-t-xl border-b-[1.5px] border-gray-200'>
                 {
                     isUserDropdownSelected &&
                     <div className={`fixed top-0 h-dvh w-full`}

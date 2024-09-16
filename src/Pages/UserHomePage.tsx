@@ -156,17 +156,16 @@ function UserHomePage() {
                 {/* h: 56px */}
                 {/* w: 56px */}
                 <div
-                    className={`pt-2 z-10 fixed top-0 right-0 transition-all ease-in-out duration-200 w-full bg-white pl-1 ${isLeftMenuOpen ? " laptop:w-4/5 laptop:pl-0" : "laptop:w-full  laptop:pl-2"}`}>
+                    className={`pt-2 z-10 fixed top-0 right-0 transition-all ease-in-out duration-200 w-full bg-white ${isLeftMenuOpen ? " laptop:w-4/5" : "laptop:w-full"}`}>
                     <div className={`w-full h-full`}>
                         <Banner firstName={representant.firstName}
                                 lastName={representant.lastName}
                                 toggleMenu={toggleLeftMenu}
                                 logout={userLogOut}/>
                     </div>
-
                 </div>
                 <div
-                    className={`pt-[58px] transition-all ease-in-out w-full duration-200 ${isLeftMenuOpen ? "laptop:w-4/5 laptop:ml-[20%] ml-0" : "w-full laptop:ml-2"}`}>
+                    className={`pt-[58px] transition-all ease-in-out w-full duration-200 ${isLeftMenuOpen ? "laptop:w-4/5 laptop:ml-[20%]" : "w-full"}`}>
                     <Body currentPage={currntPage}
                           restaurant={restaurant}
                           representant={representant}
