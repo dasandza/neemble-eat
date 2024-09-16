@@ -107,9 +107,11 @@ function SessionsInterface() {
             ws.onmessage = (event) => {
                 try {
                     const newSession: TableSessionJson = JSON.parse(event.data)
+                    console.log(newSession)
                     const tableNumber = newSession.tableNumber
                     setSessions(sessions => sessions.map(session => {
                         if (session.tableNumber === tableNumber) {
+                            console.log(session.status === SessionStatus.Open)
                             if (session.status === SessionStatus.Open) {
                                 return {...session, status: SessionStatus.Billed};
                             } else {
