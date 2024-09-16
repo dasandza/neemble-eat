@@ -1,5 +1,11 @@
 import {useEffect, useState} from "react";
-import SessionListingItem from "../Components/SessionListingItem.tsx";
+
+import {
+    SessionListingItem,
+    Free,
+    Open,
+    Billed
+} from "../Components/SessiosInterface";
 
 import {
     CharmCross, ClockIcon,
@@ -104,7 +110,7 @@ function SessionsInterface() {
                     const tableNumber = newSession.tableNumber
                     setSessions(sessions.map((session) => {
                         if (session.tableNumber === tableNumber) {
-                            if (session.status == "Open") {
+                            if (session.status === "Open" as SessionStatus) {
                                 return {
                                     ...session,
                                     status: "Billed" as SessionStatus
@@ -365,7 +371,7 @@ function SessionsInterface() {
             </div>
             <div className={`${sessionSelected != null && 'laptop:flex laptop:h-screen'}`}>
                 <div
-                    className={`pt-40 space-y-3 transition-all ease-in-out duration-700 ${sessionSelected ? 'laptop:w-1/2' : 'laptop:w-full'}`}>
+                    className={`pt-40 space-y-1.5 transition-all ease-in-out duration-700 ${sessionSelected ? 'laptop:w-1/2' : 'laptop:w-full'}`}>
                     {filteredSessions.map((session, index) => (
                         <SessionListingItem
                             session={session}
@@ -392,26 +398,13 @@ function SessionsInterface() {
                                     {
                                         sessionSelected &&
                                         sessionSelected.status == "Billed" ?
-                                            <div className=''>
-                                                <p className='bg-green-200 rounded-full text-xs px-2.5 py-0.5'>
-                                                    Fatura
-                                                </p>
-                                            </div> :
-                                            <div className=''>
+                                            <Billed/> :
+                                            <div>
                                                 {
                                                     sessionSelected?.orders ?
                                                         sessionSelected?.orders.length == 0 ?
-                                                            <p className='bg-yellow-300 rounded-full text-xs px-2.5 py-0.5'>
-                                                                Sem Pedidos
-                                                            </p> :
-                                                            <p className='bg-yellow-300 rounded-full text-xs px-2.5 py-0.5'>
-                                                                Em consumo
-                                                            </p> :
-                                                        <p className='bg-yellow-300 rounded-full text-xs px-2.5 py-0.5'>
-                                                            Sem Pedidos
-                                                        </p>
+                                                            <Free/> : <Open/> : <Free/>
                                                 }
-
                                             </div>
                                     }
                                 </div>

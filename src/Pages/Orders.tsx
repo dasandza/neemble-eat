@@ -109,7 +109,7 @@ function Orders() {
 
     return (
         <div className='min-h-svh px-4 font-poppins pt-7'>
-            <div className={`bg-gray-200 fixed w-full h-dvh top-0 left-0 -z-10`}></div>
+            <div className={`bg-gray-100 fixed w-full h-dvh top-0 left-0 -z-10`}></div>
             <div className='flex relative justify-between items-center mb-5'>
                 <Link to={`/neemble-eat/menu/${restaurantID}/${menuID}/${tableNumber}`} className='absolute flex-none'>
                     <div className="text-left">
@@ -142,7 +142,7 @@ function Orders() {
                         </p>
                         <div className={`w-1/3 h-1`}></div>
                     </div> :
-                    <div className='bg-white shadow-sm py-3 px-3 rounded-2xl mt-3'>
+                    <div className='bg-white shadow-sm py-3 px-3 rounded-3xl mt-3 border border-gray-200'>
                         {
                             orders.map((order, index) => (
                                 <div key={index}
@@ -151,7 +151,7 @@ function Orders() {
                                         <div>
                                             <div className='flex'>
                                                 <p className='font-semibold'>Pedido:&nbsp;</p>
-                                                <p className='truncate w-32'>
+                                                <p className='truncate hover:overflow-clip w-32'>
                                                     {order.orderedItemName}
                                                 </p>
                                                 <p>
@@ -195,7 +195,7 @@ function Orders() {
             }
             {orders.length != 0 &&
                 <div>
-                    <div className='bg-white -mb-1 shadow-sm py-3 px-3.5 rounded-3xl mt-3'>
+                    <div className='bg-white -mb-1 shadow-sm py-3 px-3.5 rounded-3xl mt-3 border border-gray-200'>
                         <div className='flex items-center justify-between border-b border-gray-100 pb-3'>
                             <label htmlFor="tipInput" className='text-sm font-poppins-semibold'>Gorjeta</label>
                             <div className='flex items-center space-x-1'>
@@ -233,7 +233,7 @@ function Orders() {
                                     <h1 className='font-semibold text-sm'>
                                         Total
                                     </h1>
-                                    <p className=' text-zinc-800 text-xl'>
+                                    <p className='text-xl text-gray-700'>
                                         {sessionPrice + tip} Kz
                                     </p>
                                 </div>
@@ -241,7 +241,7 @@ function Orders() {
                             </div>
                             <div>
                                 <button
-                                    className={`px-7 py-3 ${(sessionPrice + tip) == 0 ? "bg-gray-400 cursor-not-allowed" : "bg-black"} text-sm text-white rounded-3xl `}
+                                    className={`px-7 py-3 ${(sessionPrice + tip) == 0 ? "bg-gray-600 cursor-not-allowed" : "bg-black"} text-sm hover:bg-gray-600 transition duration-100 text-white rounded-full `}
                                     onClick={toggleShowPaymentMethods}>
                                     Pedir Conta
                                 </button>

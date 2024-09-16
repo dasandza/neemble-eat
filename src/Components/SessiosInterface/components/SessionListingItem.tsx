@@ -1,5 +1,6 @@
-import {PriceTag} from "../assets/icons";
-import {SessionStatus, TableSessionJson} from "../schema.ts";
+import {PriceTag} from "../../../assets/icons";
+import {SessionStatus, TableSessionJson} from "../../../schema.ts";
+import {Open, Free, Billed} from "./tags.tsx"
 
 interface props {
     session: TableSessionJson,
@@ -27,26 +28,17 @@ function SessionListingItem({session, onClick}: props) {
             </div>
             <div className='prevent-select'>
                 {
-                    session.status == "Billed" &&
-                    <div className=''>
-                        <p className='bg-green-200 rounded-full text-xs px-2.5 py-0.5'>
-                            Fatura
-                        </p>
-                    </div>
-
-                }
-                {
-                    session.status == "Open" &&
-                    <div className=''>
-                        <p className='bg-yellow-300 rounded-full text-xs px-2.5 py-0.5'>
-                            Em Consumo
-                        </p>
-                    </div>
+                    session.status === "Billed" ? <Billed/> :
+                        session.status === "Open"
+                        && session.orders.length === 0 ?
+                            <Free/> :
+                            <Open/>
                 }
                 {
                     session.status == "Cancelled" as SessionStatus &&
-                    <div className=''>
-                        <p className='bg-red-300 rounded-full text-xs px-2.5 py-0.5'>
+                    <div className='flex space-x-1.5 items-center bg-red-200 rounded-full px-2.5 py-0.5'>
+                        <div className={`h-1 w-1 bg-red-500 rounded-full`}></div>
+                        <p className='font-poppins-semibold text-xs'>
                             Cancelado
                         </p>
                     </div>

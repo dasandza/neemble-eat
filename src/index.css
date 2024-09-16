@@ -19,7 +19,7 @@
 
     .item:not(:last-child)::after {
         content: "";
-        border-right: 1px solid #e5e7eb; /* Gray-200 */
+        border-right: 2px solid #e5e7eb; /* Gray-200 */
         height: 100%;
     }
 

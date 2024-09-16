@@ -1,5 +1,7 @@
-import {PriceTag, QrCode} from "../assets/icons";
-import {OrderJson} from "../schema.ts";
+import {PriceTag, QrCode} from "../../../assets/icons";
+import {OrderJson} from "../../../schema.ts";
+import {InProgress, New, Done, Cancelled} from "./tags.tsx"
+
 
 interface props {
     order: OrderJson,
@@ -37,40 +39,20 @@ function OrderListingItem({order, onClick}: props) {
             <div className='prevent-select'>
                 {
                     order.prepStatus == "Done" &&
-                    <div className='flex space-x-1.5 items-center rounded-full px-2.5 py-0.5 bg-green-200'>
-                        <div className={`h-1 w-1 bg-green-400 rounded-full`}></div>
-                        <p className='font-poppins-medium text-xs'>
-                            Pronto
-                        </p>
-                    </div>
+                    <Done/>
 
                 }
                 {
                     order.prepStatus == "In Progress" &&
-                    <div className='flex space-x-1.5 items-center px-2.5 py-0.5 bg-yellow-300 rounded-full'>
-                        <div className={`h-1 w-1 bg-yellow-500 rounded-full`}></div>
-                        <p className='font-poppins-medium text-xs'>
-                            Em Preparo
-                        </p>
-                    </div>
+                    <InProgress/>
                 }
                 {
                     order.prepStatus == "New" &&
-                    <div className='flex space-x-1.5 items-center px-2.5 py-0.5 bg-blue-200 rounded-full'>
-                        <div className={`h-1 w-1 bg-blue-400 rounded-full`}></div>
-                        <p className='font-poppins-medium text-xs'>
-                            Novo
-                        </p>
-                    </div>
+                    <New/>
                 }
                 {
                     order.prepStatus == "Cancelled" &&
-                    <div className='flex space-x-1.5 items-center px-2.5 py-0.5 bg-red-200 rounded-full'>
-                        <div className={`h-1 w-1 bg-red-400 rounded-full`}></div>
-                        <p className='font-poppins-medium text-xs'>
-                            Cancelado
-                        </p>
-                    </div>
+                    <Cancelled/>
                 }
             </div>
         </div>
