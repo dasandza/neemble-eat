@@ -103,9 +103,12 @@ function SessionsInterface() {
                     const newSession: TableSessionJson = JSON.parse(event.data)
                     const tableNumber = newSession.tableNumber
                     setSessions(sessions.map((session) => {
-                        if (session.tableNumber == tableNumber) {
+                        if (session.tableNumber === tableNumber) {
                             if (session.status == "Open") {
-                                session.status = "Billed" as SessionStatus
+                                return {
+                                    ...session,
+                                    status: "Billed" as SessionStatus
+                                }
                             } else {
                                 return newSession
                             }
@@ -161,15 +164,17 @@ function SessionsInterface() {
                     const order: OrderJson = JSON.parse(event.data)
                     console.log("New Order: ", order)
                     const sessionID = order.sessionID
-                    setSessions(sessions.map((session) => {
-                        if (session.id == sessionID) {
-                            const aux = session
-                            aux.total += order.total
-                            aux.orders = [...session.orders, order.id]
-                            return aux
+
+                    setSessions(sessions => sessions.map(session => {
+                        if (session.id === sessionID) {
+                            return {
+                                ...session,
+                                total: session.total + order.total,
+                                orders: [...session.orders, order.id]
+                            };
                         }
-                        return session
-                    }))
+                        return session;
+                    }));
                 } catch (error) {
                     console.error(error)
                 }
@@ -191,6 +196,11 @@ function SessionsInterface() {
         setTimeout(connectWebSocket, 1000);
 
     }, []);
+
+
+    useEffect(() => {
+        filterSessions(filterMode)
+    }, [sessions]);
 
     function filterSessions(mode: filterProps) {
         setFilterMode(mode)
