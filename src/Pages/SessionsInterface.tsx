@@ -110,7 +110,7 @@ function SessionsInterface() {
                     const tableNumber = newSession.tableNumber
                     setSessions(sessions.map((session) => {
                         if (session.tableNumber === tableNumber) {
-                            console.log(session.status == "Open" as SessionStatus)
+
                             if (session.status == "Open" as SessionStatus) {
                                 return {
                                     ...session,
@@ -177,7 +177,7 @@ function SessionsInterface() {
                             return {
                                 ...session,
                                 total: session.total + order.total,
-                                orders: [...session.orders, order.id]
+                                orders: session.orders ? [...session.orders, order.id] : [order.id]
                             };
                         }
                         return session;
