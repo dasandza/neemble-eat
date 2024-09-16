@@ -163,6 +163,7 @@ function SessionsInterface() {
                     const sessionID = order.sessionID
                     setSessions(sessions.map((session) => {
                         if (session.id == sessionID) {
+                            session.total += order.total
                             session.orders = [...session.orders, order.id]
                         }
                         return session
