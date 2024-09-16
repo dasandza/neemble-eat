@@ -17,7 +17,7 @@ import {
 import timeCalculator from "../utils/TimeCalculator.ts";
 import filterLastXhSessions from "../utils/filterLastXhSessions.ts";
 import exportDataToCSV from "../utils/ExportToCSV.ts";
-import {OrderJson, SessionStatus, TableSessionJson} from "../schema.ts";
+import {OrderJson, TableSessionJson, SessionStatus} from "../schema.ts";
 import fetchLastSessions from "../api/functions/fetchLastSessions.ts";
 import {useParams} from "react-router-dom";
 import {closeSession} from "../api";
@@ -108,22 +108,18 @@ function SessionsInterface() {
                 try {
                     const newSession: TableSessionJson = JSON.parse(event.data)
                     const tableNumber = newSession.tableNumber
-                    setSessions(sessions.map((session) => {
+                    setSessions(sessions => sessions.map(session => {
                         if (session.tableNumber === tableNumber) {
-
-                            if (session.status == "Open" as SessionStatus) {
-                                return {
-                                    ...session,
-                                    status: "Billed" as SessionStatus
-                                }
+                            if (session.status === SessionStatus.Open) {
+                                return {...session, status: SessionStatus.Billed};
                             } else {
-                                return newSession
+                                return newSession;
                             }
                         }
-                        return session
-                    }))
+                        return session;
+                    }));
                 } catch (error) {
-                    console.error(error)
+                    console.error("Failed to process the incoming message:", event.data, error);
                 }
             }
 

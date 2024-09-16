@@ -1,12 +1,12 @@
 import {DocumentReference, Timestamp} from "firebase/firestore";
 
 
-enum SessionStatus {
+export enum SessionStatus {
     Open = "Open",
     Billed = "Billed"
 }
 
-enum OrderStatus {
+export enum OrderStatus {
     New = "New",
     InProgress = "In Progress",
     Done = "Done",
@@ -314,8 +314,6 @@ export type {
     TableJson,
     RestaurantJson,
     RepresentantJson,
-    OrderStatus,
-    SessionStatus,
     CategoryParsed,
     RestaurantFirestore,
     OrderFirestore,
