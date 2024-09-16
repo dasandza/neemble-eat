@@ -21,7 +21,7 @@ function OrderListingItem({order, onClick}: props) {
                         {order.orderedItemName}
                     </h1>
                     <p className='text-gray-400 font-poppins-semibold'>
-                        &nbsp;{order.quantity}
+                        &nbsp;&nbsp; {order.quantity}
                     </p>
                 </div>
                 <div className='flex items-center prevent-select'>

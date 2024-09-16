@@ -110,7 +110,8 @@ function SessionsInterface() {
                     const tableNumber = newSession.tableNumber
                     setSessions(sessions.map((session) => {
                         if (session.tableNumber === tableNumber) {
-                            if (session.status === "Open" as SessionStatus) {
+                            console.log(session.status == "Open" as SessionStatus)
+                            if (session.status == "Open" as SessionStatus) {
                                 return {
                                     ...session,
                                     status: "Billed" as SessionStatus

@@ -281,7 +281,7 @@ function OrdersInterface() {
     return (
         <div>
             <div
-                className={`laptop:hidden py-16 divide-y divide-gray-100 fixed z-50 bg-white transition-all ease-in-out duration-300 ${!isLeftMenuOpen ? "-translate-x-full" : "translate-x-0"} h-dvh w-[60%] top-0 left-0`}>
+                className={`laptop:hidden py-16 divide-y divide-gray-100 fixed z-50 bg-white transition-all ease-in-out duration-200 ${!isLeftMenuOpen ? "-translate-x-full" : "translate-x-0"} h-dvh w-[60%] top-0 left-0`}>
                 {
                     filterModes.map((mode, index) => (
                         <div key={index}
@@ -409,7 +409,7 @@ function OrdersInterface() {
             </div>
             <div className={`${orderSelected != null && 'laptop:flex laptop:h-screen'} `}>
                 <div
-                    className={`pt-40 space-y-1.5 transition-all ease-in-out duration-700 ${orderSelected ? 'laptop:w-1/2' : 'laptop:w-full'}`}>
+                    className={`pt-40 space-y-1.5 transition-all ease-in-out duration-300 ${orderSelected ? 'laptop:w-1/2' : 'laptop:w-full'}`}>
                     {filteredOrders.map((order, index) => (
                         <OrderListingItem
                             order={order}
@@ -418,7 +418,7 @@ function OrdersInterface() {
                     ))}
                 </div>
                 <div
-                    className={`fixed bg-white laptop:pt-36 h-dvh w-full laptop:w-1/2 top-0 laptop:right-0 laptop:bottom-1 ease-in-out duration-500 ${orderSelected != null ? ' translate-y-0 laptop:translate-x-0' : 'translate-y-[110%] laptop:translate-y-0 laptop:translate-x-full'} shadow-md z-30 laptop:z-10`}>
+                    className={`fixed bg-white laptop:pt-36 h-dvh w-full laptop:w-1/2 top-0 laptop:right-0 laptop:bottom-1 ease-in-out duration-300 ${orderSelected != null ? ' translate-y-0 laptop:translate-x-0' : 'translate-y-[110%] laptop:translate-y-0 laptop:translate-x-full'} shadow-md z-30 laptop:z-10`}>
                     <div className='flex justify-end p-4'>
                         <button className='rounded-md p-0.5 laptop:hover:bg-gray-100 transition duration-200'
                                 onClick={() => setOrderSelected(null)}>
@@ -445,9 +445,8 @@ function OrdersInterface() {
                                                     orderSelected.prepStatus == "New" ?
                                                         <New/> :
                                                         <Cancelled/> :
-                                            <div>
+                                            <div/>
 
-                                            </div>
                                     }
                                 </div>
                             </div>
@@ -520,24 +519,24 @@ function OrdersInterface() {
                             </div>
                         }
                         <div className=''>
-                            {orderSelected &&
-                                (orderSelected.additionalNote != undefined && orderSelected.additionalNote != "") &&
-                                <div className={`mt-4`}>
-                                    <h1 className='text-base italic text-gray-700 font-poppins-semibold'>
-                                        Detalhes do cliente:
-                                    </h1>
-                                    <p className='rounded-md text-sm bg-gray-100 border border-gray-300'>
-                                        {orderSelected?.additionalNote}
-                                    </p>
-                                </div>
+                            {orderSelected ?
+                                orderSelected.additionalNote != undefined ?
+                                    orderSelected.additionalNote != "" ?
+                                        <div className={`mt-4`}>
+                                            <h1 className='text-base italic text-gray-700 font-poppins-semibold'>
+                                                Nota cliente:
+                                            </h1>
+                                            <p className='p-4 rounded-md text-sm bg-gray-100 border border-gray-300 text-gray-500'>
+                                                {orderSelected?.additionalNote}
+                                            </p>
+                                        </div> : <div/> : <div/> : <div/>
                             }
-
                         </div>
                     </div>
                 </div>
             </div>
             <div
-                className={`z-40 transition-all fixed duration-300 ${isLeftMenuOpen ? "opacity-[30%]" : "opacity-[0%] hidden"} bg-black  w-full h-dvh top-0 left-0`}
+                className={`z-40 transition-all fixed duration-200 ${isLeftMenuOpen ? "opacity-[30%]" : "opacity-[0%] hidden"} bg-black  w-full h-dvh top-0 left-0`}
                 onClick={toggleHamburgerMenu}>
             </div>
 
