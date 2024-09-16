@@ -30,10 +30,11 @@ function SessionListingItem({session, onClick}: props) {
                 {
                     session.status === "Billed" ? <Billed/> :
                         session.status === "Open"
-                        && session.orders
-                        && session.orders.length === 0 ?
-                            <Free/> :
-                            <Open/>
+                        && session.orders ?
+                            session.orders.length === 0 ?
+                                <Free/> :
+                                <Open/> :
+                            <Free/>
                 }
                 {
                     session.status == "Cancelled" as SessionStatus &&
