@@ -10,7 +10,7 @@ interface props {
 }
 
 
-export async function fetchRestaurantData({restaurantID}: props): Promise<RestaurantJson> {
+async function fetchRestaurantData({restaurantID}: props): Promise<RestaurantJson> {
     try {
         const response = await axios.get(`${online ? "https:" : "http:"}//${apiUrl}/restaurants/${restaurantID}`);
         return response.data;
@@ -30,8 +30,8 @@ function useRestaurantData({restaurantID}: props) {
         queryFn: () => fetchRestaurantData({restaurantID})
             .then(data => data),
         enabled: !!restaurantID,
-        staleTime: HOUR * 24, // Data remains fresh for 2 hours
-        gcTime: HOUR * 36, // Cache data for 5 hours
+        staleTime: HOUR * 24,
+        gcTime: HOUR * 36,
     });
 
 
@@ -43,4 +43,4 @@ function useRestaurantData({restaurantID}: props) {
     }
 }
 
-export default useRestaurantData;
+export {useRestaurantData, fetchRestaurantData};

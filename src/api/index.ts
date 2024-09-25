@@ -7,7 +7,7 @@ import createRestaurantTable from "./functions/createRestaurantTable.ts";
 import assignOwner from "./functions/assignOwner.ts";
 import fetchRepresentant from "./functions/fetchRepresentant.ts";
 import fetchAllRestaurantOrders from "./functions/fetchAllRestaurantOrders.ts";
-import fetchRestaurant from "./functions/fetchRestaurant.ts";
+import {fetchRestaurantData} from "./functions/fetchRestaurant.ts";
 import fetchRepresentantByUUID from "./functions/fetchRepresentantByUUID.ts";
 import {fetchMenuParsed} from "./functions/fetchMenuParsed.ts";
 import fetchRestaurantOpenTable from "./functions/fetchRestaurantOpenTable.ts";
@@ -34,7 +34,7 @@ export {
     fetchRestaurantOpenTable,
     fetchMenuParsed,
     fetchRepresentantByUUID,
-    fetchRestaurant,
+    fetchRestaurantData,
     fetchAllRestaurantOrders,
     fetchRepresentant,
     assignOwner,

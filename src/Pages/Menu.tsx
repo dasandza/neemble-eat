@@ -5,7 +5,7 @@ import {getCartFromLocalStorage, initializeCartInLocalStorage} from "../utils/ca
 import {useParams} from "react-router-dom";
 import {LoadingMenu} from "./LoadingPages";
 import Loading from "./LoadingPages/Loading.tsx";
-import useRestaurantData from "../api/functions/fetchRestaurant.ts";
+import {useRestaurantData} from "../api/functions/fetchRestaurant.ts";
 import Categories from "../Components/Menu/components/categories.tsx";
 import {MenuContext} from "../context/menuContext.ts";
 import {useMenuData} from "../api/functions/fetchMenuParsed.ts";

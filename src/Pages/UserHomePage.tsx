@@ -2,7 +2,7 @@ import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {Banner, LeftSideBar, Body, LoadingSpinner} from "../Components/UserHomePage";
 import {MenuOption} from "../interfaces.tsx";
-import {fetchRepresentant, fetchRestaurant} from "../api";
+import {fetchRepresentant, fetchRestaurantData} from "../api";
 import {RepresentantJson, RestaurantJson} from "../schema.ts";
 import {
     DashboardIconNotSelected,
@@ -91,7 +91,7 @@ function UserHomePage() {
                 const storedRestaurantantData = sessionStorage.getItem("Restaurant")
                 let restaurantJson: RestaurantJson = storedRestaurantantData ? JSON.parse(storedRestaurantantData) : null
                 if (!storedRestaurantantData && representantJson.restaurantID) {
-                    restaurantJson = await fetchRestaurant({restaurantID: representantJson.restaurantID})
+                    restaurantJson = await fetchRestaurantData({restaurantID: representantJson.restaurantID})
                 }
                 setRestaurant(restaurantJson)
                 setRepresentant(representantJson)
