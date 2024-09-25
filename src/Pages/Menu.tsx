@@ -9,6 +9,7 @@ import {useRestaurantData} from "../api/functions/fetchRestaurant.ts";
 import Categories from "../Components/Menu/components/categories.tsx";
 import {MenuContext} from "../context/menuContext.ts";
 import {useMenuData} from "../api/functions/fetchMenuParsed.ts";
+import Background from "../Components/ui/Background.tsx";
 
 
 function Menu() {
@@ -60,20 +61,22 @@ function Menu() {
     return (
         <Loading LoadingPage={LoadingMenu}
                  loadingParams={[isRestaurantLoading, isMenuLoading]}>
-            {
-                menu && restaurant &&
-                <MenuContext.Provider value={{
-                    menu: menu,
-                    restaurant: restaurant,
-                    open: open,
-                    tableNumber: tableNumber,
-                    setSelectedItem: (item) => setSelectedItem(item)
-                }}>
-                    <Header/>
-                    <Categories/>
-                    <Footer/>
-                </MenuContext.Provider>
-            }
+            <Background color={`bg-white`}>
+                {
+                    menu && restaurant &&
+                    <MenuContext.Provider value={{
+                        menu: menu,
+                        restaurant: restaurant,
+                        open: open,
+                        tableNumber: tableNumber,
+                        setSelectedItem: (item) => setSelectedItem(item)
+                    }}>
+                        <Header/>
+                        <Categories/>
+                        <Footer/>
+                    </MenuContext.Provider>
+                }
+            </Background>
         </Loading>
 
     );
