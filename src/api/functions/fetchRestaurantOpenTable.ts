@@ -54,7 +54,6 @@ function useOpenSession({closeSession, restaurantID, tableNumber}: hookProps) {
         isSessionLoading: isLoading,
         sessionError: error,
         ...closeSession ? {closeSessionMutation: closeSessionMutation} : {}
-
     }
 }
 

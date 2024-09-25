@@ -20,6 +20,9 @@ function PaymentMethodsDisplay({children}: props) {
 
 PaymentMethodsDisplay.Cash = function Cash() {
     const {closeSessionMutation} = useOrdersContext()
+    if (!closeSessionMutation) {
+        return <div></div>
+    }
     return <SwipeToConfirmButton label="Cash"
                                  onConfirm={
                                      async () => {
@@ -37,6 +40,10 @@ PaymentMethodsDisplay.Cash = function Cash() {
 
 PaymentMethodsDisplay.Card = function Card() {
     const {closeSessionMutation} = useOrdersContext()
+
+    if (!closeSessionMutation) {
+        return <div></div>
+    }
     return <SwipeToConfirmButton label="Cartão"
                                  onConfirm={
                                      async () => {
@@ -55,6 +62,10 @@ PaymentMethodsDisplay.Card = function Card() {
 PaymentMethodsDisplay.MuilticaixaExpress = function MuilticaixaExpress() {
     const {closeSessionMutation} = useOrdersContext()
 
+
+    if (!closeSessionMutation) {
+        return <div></div>
+    }
     return <SwipeToConfirmButton label=""
                                  onConfirm={
                                      async () => {

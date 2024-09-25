@@ -5,7 +5,7 @@ import {UseMutateAsyncFunction} from "@tanstack/react-query";
 interface ContextProps {
     orders: OrderJson[] | undefined
     isFetchingOrders: boolean
-    closeSessionMutation: UseMutateAsyncFunction<void, Error, void, unknown>
+    closeSessionMutation: UseMutateAsyncFunction<void, Error, void, unknown> | undefined
 }
 
 export const OrdersContext = createContext<ContextProps | undefined>(undefined)
