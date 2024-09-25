@@ -8,7 +8,7 @@ import Loading from "./LoadingPages/Loading.tsx";
 import useRestaurantData from "../api/functions/fetchRestaurant.ts";
 import Categories from "../Components/Menu/components/categories.tsx";
 import {MenuContext} from "../context/menuContext.ts";
-import useMenuData from "../api/functions/fetchMenuParsed.ts";
+import {useMenuData} from "../api/functions/fetchMenuParsed.ts";
 
 
 function Menu() {

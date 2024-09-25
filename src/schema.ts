@@ -226,7 +226,7 @@ interface RestaurantJson {
     description: string,
     orders?: Array<string>,
     sessions?: Array<string>,
-    menus?: Array<string>,
+    menus: Array<string>,
     tables?: Array<string>
 }
 

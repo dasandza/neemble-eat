@@ -8,6 +8,10 @@ interface props {
     menuID: string
 }
 
+interface hookProps extends props {
+    getStale?: boolean
+}
+
 
 async function fetchMenuParsed({menuID}: props): Promise<Menu> {
     try {
@@ -20,7 +24,7 @@ async function fetchMenuParsed({menuID}: props): Promise<Menu> {
 }
 
 
-function useMenuData({menuID}: props) {
+function useMenuData({menuID}: hookProps) {
     const {
         data: menu, error: menuError, isLoading: isMenuLoading,
     } = useQuery({
@@ -40,4 +44,4 @@ function useMenuData({menuID}: props) {
     }
 }
 
-export default useMenuData;
+export {useMenuData, fetchMenuParsed};

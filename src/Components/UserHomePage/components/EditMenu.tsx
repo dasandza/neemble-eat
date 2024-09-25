@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react";
-import {fetchMenuParsed} from "../../../api";
 import {Category, RestaurantJson, MenuItem, Menu} from "../../../schema.ts";
 import {AddIcon, BinIcon, SearchIcon} from "../../../assets/icons";
 import {EditCategory, AddCategory, LoadingSpinner} from "../index.ts";
+import {fetchMenuParsed} from "../../../api/functions/fetchMenuParsed.ts";
 
 
 interface props {
@@ -17,6 +17,7 @@ function EditMenu({restaurant}: props) {
     const [addingCategory, setAddingCategory] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(true)
 
+
     useEffect(() => {
         async function fetch() {
             if (restaurant.menus) {
@@ -29,10 +30,11 @@ function EditMenu({restaurant}: props) {
                     menuInfoStored = await fetchMenuParsed({menuID: menuID})
 
                 }
-                console.log(menuInfoStored)
-                sessionStorage.setItem("EditMenu", JSON.stringify(menuInfoStored))
-                setMenu(menuInfoStored)
-                setLoading(false)
+                if (menuInfoStored) {
+                    sessionStorage.setItem("EditMenu", JSON.stringify(menuInfoStored))
+                    setMenu(menuInfoStored)
+                    setLoading(false)
+                }
             }
         }
 
