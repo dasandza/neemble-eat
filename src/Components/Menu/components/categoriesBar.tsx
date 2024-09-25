@@ -48,13 +48,25 @@ function CategoriesBar({
                             className='categories flex items-center text-gray-600 font-semibold cursor-pointer prevent-select whitespace-nowrap w-fit'>
                             {
                                 menu.categories &&
-                                menu.categories.map((category, index) => <div
-                                    key={index}
-                                    className={`mb-0 pb-4 text-sm mr-7 hover:text-blue-500 ${category ? selectedCategory?.name === category.name ? 'text-blue-500 border-b-2 border-blue-500' : '' : ''}`}
-                                    onClick={() => handleSelectCategory(category, index)}
-                                >
-                                    {category.name}
-                                </div>)
+                                menu.categories.map((category, index) => {
+
+                                        const gotNoItems = category.items.length == 0
+
+                                        const gotNoItemsAvailble = category.items.every(item => item.availability === false)
+
+                                        if (gotNoItemsAvailble || gotNoItems) {
+                                            return <div></div>
+                                        }
+
+                                        return <div
+                                            key={index}
+                                            className={`mb-0 pb-4 text-sm mr-7 hover:text-blue-500 ${category ? selectedCategory?.name === category.name ? 'text-blue-500 border-b-2 border-blue-500' : '' : ''}`}
+                                            onClick={() => handleSelectCategory(category, index)}
+                                        >
+                                            {category.name}
+                                        </div>
+                                    }
+                                )
                             }
                         </div>
                     </div>

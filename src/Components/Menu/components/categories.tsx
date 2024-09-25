@@ -33,12 +33,22 @@ function Categories() {
             <div>
                 {
                     menu.categories &&
-                    menu.categories.map((category, index) =>
-                        <div key={index} ref={refs[index]}>
-                            <Category category={category}
-                                      selectItem={(item) => setSelectedItem(item)}
-                            />
-                        </div>
+                    menu.categories.map((category, index) => {
+
+                            const gotNoItems = category.items.length == 0
+
+                            const gotNoItemsAvailble = category.items.every(item => item.availability === false)
+
+                            if (gotNoItemsAvailble || gotNoItems) {
+                                return <div></div>
+                            }
+
+                            return <div key={index} ref={refs[index]}>
+                                <Category category={category}
+                                          selectItem={(item) => setSelectedItem(item)}
+                                />
+                            </div>
+                        }
                     )
                 }
             </div>
