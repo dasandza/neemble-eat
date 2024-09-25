@@ -8,7 +8,7 @@ interface props {
 
 function Layout({children}: props) {
     return (
-        <div className={`min-h-svh px-8 font-poppins pt-4`}>
+        <div className={`min-h-svh px-4 font-poppins pt-4`}>
             {children}
         </div>
     );

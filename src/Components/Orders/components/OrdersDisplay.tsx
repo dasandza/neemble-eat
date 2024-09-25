@@ -7,7 +7,7 @@ function OrdersDisplay() {
     const {orders, isFetchingOrders} = useOrdersContext()
 
     return (
-        <div className='bg-white shadow-sm p-3 rounded-3xl mt-3 border border-gray-200'>
+        <div className='bg-white shadow-sm p-2 rounded-3xl mt-3 border border-gray-200'>
             {
                 orders &&
                 orders.map((order, index) => (
