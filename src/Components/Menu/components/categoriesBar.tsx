@@ -1,27 +1,31 @@
-import {Category} from "../../../schema.ts";
 import {HamburgerMenuIcon} from "../../../assets/icons";
+import {useMenuContext} from "../../../context/menuContext.ts";
+import {Category} from "../../../schema.ts";
+import React from "react";
+
 
 interface props {
-    categories: Category[]
-    isDragging: boolean
-    handleMouseMove: (e: React.MouseEvent<HTMLDivElement>) => void
-    handleMouseLeaveOrUp: () => void
-    handleMouseDown: (e: React.MouseEvent<HTMLDivElement>) => void
-    selectedCategory: Category | undefined
+    handleMouseDown: (e: React.MouseEvent<HTMLDivElement>) => void,
+    handleMouseMove: (e: React.MouseEvent<HTMLDivElement>) => void,
+    handleMouseLeaveOrUp: () => void,
+    handleSelectCategory: (category: Category, index: number) => void,
+    selectedCategory: Category | undefined,
+    isDragging: boolean,
     scrollContainerRef: React.RefObject<HTMLDivElement>
-    handleSelectCategory: (category: Category, index: number) => void
 }
 
+
 function CategoriesBar({
-                           categories,
-                           isDragging,
-                           handleMouseMove,
-                           handleMouseLeaveOrUp,
-                           handleMouseDown,
                            selectedCategory,
+                           isDragging,
                            scrollContainerRef,
-                           handleSelectCategory
+                           handleSelectCategory,
+                           handleMouseLeaveOrUp,
+                           handleMouseMove,
+                           handleMouseDown
                        }: props) {
+
+    const {menu} = useMenuContext()
 
 
     return (
@@ -42,13 +46,16 @@ function CategoriesBar({
                     >
                         <div
                             className='categories flex items-center text-gray-600 font-semibold cursor-pointer prevent-select whitespace-nowrap w-fit'>
-                            {categories.map((category, index) => <div
-                                key={index}
-                                className={`mb-0 pb-4 text-sm mr-7 hover:text-blue-500 ${category ? selectedCategory?.name === category.name ? 'text-blue-500 border-b-2 border-blue-500' : '' : ''}`}
-                                onClick={() => handleSelectCategory(category, index)}
-                            >
-                                {category.name}
-                            </div>)}
+                            {
+                                menu.categories &&
+                                menu.categories.map((category, index) => <div
+                                    key={index}
+                                    className={`mb-0 pb-4 text-sm mr-7 hover:text-blue-500 ${category ? selectedCategory?.name === category.name ? 'text-blue-500 border-b-2 border-blue-500' : '' : ''}`}
+                                    onClick={() => handleSelectCategory(category, index)}
+                                >
+                                    {category.name}
+                                </div>)
+                            }
                         </div>
                     </div>
                 </div>

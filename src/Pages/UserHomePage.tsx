@@ -1,4 +1,4 @@
-import {Navigate, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {Banner, LeftSideBar, Body, LoadingSpinner} from "../Components/UserHomePage";
 import {MenuOption} from "../interfaces.tsx";
@@ -14,7 +14,6 @@ import {
 } from "../assets/icons";
 import {signOut} from "firebase/auth";
 import {auth} from "../firebase/firebase.ts";
-import {useAuth} from "../AuthContext.tsx";
 
 
 const logout = async () => {
@@ -27,8 +26,6 @@ const logout = async () => {
 };
 
 function UserHomePage() {
-
-    const {user} = useAuth();
 
     const [error, setError] = useState<string | null>(null)
 
@@ -115,10 +112,6 @@ function UserHomePage() {
 
     function userLogOut() {
         logout().then()
-    }
-
-    if (!user) {
-        return <Navigate to={`/neemble-eat/auth-error`}/>
     }
 
 

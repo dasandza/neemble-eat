@@ -334,9 +334,7 @@ function OrdersInterface() {
 
                                     </div>
                                     <p className='text-gray-600 text-sm font-poppins-semibold prevent-select'>Antigo {"→"} Recente</p>
-                                </div>
-
-                                :
+                                </div> :
                                 <div className='flex space-x-3 items-center'>
                                     <div
                                         className='cursor-pointer laptop:hover:bg-gray-100 transition durantion-200 w-fit p-1 rounded-md'

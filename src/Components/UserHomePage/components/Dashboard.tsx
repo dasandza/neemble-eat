@@ -13,6 +13,8 @@ interface props {
 
 function Dashboard({representant, restaurant}: props) {
 
+    const origin = window.location.origin
+
     const time = formatDateString(new Date(new Date().getTime()).toString())
     const [salesData, setSalesData] = useState<[string, number][]>([])
 
@@ -74,7 +76,7 @@ function Dashboard({representant, restaurant}: props) {
                                         Clique no botão abaixo para acessar a sua tela de gerenciamento.
                                     </p>
                                 </div>
-                                <a href={`https://dasandza.github.io/neemble-eat/orders/${restaurant.id}`}
+                                <a href={`${origin}/neemble-eat/orders/${restaurant.id}`}
                                    target="_blank"
                                    rel="noopener noreferrer">
                                     <button
@@ -100,7 +102,7 @@ function Dashboard({representant, restaurant}: props) {
                                         Clique no botão abaixo para acessar a sua tela de gerenciamento.
                                     </p>
                                 </div>
-                                <a href={`https://dasandza.github.io/neemble-eat/sessions/${restaurant.id}`}
+                                <a href={`${origin}/neemble-eat/sessions/${restaurant.id}`}
                                    target="_blank"
                                    rel="noopener noreferrer">
                                     <button

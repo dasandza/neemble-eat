@@ -10,6 +10,16 @@ const filterCart = (cart: CartItem[]) => {
     return newCart
 }
 
+function getCart() {
+    const existingCart = getCartFromLocalStorage();
+    if (existingCart) {
+        return existingCart;
+    } else {
+        return initializeCartInLocalStorage();
+    }
+}
+
+
 const saveCartToLocalStorage = (cart: Array<CartItem>) => {
 
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -34,6 +44,7 @@ const getItemsInTheCartNumber = (cart: CartItem[]) => {
 }
 
 export {
+    getCart,
     filterCart,
     getCartFromLocalStorage,
     saveCartToLocalStorage,

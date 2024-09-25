@@ -14,9 +14,11 @@ import {
     SessionsInterface, UserHomePage
 } from './Pages'
 import {CharmCross} from "./assets/icons";
-import NewMenu from "./Pages/NewMenu.tsx";
+import Menu from "./Pages/Menu.tsx";
 import Test from "./Pages/Test.tsx";
 import AuthError from "./Pages/AuthError.tsx";
+import {ReactElement} from "react";
+import AuthVerification from "./firebase/AuthVerification.tsx";
 
 
 function App() {
@@ -45,44 +47,112 @@ function App() {
         },
     ]
 
+    const prefix = "/neemble-eat"
+
+    const routes: {
+        path: string,
+        element: ReactElement,
+        requiresAuth: boolean,
+    }[] =
+        [
+            {
+                path: "/",
+                element: <Home menuOptions={menuOptions}/>,
+                requiresAuth: false
+            },
+            {
+                path: "/about-us",
+                element: <About menuOptions={menuOptions}/>,
+                requiresAuth: false
+            },
+            {
+                path: "/demo",
+                element: <Demo menuOptions={menuOptions}/>,
+                requiresAuth: false
+            },
+            {
+                path: "/contact",
+                element: <Contact menuOptions={menuOptions}/>,
+                requiresAuth: false
+            },
+            {
+                path: "/support",
+                element: <Support menuOptions={menuOptions}/>,
+                requiresAuth: false
+            },
+            {
+                path: '/c/:restaurantID/:menuID/:tableNumber',
+                element: <Cart/>,
+                requiresAuth: false
+            },
+            {
+                path: "/o/:restaurantID/:menuID/:tableNumber",
+                element: <Orders/>,
+                requiresAuth: false
+            },
+            {
+                path: "/login",
+                element: <LogIn/>,
+                requiresAuth: false
+            },
+            {
+                path: "/signup",
+                element: <SignUp/>,
+                requiresAuth: false
+            },
+            {
+                path: "/setup/:representantID/:name",
+                element: <AccountSetUp/>,
+                requiresAuth: true
+            },
+            {
+                path: "/orders/:restaurantID",
+                element: <OrdersInterface/>,
+                requiresAuth: true
+            },
+            {
+                path: "/sessions/:restaurantID",
+                element: <SessionsInterface/>,
+                requiresAuth: true
+            },
+            {
+                path: "/user/rep/:representantID",
+                element: <UserHomePage/>,
+                requiresAuth: true
+            },
+            {
+                path: "/menu/:restaurantID/:menuID/:tableNumber",
+                element: <Menu/>,
+                requiresAuth: false
+            },
+            {
+                path: "/test",
+                element: <Test/>,
+                requiresAuth: false
+            },
+            {
+                path: "/auth-error",
+                element: <AuthError/>,
+                requiresAuth: false
+            }
+        ]
 
     return (
         <div className="App">
             <Router>
                 <Routes>
-                    <Route path="/neemble-eat/"
-                           element={<Home menuOptions={menuOptions}/>}/>
-                    <Route path="/neemble-eat/about-us"
-                           element={<About menuOptions={menuOptions}/>}/>
-                    <Route path="/neemble-eat/demo"
-                           element={<Demo menuOptions={menuOptions}/>}/>
-                    <Route path="/neemble-eat/contact"
-                           element={<Contact menuOptions={menuOptions}/>}/>
-                    <Route path="/neemble-eat/support"
-                           element={<Support menuOptions={menuOptions}/>}/>
-                    <Route path='/neemble-eat/c/:restaurantID/:menuID/:tableNumber'
-                           element={<Cart/>}/>
-                    <Route path="/neemble-eat/o/:restaurantID/:menuID/:tableNumber"
-                           element={<Orders/>}/>
-                    <Route path="/neemble-eat/login"
-                           element={<LogIn/>}/>
-                    <Route path="/neemble-eat/signup"
-                           element={<SignUp/>}/>
-                    <Route path="/neemble-eat/setup/:representantID/:name"
-                           element={<AccountSetUp/>}/>
-                    <Route path="/neemble-eat/orders/:restaurantID"
-                           element={<OrdersInterface/>}/>
-                    <Route path="/neemble-eat/sessions/:restaurantID"
-                           element={<SessionsInterface/>}/>
-                    <Route path="/neemble-eat/user/rep/:representantID"
-                           element={<UserHomePage/>}/>
-                    <Route path="/neemble-eat/menu/:restaurantID/:menuID/:tableNumber"
-                           element={<NewMenu/>}/>
-                    <Route path="/neemble-eat/test"
-                           element={<Test/>}/>
-                    <Route path="/neemble-eat/auth-error"
-                           element={<AuthError/>}/>
+                    {routes.map((route) => {
+                        const {path, element, requiresAuth} = route;
+                        const fullPath = `${prefix}${path}`;
 
+                        return (
+                            <Route
+                                key={fullPath}
+                                path={fullPath}
+                                element={requiresAuth ? <AuthVerification>{element}</AuthVerification> : element}
+                            />
+                        );
+                    })}
                 </Routes>
             </Router>
         </div>

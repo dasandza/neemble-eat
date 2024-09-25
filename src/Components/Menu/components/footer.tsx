@@ -1,19 +1,16 @@
 import {CharmLinkExternal, CharmPhone} from "../../../assets/icons";
+import {useMenuContext} from "../../../context/menuContext.ts";
 
 
-interface props {
-    restaurantName: string
-    phoneNumber: string
+function Footer() {
 
-}
+    const {restaurant} = useMenuContext()
 
-
-function Footer({restaurantName, phoneNumber}: props) {
     return (
         <div className='bg-gray-200 laptop:mt-6'>
             <div className='pt-5 pb-10 border-b border-gray-300 px-5 laptop:px-9'>
                 <h1 className={`text-2xl font-poppins-semibold`}>
-                    {restaurantName}
+                    {restaurant.name}
                 </h1>
 
                 <div className='flex items-center'>
@@ -22,7 +19,7 @@ function Footer({restaurantName, phoneNumber}: props) {
 
                     </CharmPhone>
                     <p className='ml-1 text-sm text-gray-600 font-semibold'>
-                        <a href={`tel:${phoneNumber}`}>{phoneNumber}</a>
+                        <a href={`tel:${restaurant.phoneNumber}`}>{restaurant.phoneNumber}</a>
 
                     </p>
                 </div>
