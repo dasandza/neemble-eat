@@ -27,16 +27,20 @@ function Orders() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
 
 
-    const {session, sessionError, isSessionLoading, closeSessionMutation} = useOpenSession({
+    const {
+        session,
+        sessionError,
+        isSessionLoading,
+        closeSessionMutation
+    } = useOpenSession({
         restaurantID: restaurantID,
         tableNumber: tableNumber,
         closeSession: async () => handleGetBill()
     })
 
-    const {orders, ordersError, isOrdersLoading} = useSessionOders({
+    const {orders, ordersError, isOrdersLoading, isFetchingOrders} = useSessionOders({
         sessionID: session ? session.id : null
     })
-
 
     const togglePopup = () => {
         setIsPopupOpen(!isPopupOpen);
@@ -80,7 +84,8 @@ function Orders() {
                  loadingParams={[isSessionLoading, isOrdersLoading]}>
             <OrdersContext.Provider value={{
                 closeSessionMutation: closeSessionMutation,
-                orders: orders
+                orders: orders,
+                isFetchingOrders: isFetchingOrders
             }}>
                 <Layout>
                     <Background color={`bg-gray-100`}>

@@ -43,18 +43,18 @@ function useOpenSession({closeSession, restaurantID, tableNumber}: hookProps) {
     const {mutateAsync: closeSessionMutation} = useMutation({
         mutationFn: closeSession,
         onSuccess: () => {
-            queryClient.invalidateQueries({
+            queryClient.refetchQueries({
                 queryKey: ["open-session", restaurantID, tableNumber]
-            }).then()
+            }).catch((error) => console.error(error))
         }
-
     })
 
     return {
         session: data,
         isSessionLoading: isLoading,
         sessionError: error,
-        closeSessionMutation: closeSessionMutation
+        ...closeSession ? {closeSessionMutation: closeSessionMutation} : {}
+
     }
 }
 

@@ -4,7 +4,7 @@ import {OrderSingleItem, Ready, InProgress, Cancelled} from "../index.ts";
 
 function OrdersDisplay() {
 
-    const {orders} = useOrdersContext()
+    const {orders, isFetchingOrders} = useOrdersContext()
 
     return (
         <div className='bg-white shadow-sm p-3 rounded-3xl mt-3 border border-gray-200'>
@@ -25,6 +25,12 @@ function OrdersDisplay() {
                         </div>
                     </div>
                 ))
+            }
+            {
+                isFetchingOrders &&
+                <div>
+                    <div className="my-2 rounded-xl h-20 bg-gray-300 animate-pulse"></div>
+                </div>
             }
         </div>
 

@@ -21,7 +21,7 @@ async function fetchAllSessionOrders({sessionID}: props): Promise<OrderJson[]> {
 
 function useSessionOders({sessionID}: props) {
 
-    const {data, isLoading, error} = useQuery({
+    const {data, isLoading, error, isFetching} = useQuery({
         queryKey: ["orders", sessionID],
         queryFn: () => fetchAllSessionOrders({sessionID}).then(data => data),
         enabled: sessionID != null,
@@ -33,7 +33,8 @@ function useSessionOders({sessionID}: props) {
     return {
         orders: data,
         isOrdersLoading: isLoading,
-        ordersError: error
+        ordersError: error,
+        isFetchingOrders: isFetching
     }
 }
 
