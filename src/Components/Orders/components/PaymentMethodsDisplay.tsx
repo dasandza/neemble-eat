@@ -19,7 +19,7 @@ function PaymentMethodsDisplay({children}: props) {
 }
 
 PaymentMethodsDisplay.Cash = function Cash() {
-    const {closeSessionMutation} = useOrdersContext()
+    const {closeSessionMutation, refreshOrders} = useOrdersContext()
     if (!closeSessionMutation) {
         return <div></div>
     }
@@ -28,18 +28,18 @@ PaymentMethodsDisplay.Cash = function Cash() {
                                      async () => {
                                          try {
                                              await closeSessionMutation()
+                                             await refreshOrders()
                                          } catch (error) {
                                              console.log(error)
                                          }
                                      }
                                  }
-                                 color="bg-green-500"
-                                 icon={<div></div>}/>
+                                 color="bg-green-500"/>
 }
 
 
 PaymentMethodsDisplay.Card = function Card() {
-    const {closeSessionMutation} = useOrdersContext()
+    const {closeSessionMutation, refreshOrders} = useOrdersContext()
 
     if (!closeSessionMutation) {
         return <div></div>
@@ -49,18 +49,18 @@ PaymentMethodsDisplay.Card = function Card() {
                                      async () => {
                                          try {
                                              await closeSessionMutation()
+                                             await refreshOrders()
                                          } catch (error) {
                                              console.log(error)
                                          }
                                      }
                                  }
-                                 color="bg-black"
-                                 icon={<div></div>}/>
+                                 color="bg-black"/>
 }
 
 
 PaymentMethodsDisplay.MuilticaixaExpress = function MuilticaixaExpress() {
-    const {closeSessionMutation} = useOrdersContext()
+    const {closeSessionMutation, refreshOrders} = useOrdersContext()
 
 
     if (!closeSessionMutation) {
@@ -71,14 +71,17 @@ PaymentMethodsDisplay.MuilticaixaExpress = function MuilticaixaExpress() {
                                      async () => {
                                          try {
                                              await closeSessionMutation()
+                                             await refreshOrders()
                                          } catch (error) {
                                              console.log(error)
                                          }
                                      }
                                  }
                                  color="bg-orange-600"
-                                 icon={<img src={MulticaixaExpressLogo} alt=""
-                                            className='h-20'/>}/>
+                                 icon={
+                                     <img src={MulticaixaExpressLogo} alt=""
+                                          className='h-20'/>
+                                 }/>
 }
 
 export default PaymentMethodsDisplay;

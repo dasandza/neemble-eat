@@ -1,6 +1,6 @@
 import {OrderJson} from "../../schema.ts";
 import {apiUrl, online} from "./key.ts";
-import {useQuery} from "@tanstack/react-query";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {MINUTE} from "../../utils/helpers/timeUnits.ts";
 
 interface props {
@@ -21,6 +21,8 @@ async function fetchAllSessionOrders({sessionID}: props): Promise<OrderJson[]> {
 
 function useSessionOders({sessionID}: props) {
 
+    const queryClient = useQueryClient()
+
     const {data, isLoading, error, isFetching} = useQuery({
         queryKey: ["orders", sessionID],
         queryFn: () => fetchAllSessionOrders({sessionID}).then(data => data),
@@ -29,12 +31,23 @@ function useSessionOders({sessionID}: props) {
         gcTime: 5 * MINUTE
     })
 
+    const {mutateAsync: refreshOrders} = useMutation({
+        mutationFn: async () => {
+        },
+        onSuccess: () => {
+            queryClient.refetchQueries({
+                queryKey: ["orders", sessionID]
+            }).catch((error) => console.error(error))
+        }
+    })
+
 
     return {
         orders: data,
         isOrdersLoading: isLoading,
         ordersError: error,
-        isFetchingOrders: isFetching
+        isFetchingOrders: isFetching,
+        refreshOrders
     }
 }
 

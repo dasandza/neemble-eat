@@ -38,7 +38,13 @@ function Orders() {
         closeSession: async () => handleGetBill()
     })
 
-    const {orders, ordersError, isOrdersLoading, isFetchingOrders} = useSessionOders({
+    const {
+        orders,
+        ordersError,
+        isOrdersLoading,
+        isFetchingOrders,
+        refreshOrders
+    } = useSessionOders({
         sessionID: session ? session.id : null
     })
 
@@ -84,6 +90,7 @@ function Orders() {
                  loadingParams={[isSessionLoading, isOrdersLoading]}>
             <OrdersContext.Provider value={{
                 closeSessionMutation: closeSessionMutation,
+                refreshOrders: refreshOrders,
                 orders: orders,
                 isFetchingOrders: isFetchingOrders
             }}>

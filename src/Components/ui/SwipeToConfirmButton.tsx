@@ -4,7 +4,7 @@ interface SwipeToConfirmButtonProps {
     label: string;
     onConfirm: () => void;
     color: string
-    icon: ReactElement
+    icon?: ReactElement
 }
 
 
@@ -69,7 +69,7 @@ function SwipeToConfirmButton({label, onConfirm, color, icon}: SwipeToConfirmBut
                 onTouchStart={handleStart}
                 ref={buttonRef}
             >
-                {icon}
+                {icon != undefined && icon}
                 {label}
             </div>
             {!confirmed && (
