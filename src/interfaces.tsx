@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React from "react";
+import React, {ReactNode} from "react";
 
 // TEMP INTERFACES
 
@@ -245,6 +245,7 @@ interface BannerFields {
 
 interface MenuOption {
     name: string,
+    element: ReactNode
     selectedIcon: JSX.Element,
     notSelectedIcon: JSX.Element
 }

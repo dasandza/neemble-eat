@@ -22,7 +22,7 @@ function DashboardTable({data}: props) {
                         index + 1 <= 5 &&
                         <tr key={index} className="hover:bg-gray-100">
                             <td className="py-[13px] px-3 laptop:px-6 font-poppins-regular text-left">{index + 1}</td>
-                            <td className="py-[13px] px-3 laptop:px-6 font-poppins-regular text-left truncate">{row[0]}</td>
+                            <td className="py-[13px] px-3 laptop:px-6 font-poppins-regular text-left max-w-20 laptop:max-w-fit truncate">{row[0]}</td>
                             {/*<td className="py-[13px] px-3 laptop:px-6 font-poppins-regular text-left">{row.price} Kz</td>*/}
                             <td className="py-[13px] px-3 laptop:px-6 font-poppins-regular text-left">{row[1]}</td>
                         </tr>

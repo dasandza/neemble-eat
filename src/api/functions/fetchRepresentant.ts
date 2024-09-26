@@ -1,30 +1,53 @@
 import {RepresentantJson} from "../../schema.ts";
 import {apiUrl, online} from "./key.ts";
+import {useQuery} from "@tanstack/react-query";
+import {HOUR} from "../../utils/helpers/timeUnits.ts";
 
 interface props {
     representatID: string
 }
 
 
-async function FetchRepresentant({representatID}: props) {
+async function fetchRepresentant({representatID}: props): Promise<RepresentantJson> {
     const response = await fetch(`${online ? "https:" : "http:"}//${apiUrl}/representants/${representatID}`, {
         method: "GET",
     })
     if (response.ok) {
-        const data = await response.json()
-        return {
-            id: data.id,
-            created_time: data.created_time,
-            UUID: data.UUID,
-            firstName: data.firstName,
-            lastName: data.lastName,
-            email: data.email,
-            phoneNumber: data.phoneNumber,
-            role: data.role,
-            restaurantID: data.restaurantID
-        } as RepresentantJson
+        return await response.json()
     }
     throw new Error("Failed to find the account")
 }
 
-export default FetchRepresentant;
+
+function useRepresentantData({representatID}: props) {
+    const {
+        data,
+        isLoading,
+        isFetching,
+        error,
+        refetch
+    } = useQuery({
+        queryKey: ["GET-Representant", representatID],
+        queryFn: () => fetchRepresentant({representatID: representatID})
+            .then(data => data),
+        staleTime: 5 * HOUR,
+        gcTime: HOUR * 24,
+    })
+
+    return {
+        representant: data,
+        isRepresentantLoading: isLoading,
+        isRepresentantFetching: isFetching,
+        representantError: error,
+        refetchRepresentant: refetch
+    }
+
+
+}
+
+
+export {
+    fetchRepresentant,
+    useRepresentantData
+}
+

@@ -1,15 +1,19 @@
 import {HamburgerMenuIcon} from "../../../assets/icons";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {useUserPageContext} from "../../../context/userPageContext.ts";
 
 interface props {
-    firstName: string,
-    lastName: string,
     toggleMenu: () => void,
     logout: () => void
 }
 
-function Banner({firstName, lastName, toggleMenu, logout}: props) {
+function Banner({toggleMenu, logout}: props) {
+
+    const {representant} = useUserPageContext()
+
+    const {lastName, firstName} = representant ? representant : {firstName: "Not Found", lastName: "Not Found"}
+
     const [isUserDropdownSelected, setUserDropdownSelected] = useState<boolean>(false)
     const navigate = useNavigate();
 

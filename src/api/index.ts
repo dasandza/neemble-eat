@@ -5,11 +5,20 @@ import addMenuCategory from "./functions/addMenuCategory.ts";
 import addCategoryItem from "./functions/addCategoryItem.ts";
 import createRestaurantTable from "./functions/createRestaurantTable.ts";
 import assignOwner from "./functions/assignOwner.ts";
-import fetchRepresentant from "./functions/fetchRepresentant.ts";
+import {
+    fetchRepresentant,
+    useRepresentantData
+} from "./functions/fetchRepresentant.ts";
 import fetchAllRestaurantOrders from "./functions/fetchAllRestaurantOrders.ts";
-import {fetchRestaurantData} from "./functions/fetchRestaurant.ts";
+import {
+    fetchRestaurantData,
+    useRestaurantData
+} from "./functions/fetchRestaurant.ts";
 import fetchRepresentantByUUID from "./functions/fetchRepresentantByUUID.ts";
-import {fetchMenuParsed} from "./functions/fetchMenuParsed.ts";
+import {
+    fetchMenuParsed,
+    useMenuData
+} from "./functions/fetchMenuParsed.ts";
 import fetchRestaurantOpenTable from "./functions/fetchRestaurantOpenTable.ts";
 import addOrder from "./functions/addOrder.ts";
 import fetchAllSessionOrders from "./functions/fetchAllSessionOrders.ts";
@@ -20,6 +29,7 @@ import deleteMenuItems from "./functions/deleteMenuItems.ts";
 import updateItem from "./functions/updateItem.ts";
 import updateCategory from "./functions/updateCategory.ts";
 import fetchTopOrders from "./functions/fetchTopOrders.ts";
+
 
 export {
     fetchTopOrders,
@@ -41,7 +51,10 @@ export {
     createRestaurantTable,
     addCategoryItem,
     createRestaurant,
+    useRestaurantData,
     createMenu,
+    useRepresentantData,
+    useMenuData,
     createRepresentant,
     addMenuCategory,
 

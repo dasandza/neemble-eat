@@ -1,17 +1,13 @@
 import {DashboardTable} from "../index.ts";
-import {RepresentantJson, RestaurantJson} from "../../../schema.ts";
 import formatDateString from "../../../utils/DateFormat.tsx";
 import {useEffect, useState} from "react";
 import {fetchTopOrders} from "../../../api";
+import {useUserPageContext} from "../../../context/userPageContext.ts";
 
 
-interface props {
-    restaurant: RestaurantJson
-    representant: RepresentantJson
-}
+function Dashboard() {
 
-
-function Dashboard({representant, restaurant}: props) {
+    const {restaurant, representant} = useUserPageContext()
 
     const origin = window.location.origin
 
@@ -114,7 +110,7 @@ function Dashboard({representant, restaurant}: props) {
                         </div>
                     </div>
                 </section>
-                <section>
+                <section className={`hidden`}>
                     <h1 className='font-poppins-medium text-gray-600 pb-2 ml-2'>
                         Performance
                     </h1>

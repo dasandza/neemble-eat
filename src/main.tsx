@@ -4,7 +4,7 @@ import App from './App.tsx';
 import './index.css';
 import {AuthProvider} from "./AuthContext.tsx";
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'; // v4
-//import {ReactQueryDevtools} from '@tanstack/react-query-devtools'; // v4
+// import {ReactQueryDevtools} from '@tanstack/react-query-devtools'; // v4
 
 
 const queryClient = new QueryClient({

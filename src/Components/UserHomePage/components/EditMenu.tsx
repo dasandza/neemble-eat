@@ -1,15 +1,13 @@
 import {useEffect, useState} from "react";
-import {Category, RestaurantJson, MenuItem, Menu} from "../../../schema.ts";
+import {Category, MenuItem, Menu} from "../../../schema.ts";
 import {AddIcon, BinIcon, SearchIcon} from "../../../assets/icons";
 import {EditCategory, AddCategory, LoadingSpinner} from "../index.ts";
-import {fetchMenuParsed} from "../../../api/functions/fetchMenuParsed.ts";
+import {fetchMenuParsed} from "../../../api";
+import {useUserPageContext} from "../../../context/userPageContext.ts";
 
+function EditMenu() {
 
-interface props {
-    restaurant: RestaurantJson
-}
-
-function EditMenu({restaurant}: props) {
+    const {restaurant} = useUserPageContext()
 
     const [menu, setMenu] = useState<Menu>()
     const [nameIncludes, setNameIncludes] = useState<string>("")

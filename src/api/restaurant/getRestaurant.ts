@@ -1,7 +1,5 @@
 import {RestaurantJson} from "../../schema.ts";
-import {apiUrl, online} from "./key.ts";
-import axios from 'axios';
-
+import {API} from "../utils.ts";
 import {useQuery} from "@tanstack/react-query";
 import {HOUR} from "../../utils/helpers/timeUnits.ts";
 
@@ -10,9 +8,9 @@ interface props {
 }
 
 
-async function fetchRestaurantData({restaurantID}: props): Promise<RestaurantJson> {
+async function getRestaurant({restaurantID}: props): Promise<RestaurantJson> {
     try {
-        const response = await axios.get(`${online ? "https:" : "http:"}//${apiUrl}/restaurants/${restaurantID}`);
+        const response = await API.get(`/restaurants/${restaurantID}`);
         return response.data;
     } catch (error) {
         console.error("Failed to fetch restaurant:", error);
@@ -21,13 +19,13 @@ async function fetchRestaurantData({restaurantID}: props): Promise<RestaurantJso
 }
 
 
-function useRestaurantData({restaurantID}: props) {
+function useGetRestaurant({restaurantID}: props) {
 
     const {
         data, isLoading, error
     } = useQuery({
-        queryKey: ["restaurantID", restaurantID],
-        queryFn: () => fetchRestaurantData({restaurantID})
+        queryKey: ["GET Restaurant", restaurantID],
+        queryFn: () => getRestaurant({restaurantID})
             .then(data => data),
         enabled: restaurantID != null,
         staleTime: HOUR * 24,
@@ -43,4 +41,4 @@ function useRestaurantData({restaurantID}: props) {
     }
 }
 
-export {useRestaurantData, fetchRestaurantData};
+export {useGetRestaurant, getRestaurant};

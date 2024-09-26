@@ -1,44 +1,16 @@
-import {MenuOption} from "../../../interfaces.tsx";
-import {Dashboard, EditMenu, Settings, Support, News, Report} from "../index.ts";
-import {RepresentantJson, RestaurantJson} from "../../../schema.ts";
+import React from "react";
 
 
 interface props {
-    currentPage: MenuOption
-    restaurant: RestaurantJson
-    representant: RepresentantJson
+    currentPage: React.ReactNode
 
 }
 
 
-function Body({currentPage, restaurant, representant}: props) {
+function Body({currentPage}: props) {
     return (
         <div className='h-full shadow-inner'>
-            {
-                currentPage.name == "Dashboard" &&
-                <Dashboard representant={representant}
-                           restaurant={restaurant}/>
-            }
-            {
-                currentPage.name == "Menu do restaurante" &&
-                <EditMenu restaurant={restaurant}/>
-            }
-            {
-                currentPage.name == "Definições" &&
-                <Settings/>
-            }
-            {
-                currentPage.name == "Suporte" &&
-                <Support/>
-            }
-            {
-                currentPage.name == "Reporte Erros" &&
-                <Report/>
-            }
-            {
-                currentPage.name == "Novidades" &&
-                <News/>
-            }
+            {currentPage}
         </div>
     );
 }

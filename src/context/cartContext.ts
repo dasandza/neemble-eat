@@ -1,7 +1,7 @@
 import React, {createContext, useContext} from "react";
 import useCart from "../hooks/useCart.ts";
 
-export const CartContext = createContext<{
+interface CartContextProps {
     restaurantID: string,
     menuID: string,
     tableNumber: number,
@@ -9,7 +9,9 @@ export const CartContext = createContext<{
     customerName: string,
     setCustomerName: React.Dispatch<React.SetStateAction<string>>,
     cart: ReturnType<typeof useCart>
-} | undefined>(undefined);
+}
+
+export const CartContext = createContext<CartContextProps | undefined>(undefined);
 
 
 export function useCartContext() {
@@ -17,6 +19,5 @@ export function useCartContext() {
 
     if (!context)
         throw new Error("useCartContext() must be used within the Context");
-    const {restaurantID, customerName, togglePopUp, menuID, tableNumber, setCustomerName, cart} = context
-    return {restaurantID, customerName, togglePopUp, menuID, tableNumber, setCustomerName, cart}
+    return context
 }
